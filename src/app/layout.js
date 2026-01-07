@@ -51,7 +51,7 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body className={`${poppins.className} ${poppins.variable} ${geistMono.variable}`}>
         <ReactQueryProvider>
-          <GoogleOAuthProvider clientId="707115021884-av20ojvtc8c37pkn98bcsnau33hie2b5.apps.googleusercontent.com">
+          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
             {/* SITE NAV */}
             <Navbar />
 
