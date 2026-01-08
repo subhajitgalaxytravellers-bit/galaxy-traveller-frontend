@@ -83,7 +83,7 @@ export default function DetailSection() {
           {/* MAIN IMAGE */}
           <div className="relative w-[90%] sm:w-[80%] md:w-[85%] aspect-[5/6] rounded-2xl overflow-hidden shadow-xl">
             <Image
-              src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80"
+                  src={"/assets/destination-santorini.jpg"}
               alt="Main travel"
               fill
               className="object-cover"
@@ -94,7 +94,7 @@ export default function DetailSection() {
           {/* SMALL OVERLAY IMAGE */}
           <div className="absolute hidden sm:block top-1/2 -left-10 md:-left-14 transform -translate-y-1/2 w-[35%] aspect-square rounded-xl overflow-hidden shadow-lg border-4 border-white">
             <Image
-              src="https://images.unsplash.com/photo-1533228100845-08145b01de14?w=800&q=80"
+              src={"/assets/sea.jpg"}
               alt="Small travel"
               fill
               className="object-cover"
@@ -105,7 +105,7 @@ export default function DetailSection() {
           {/* MOBILE SMALL IMAGE (STACKED) */}
           <div className="sm:hidden mt-6 w-[60%] aspect-square rounded-xl overflow-hidden shadow-lg border-4 border-white">
             <Image
-              src="https://images.unsplash.com/photo-1533228100845-08145b01de14?w=800&q=80"
+                 src={"/assets/destination-santorini.jpg"}
               alt="Small travel mobile"
               fill
               className="object-cover"
