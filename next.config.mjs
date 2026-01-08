@@ -9,6 +9,11 @@ const nextConfig = {
         hostname: "storage.googleapis.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "developers.google.com",
+        pathname: "/**",
+      }
     ],
   },
 };
