@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { PlaneTakeoff, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function DetailSection() {
   const navigate = useRouter();
@@ -81,28 +82,34 @@ export default function DetailSection() {
         >
           {/* MAIN IMAGE */}
           <div className="relative w-[90%] sm:w-[80%] md:w-[85%] aspect-[5/6] rounded-2xl overflow-hidden shadow-xl">
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80"
               alt="Main travel"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 90vw, (max-width: 1200px) 80vw, 600px"
             />
           </div>
 
           {/* SMALL OVERLAY IMAGE */}
           <div className="absolute hidden sm:block top-1/2 -left-10 md:-left-14 transform -translate-y-1/2 w-[35%] aspect-square rounded-xl overflow-hidden shadow-lg border-4 border-white">
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1533228100845-08145b01de14?w=800&q=80"
               alt="Small travel"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="200px"
             />
           </div>
 
           {/* MOBILE SMALL IMAGE (STACKED) */}
           <div className="sm:hidden mt-6 w-[60%] aspect-square rounded-xl overflow-hidden shadow-lg border-4 border-white">
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1533228100845-08145b01de14?w=800&q=80"
               alt="Small travel mobile"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="200px"
             />
           </div>
 
@@ -115,9 +122,11 @@ export default function DetailSection() {
 
       {/* BACKGROUND DECORATION */}
       <div className="absolute left-0 bottom-0 opacity-10 pointer-events-none select-none hidden sm:block">
-        <img
+        <Image
           src="https://upload.wikimedia.org/wikipedia/commons/3/30/BlankMap-World-Sovereign_Nations.svg"
           alt=""
+          width={400}
+          height={300}
           className="w-[300px] md:w-[400px]"
         />
       </div>

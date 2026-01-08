@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { Card, CardContent } from "../ui/card";
 
 export default function TourHighlights({ highlights }) {
@@ -16,9 +17,11 @@ export default function TourHighlights({ highlights }) {
               <div className="flex gap-4">
                 {highlight.img && (
                   <div className="flex-shrink-0 my-auto">
-                    <img
+                    <Image
                       src={highlight.img}
                       alt={highlight.title}
+                      width={80}
+                      height={80}
                       className="w-20 h-20 object-cover rounded-lg"
                     />
                   </div>

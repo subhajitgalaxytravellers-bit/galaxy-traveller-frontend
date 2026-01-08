@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export const FlyerCard = ({ flyer }) => {
   const url =
@@ -11,10 +12,12 @@ export const FlyerCard = ({ flyer }) => {
     <Link href={url}>
       <div className="group cursor-pointer rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
         <div className="relative aspect-[3/4] overflow-hidden">
-          <img
+          <Image
             src={flyer?.image}
             alt={flyer?.title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
           />
 
           {/* STRONGER GRADIENT */}

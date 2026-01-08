@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Image from "next/image";
 
 export default function DestinationsClient({ continents }) {
   const [selectedContinent, setSelectedContinent] = useState(
@@ -62,10 +63,12 @@ export default function DestinationsClient({ continents }) {
           </p>
         </div>
         <div className="absolute inset-0 hero-bottom-fade z-10"></div>
-        <img
+        <Image
           src="/assets/hero-blog.jpg"
           alt="Destinations Hero"
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          className="object-cover"
+          priority
         />
       </section>
 
@@ -128,10 +131,12 @@ export default function DestinationsClient({ continents }) {
                       <Card className="group p-0 overflow-hidden border-0 card-shadow hover:hover-shadow transition-all duration-300 cursor-pointer h-full">
                         <CardContent className="p-0 relative h-80">
                           <div className="relative overflow-hidden h-full">
-                            <img
+                            <Image
                               src={destination.heroImg}
                               alt={destination.title}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                              fill
+                              className="object-cover group-hover:scale-110 transition-transform duration-500"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             />
                             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
 

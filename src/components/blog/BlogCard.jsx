@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { formatDate } from "@/lib/date";
 import Link from "next/link";
+import Image from "next/image";
 
 export const BlogCard = ({
   id,
@@ -17,13 +18,15 @@ export const BlogCard = ({
   const formattedDate = formatDate(date);
   console.log({ formattedDate });
   return (
-    <Card className="overflow-hidden p-0 hover-lift border-0 shadow-md group h-full flex flex-col">
+    <Card className="overflow-hidden p-0 border-0 shadow-md hover:shadow-lg transition-shadow duration-300 group h-full flex flex-col">
       <Link href={`/blogs/${id}`} className="flex flex-col h-full">
         <div className="relative h-56 overflow-hidden flex-shrink-0">
-          <img
+          <Image
             src={image}
             alt={title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           {category && (
             <div className="absolute top-4 left-4 z-20">
@@ -59,8 +62,8 @@ export const BlogCard = ({
           <div className="flex items-center justify-between mt-auto">
             <span className="text-sm font-medium">By {author}</span>
 
-            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:w-16 transition-all duration-300 overflow-hidden">
-              <ArrowRight className="h-4 w-4 text-primary group-hover:text-primary-foreground transition-all group-hover:translate-x-1" />
+            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary transition-colors duration-300">
+              <ArrowRight className="h-4 w-4 text-primary group-hover:text-primary-foreground transition-colors" />
             </div>
           </div>
         </div>

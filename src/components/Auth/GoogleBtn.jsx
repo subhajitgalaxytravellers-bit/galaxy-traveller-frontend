@@ -1,5 +1,6 @@
 "use client";
 import { useGoogleLogin } from "@react-oauth/google";
+import Image from "next/image";
 import { toast } from "react-toastify";
 
 export default function ModernGoogleButton({ onSuccess, onError }) {
@@ -28,9 +29,11 @@ export default function ModernGoogleButton({ onSuccess, onError }) {
       onClick={() => login()}
       className="flex items-center justify-center gap-2 w-full py-3 rounded-md border border-gray-300 bg-white hover:bg-gray-50 shadow-sm transition-all duration-200"
     >
-      <img
+      <Image
         src="https://developers.google.com/identity/images/g-logo.png"
         alt="Google logo"
+        width={20}
+        height={20}
         className="w-5 h-5"
       />
       <span className="text-gray-700 font-medium">Continue with Google</span>

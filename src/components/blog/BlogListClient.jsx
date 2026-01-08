@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import CTA from '@/components/common/CTA';
 import Link from 'next/link';
+import Image from 'next/image';
 import { BlogCard } from './BlogCard';
 
 // simple debounce hook
@@ -40,10 +41,12 @@ export default function BlogListClient({ blogs }) {
         {/* HERO */}
         <section className='relative h-[60vh] min-h-[400px] image-overlay'>
           <div className=''>
-            <img
-              src={'assets/hero-blog.jpg'}
+            <Image
+              src='/assets/hero-blog.jpg'
               alt='Featured blog post'
-              className='absolute inset-0 w-full h-full object-cover'
+              fill
+              className='object-cover'
+              priority
             />
             {/* Gradient overlay */}
             {/* <div className="absolute inset-0 bg-gradient-to-br from-transparent  via-black/20 to-black/70 z-10"></div> */}
@@ -53,12 +56,11 @@ export default function BlogListClient({ blogs }) {
             <div className='absolute inset-0 w-full justify-center z-20 px-16'>
               <div className=' mx-auto px-4 h-full justify-center text-center flex items-center  '>
                 <div className='  text-white'>
-                  <h1 className='font-heading text-4xl md:text-6xl font-bold mb-4 animate-fade-in'>
+                  <h1 className='font-heading text-4xl md:text-6xl font-bold mb-4'>
                     Discover World&apos;s Cultural Treasures
                   </h1>
                   <p
-                    className='text-lg md:text-xl text-white/90 mb-6 animate-fade-in'
-                    style={{ animationDelay: '0.1s' }}>
+                    className='text-lg md:text-xl text-white/90 mb-6'>
                     Journey through vibrant festivals, ancient traditions, and
                     breathtaking landscapes
                   </p>
@@ -85,10 +87,7 @@ export default function BlogListClient({ blogs }) {
 
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
               {filtered.map((post, index) => (
-                <div
-                  key={post.slug || index}
-                  className='animate-fade-in'
-                  style={{ animationDelay: `${index * 0.1}s` }}>
+                <div key={post.slug || index}>
                   <BlogCard
                     id={post.slug}
                     title={post.title}

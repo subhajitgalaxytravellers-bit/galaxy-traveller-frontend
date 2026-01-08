@@ -24,9 +24,13 @@ export default function BookingAvatar({ isScrolled }) {
   const [open, setOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+    
     if (stored) {
       try {
         setUser(JSON.parse(stored));
@@ -40,12 +44,12 @@ export default function BookingAvatar({ isScrolled }) {
     () => getInitials(user?.name || user?.email),
     [user],
   );
-  const isLoggedIn = !!localStorage.getItem('token');
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setUser(null);
+    setIsLoggedIn(false);
     setOpen(false);
   };
 
@@ -126,6 +130,7 @@ export default function BookingAvatar({ isScrolled }) {
         onOpenChange={setAuthOpen}
         onAuthSuccess={(data) => {
           setUser(data?.user || null);
+          setIsLoggedIn(!!data?.token);
           setAuthOpen(false);
         }}
       />

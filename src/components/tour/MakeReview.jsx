@@ -14,6 +14,7 @@ import {
 import { Star, Upload, X, Image as ImageIcon } from 'lucide-react';
 import AuthDialog from '../Auth/authDialog';
 import { Base_Url } from '@/api/client';
+import Image from 'next/image';
 
 // ---------- constants ----------
 const API_BASE = `${Base_Url}`.replace(/\/+$/, '');
@@ -320,9 +321,11 @@ export default function MakeReview({ tourIdOrSlug }) {
                 <div className='flex flex-wrap gap-2 mb-3'>
                   {uploadedImages.map((image, index) => (
                     <div key={index} className='relative'>
-                      <img
+                      <Image
                         src={image}
                         alt={`Upload ${index + 1}`}
+                        width={80}
+                        height={80}
                         className='w-20 h-20 object-cover rounded-lg'
                       />
                       <Button

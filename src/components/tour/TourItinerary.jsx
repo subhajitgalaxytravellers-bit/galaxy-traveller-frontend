@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { ChevronDown, ChevronUp, Clock, Info } from "lucide-react";
+import Image from "next/image";
 
 export default function TourItinerary({ itinerary }) {
   const [expandedDays, setExpandedDays] = useState(new Set([1]));
@@ -102,9 +103,11 @@ export default function TourItinerary({ itinerary }) {
                       {/* Image */}
                       {block.image && (
                         <div className="flex-shrink-0">
-                          <img
+                          <Image
                             src={block.image}
                             alt={block.title}
+                            width={80}
+                            height={64}
                             className="w-20 h-16 object-cover rounded-lg hover-elevate cursor-pointer"
                           />
                         </div>

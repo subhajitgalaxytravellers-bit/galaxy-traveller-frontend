@@ -1,6 +1,7 @@
 'use client';
 import client from '@/api/client';
 import { Plane, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -12,7 +13,7 @@ const Footer = ({ footer, global }) => {
           {/* Brand */}
           <div className='max-lg:px-4 max-lg:text-center max-lg:items-center'>
             <div className='flex items-center gap-2 mb-4 max-lg:justify-center'>
-              <img src='/assets/logo.png' alt='Logo' className='  h-12' />
+              <Image src='/assets/logo.png' alt='Logo' width={150} height={48} className='h-12' />
             </div>
             <p className='text-muted-foreground mb-6'> {footer?.brief || ''}</p>
             <div className='flex gap-4 justify-center lg:justify-start'>

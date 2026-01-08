@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -44,21 +45,20 @@ export default function BlogDetailClient({ post }) {
       {/* HERO */}
       <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center">
         <div className="absolute inset-0 image-overlay">
-          <img
+          <Image
             src={post.displayImg}
             alt={post.title}
-            className="absolute inset-0 w-full h-full object-cover"
+            fill
+            className="object-cover"
+            priority
           />
           <div className="absolute inset-0 hero-bottom-fade z-10"></div>
         </div>
         <div className="relative z-10 container mx-auto px-4 text-center text-white">
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-4 animate-fade-in">
+          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
             {post.title}
           </h1>
-          <p
-            className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto animate-fade-in"
-            style={{ animationDelay: "0.1s" }}
-          >
+          <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
             {post.bodyAlt}
           </p>
         </div>
@@ -199,11 +199,12 @@ export default function BlogDetailClient({ post }) {
                   const match = paragraph.match(/!\[(.*?)\]\((.*?)\)/);
                   if (match) {
                     return (
-                      <figure key={index} className="my-8">
-                        <img
+                      <figure key={index} className="my-8 relative w-full h-96">
+                        <Image
                           src={match[2]}
                           alt={match[1]}
-                          className="w-full rounded-lg"
+                          fill
+                          className="object-cover rounded-lg"
                         />
                         {/* {match[1] && (
                             <figcaption className="text-sm text-muted-foreground text-center mt-3">

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react"; // Import Menu icon
 import { useState } from "react"; // Import state hook for managing drawer state
 import Link from "next/link";
+import Image from "next/image";
 
 const CustomHeader = () => {
   // Drawer state
@@ -20,9 +21,11 @@ const CustomHeader = () => {
     <header className="flex justify-between items-center px-6 py-4 bg-white shadow-lg">
       {/* Left: Logo */}
       <div className="flex items-center">
-        <img
+        <Image
           src="/path-to-your-logo.png"
           alt="Logo"
+          width={48}
+          height={48}
           className="w-12 h-12 object-contain"
         />
       </div>

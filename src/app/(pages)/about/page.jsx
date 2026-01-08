@@ -11,6 +11,7 @@ import {
   Heart,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || '').replace(/\/$/, '');
 
@@ -173,10 +174,12 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className='relative h-[60vh] min-h-[360px] flex items-center justify-center overflow-hidden'>
         <div className='absolute inset-0 z-0'>
-          <img
+          <Image
             src={'/assets/hero-mountains.jpg'}
             alt='About GalaxyTravel - Mountain landscape'
-            className='w-full h-full object-cover'
+            fill
+            className='object-cover'
+            priority
           />
           {/* <div className='absolute inset-0 hero-bottom-fade z-10'></div> */}
         </div>
@@ -270,10 +273,12 @@ export default function AboutPage() {
               </p>
             </div>
             <div className='relative h-[300px] sm:h-[380px] md:h-[500px] rounded-lg overflow-hidden card-shadow hover-shadow transition-all'>
-              <img
+              <Image
                 src={'/assets/destination-alps.jpg'}
                 alt='Our team at work'
-                className='w-full h-full object-cover'
+                fill
+                className='object-cover'
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           </div>
@@ -363,10 +368,12 @@ export default function AboutPage() {
                 key={index}
                 className='overflow-hidden p-0 hover-shadow transition-all hover:scale-105'>
                 <div className='relative h-72 overflow-hidden'>
-                  <img
+                  <Image
                     src={member.image}
                     alt={member.name}
-                    className='w-full h-full object-cover transition-transform hover:scale-110'
+                    fill
+                    className='object-cover transition-transform hover:scale-110'
+                    sizes="(max-width: 1024px) 50vw, 25vw"
                   />
                 </div>
                 <div className='p-6 text-center'>

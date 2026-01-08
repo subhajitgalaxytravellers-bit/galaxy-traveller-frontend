@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/carousel";
 import { TourCard } from "@/components/tour/TourCard";
 import { BlogCard } from "@/components/blog/BlogCard";
+import Image from "next/image";
 
 export default function DestinationDetailsClient({ destination }) {
   const router = useRouter();
@@ -39,10 +40,12 @@ export default function DestinationDetailsClient({ destination }) {
       {/* HERO SECTION */}
       <section className="relative h-screen">
         <div className="absolute inset-0">
-          <img
+          <Image
             src={sanitizeGCSUrl(destination.heroImg)}
             alt={destination.title}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            priority
           />
           <div className="absolute inset-0 hero-bottom-fade" />
         </div>
@@ -185,9 +188,11 @@ export default function DestinationDetailsClient({ destination }) {
               transition={{ duration: 0.6 }}
               className="mb-16"
             >
-              <img
+              <Image
                 src={sanitizeGCSUrl(destination.highlight?.img)}
                 alt={`${destination.title} highlight`}
+                width={1200}
+                height={500}
                 className="w-full h-[500px] object-cover rounded-2xl shadow-2xl"
               />
             </motion.div>

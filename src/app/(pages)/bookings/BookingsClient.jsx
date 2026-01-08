@@ -21,6 +21,7 @@ import { createPayment } from '@/lib/razorpay';
 import BookingProcessingOverlay from '@/components/common/ProcessDialog';
 import AuthDialog from '@/components/Auth/authDialog';
 import { toast } from 'react-toastify';
+import Image from 'next/image';
 
 const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || '').replace(/\/$/, '');
 const countWords = (text = '') =>
@@ -214,10 +215,12 @@ export default function BookingsPage() {
     <div className='min-h-screen bg-background'>
       {/* HERO */}
       <section className='relative h-[60vh] min-h-[400px] flex items-center justify-center text-center'>
-        <img
+        <Image
           src='/assets/hero-blog.jpg'
           alt='Bookings'
-          className='absolute inset-0 w-full h-full object-cover'
+          fill
+          className='object-cover'
+          priority
         />
         <div className='absolute inset-0 hero-bottom-fade' />
         <div className='relative z-10 container mx-auto px-4 flex flex-col items-center justify-center'>
@@ -311,10 +314,12 @@ export default function BookingsPage() {
                   <div className='relative h-40 w-full overflow-hidden'>
                     <div className='absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent z-10' />
                     {booking.tour?.heroImg ? (
-                      <img
+                      <Image
                         src={booking.tour.heroImg}
                         alt={tourTitle}
-                        className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'
+                        fill
+                        className='object-cover transition-transform duration-500 group-hover:scale-105'
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     ) : (
                       <div className='h-full w-full bg-gradient-to-r from-primary/20 via-primary/10 to-accent/20' />

@@ -28,6 +28,7 @@ import { ArrowDown, Mail, MapPin, Phone } from 'lucide-react';
 import { toast } from 'react-toastify';
 import client from '@/api/client';
 import { useCreateLead } from '@/lib/contact';
+import Image from 'next/image';
 
 const contactSchema = z.object({
   name: z.string().trim().min(2).max(100),
@@ -197,10 +198,12 @@ export default function ContactClient() {
 
         <div className='absolute inset-0 hero-bottom-fade z-10' />
 
-        <img
+        <Image
           src={'/assets/hero-blog.jpg'}
           alt='Contact'
-          className='absolute inset-0 w-full h-full object-cover'
+          fill
+          className='object-cover'
+          priority
         />
 
         <motion.div

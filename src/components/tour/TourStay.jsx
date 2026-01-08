@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Card, CardContent } from "../ui/card";
 import { Star, MapPin } from "lucide-react";
 
@@ -32,19 +33,23 @@ export default function TourStays({ stays }) {
                   {stay.images.length > 0 && (
                     <div className="space-y-2">
                       <div className="p-1.5">
-                        <img
+                        <Image
                           src={stay.images[0]}
                           alt={stay.hotelName}
+                          width={400}
+                          height={192}
                           className="w-full h-48 object-cover rounded-lg"
                         />
                       </div>
                       {stay.images.length > 1 && (
                         <div className="grid grid-cols-2 gap-2 p-1.5">
                           {stay.images.slice(1, 3).map((image, imgIndex) => (
-                            <img
+                            <Image
                               key={imgIndex}
                               src={image}
                               alt={`${stay.hotelName} ${imgIndex + 2}`}
+                              width={150}
+                              height={80}
                               className="w-full h-20 object-cover rounded-lg"
                             />
                           ))}

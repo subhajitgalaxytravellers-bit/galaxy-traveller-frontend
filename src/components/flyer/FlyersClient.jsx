@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import client from "@/api/client";
 import CTA from "../common/CTA";
 import { FlyerCard } from "./flyerCard";
+import Image from "next/image";
 
 export default function FlyersClient({ initialData, limit }) {
   const sentinelRef = useRef(null);
@@ -59,10 +60,12 @@ export default function FlyersClient({ initialData, limit }) {
       <section className="relative h-[60vh] min-h-[400px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 hero-bottom-fade z-10"></div>
 
-        <img
+        <Image
           src={"/assets/hero-blog.jpg"}
           alt="Flyers hero"
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          className="object-cover"
+          priority
         />
         <div className="relative z-20 text-center px-4 text-white">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">

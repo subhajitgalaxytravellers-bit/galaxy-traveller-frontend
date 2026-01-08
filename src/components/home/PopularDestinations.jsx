@@ -11,7 +11,7 @@ const containerVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.18,
+      staggerChildren: 0.1, // Reduced from 0.18 for smoother performance
     },
   },
 };
@@ -22,7 +22,7 @@ const destinationVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.7, ease: 'easeOut' },
+    transition: { duration: 0.5, ease: 'easeOut' }, // Reduced from 0.7
   },
 };
 
@@ -30,7 +30,13 @@ export default function PopularDestinations({ destinations }) {
   const x = useMotionValue(0);
   const containerRef = useRef(null);
 
+  // Detect reduced motion preference
+  const prefersReducedMotion = typeof window !== 'undefined' && 
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   useEffect(() => {
+    if (prefersReducedMotion) return; // Skip auto-scroll if user prefers reduced motion
+
     const interval = setInterval(() => {
       if (!containerRef.current) return;
 
@@ -48,7 +54,7 @@ export default function PopularDestinations({ destinations }) {
     }, 2500);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <section id='destinations' className='py-24 bg-muted/30'>

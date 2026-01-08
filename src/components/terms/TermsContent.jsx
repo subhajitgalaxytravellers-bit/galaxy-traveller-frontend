@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ChevronLeft, ArrowDown } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function TermsContent({ sections }) {
@@ -15,10 +16,12 @@ export default function TermsContent({ sections }) {
     <div className="min-h-screen bg-background">
       {/* HERO */}
       <section className="relative h-[60vh] min-h-[400px]">
-        <img
+        <Image
           src="/assets/polices-bg.jpeg"
           alt="Terms & Conditions"
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          className="object-cover"
+          priority
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
 

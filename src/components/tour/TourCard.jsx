@@ -1,4 +1,5 @@
 import { MapPin, Clock, Star } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export const TourCard = ({ tour }) => {
@@ -6,10 +7,12 @@ export const TourCard = ({ tour }) => {
     <Link href={`/tours/${tour.slug}`} className="group block">
       <div className="relative h-[400px] rounded-2xl overflow-hidden border border-border/50 bg-card/70 backdrop-blur-sm transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl">
         {/* Background Image */}
-        <img
+        <Image
           src={tour.heroImg}
           alt={tour.title}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
 
         {/* Gradient Overlay */}

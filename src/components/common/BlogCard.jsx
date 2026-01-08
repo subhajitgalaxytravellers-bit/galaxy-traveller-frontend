@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 export default function BlogCard({ title, img, description, link }) {
   return (
@@ -23,10 +24,12 @@ export default function BlogCard({ title, img, description, link }) {
       >
         {/* Image section */}
         <div className="relative h-1/2 w-full overflow-hidden">
-          <motion.img
+          <Image
             src={img}
             alt={title}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            fill
+            className="object-cover group-hover:scale-110 transition-transform duration-700"
+            sizes="(max-width: 640px) 100vw, 320px"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         </div>

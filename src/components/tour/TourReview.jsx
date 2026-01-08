@@ -5,6 +5,7 @@ import { Star } from "lucide-react";
 
 import { useState, useMemo } from "react";
 import { Button } from "../ui/button";
+import Image from "next/image";
 
 export default function TourReviews({ reviews, overallRating, totalReviews }) {
   const [visibleCount, setVisibleCount] = useState(3);
@@ -94,10 +95,12 @@ export default function TourReviews({ reviews, overallRating, totalReviews }) {
                   {review?.img?.length > 0 && (
                     <div className="flex gap-2 mt-4">
                       {review.img.map((photo, index) => (
-                        <img
+                        <Image
                           key={index}
                           src={photo}
                           alt={`Review photo ${index + 1}`}
+                          width={80}
+                          height={80}
                           className="w-20 h-20 object-cover rounded-md hover-elevate cursor-pointer"
                           data-testid={`review-photo-${review.id}-${index}`}
                         />

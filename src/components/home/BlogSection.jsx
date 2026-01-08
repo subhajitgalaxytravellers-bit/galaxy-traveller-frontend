@@ -3,9 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowRight, User } from "lucide-react";
-
-// eslint-disable-next-line no-unused-vars
-import { motion } from "framer-motion";
+import Image from "next/image";
 import { formatDate } from "@/lib/date";
 import { useRouter } from "next/navigation";
 
@@ -48,24 +46,6 @@ const blogPost = [
   },
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: "easeOut" },
-  },
-};
-
 const BlogSection = ({ blogPosts = blogPost }) => {
   const navigate = useRouter();
 
@@ -73,13 +53,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
     <section className="py-24 bg-muted/30">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true, amount: 0.3 }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16 opacity-0 animate-fade-in-up">
           <p className="text-primary font-semibold mb-2 uppercase tracking-wider">
             Travel Insights
           </p>
@@ -90,29 +64,29 @@ const BlogSection = ({ blogPosts = blogPost }) => {
             Discover travel tips, destination guides, and inspiring stories from
             around the world
           </p>
-        </motion.div>
+        </div>
 
         {/* Blog Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogPosts.map((post, index) => {
             console.log(post.createdAt);
             const { day, month, year } = formatDate(post?.createdAt);
             return (
-              <motion.div key={index} variants={cardVariants}>
+              <div
+                key={index}
+                className="opacity-0 animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
                 <Card className="group p-0 overflow-hidden border-0 card-shadow hover:hover-shadow transition-all duration-300 cursor-pointer">
                   <CardContent className="p-0">
                     {/* Image */}
                     <div className="relative overflow-hidden aspect-[16/10]">
-                      <img
+                      <Image
                         src={post.displayImg || post.image}
                         alt={post.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                       {post.categories.length > 0 && (
                         <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground">
@@ -160,7 +134,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
                           onClick={() => {
                             navigate(`/blog/${post.slug}`);
                           }}
-                          className="flex items-center gap-1 text-primary font-medium text-sm group-hover:gap-2 transition-all"
+                          className="flex items-center gap-1 text-primary font-medium text-sm hover:gap-2 transition-all"
                         >
                           Read More
                           <ArrowRight className="w-4 h-4" />
@@ -169,19 +143,13 @@ const BlogSection = ({ blogPosts = blogPost }) => {
                     </div>
                   </CardContent>
                 </Card>
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
 
         {/* View All */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true }}
-          className="text-center mt-12"
-        >
+        <div className="text-center mt-12 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
           <Button
             onClick={() => {
               navigate("/blogs");
@@ -192,7 +160,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
           >
             View All Articles
           </Button>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

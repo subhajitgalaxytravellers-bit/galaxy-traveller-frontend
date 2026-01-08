@@ -28,19 +28,37 @@ const geistMono = Geist_Mono({
 });
 
 export default async function RootLayout({ children }) {
-  // Fetch settings dynamically
-  const settings = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_API}/api/settings`,
-    {
-      cache: "no-store",
+  // Fetch settings dynamically with caching
+  let settings = { data: { whatsapp: {}, footerContact: {} } };
+  let globals = { data: {} };
+
+  try {
+    const settingsRes = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/api/settings`,
+      {
+        next: { revalidate: 60 }, // Cache for 60 seconds
+      }
+    );
+    if (settingsRes.ok) {
+      settings = await settingsRes.json();
     }
-  ).then((r) => r.json());
-  const globals = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_API}/api/site_global`,
-    {
-      cache: "no-store",
+  } catch (error) {
+    console.error('Failed to fetch settings:', error);
+  }
+
+  try {
+    const globalsRes = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/api/site_global`,
+      {
+        next: { revalidate: 60 }, // Cache for 60 seconds
+      }
+    );
+    if (globalsRes.ok) {
+      globals = await globalsRes.json();
     }
-  ).then((r) => r.json());
+  } catch (error) {
+    console.error('Failed to fetch site globals:', error);
+  }
 
   const whatsappNumber = settings?.data?.whatsapp?.number || "";
   const footerContact = settings?.data?.footerContact || {};

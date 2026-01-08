@@ -14,6 +14,7 @@ import {
 import CTA from '@/components/common/CTA';
 import { getSearchTours } from '@/lib/tours';
 import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 
 // Debounce
 function useDebounce(value, delay = 400) {
@@ -270,10 +271,12 @@ export default function ToursClient() {
       <div className='min-h-screen bg-background'>
         {/* HERO */}
         <section className='relative h-[60vh] min-h-[400px] overflow-hidden'>
-          <img
+          <Image
             src='/assets/hero-blog.jpg'
             alt='Tours'
-            className='absolute inset-0 w-full h-full object-cover'
+            fill
+            className='object-cover'
+            priority
           />
           <div className='absolute inset-0 hero-bottom-fade'></div>
 

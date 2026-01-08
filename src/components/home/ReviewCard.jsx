@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Star } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function ReviewCard({ img, review, user, location, rating }) {
   return (
@@ -14,10 +15,12 @@ export default function ReviewCard({ img, review, user, location, rating }) {
     >
       <Card className="relative w-full overflow-hidden rounded-2xl shadow-lg border-none aspect-[3/4] sm:aspect-[4/5]">
         {/* Background image */}
-        <img
+        <Image
           src={img}
           alt={user}
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 100vw, 400px"
         />
 
         {/* Dark gradient overlay */}

@@ -2,6 +2,7 @@ import { MapPin, Star } from "lucide-react";
 import Link from "next/link";
 
 import { sanitizeGCSUrl } from "@/lib/sanitizeUrl";
+import Image from "next/image";
 
 export const DestinationCard = ({ destination }) => {
   const toursCount = destination?.tours?.length || destination?.tourCount || 0;
@@ -13,12 +14,14 @@ export const DestinationCard = ({ destination }) => {
       className="group block h-full"
     >
       <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-sm transition-shadow duration-300 hover:shadow-lg">
-        <img
+        <Image
           src={sanitizeGCSUrl(
             destination.heroImg || destination.displayImg || destination.image
           )}
           alt={destination.title}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
         />
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />

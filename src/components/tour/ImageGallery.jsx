@@ -9,6 +9,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { ChevronLeft, ChevronRight, X, Expand } from "lucide-react";
+import Image from "next/image";
 
 const FALLBACK =
   "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop";
@@ -56,10 +57,12 @@ export default function ImageGallery({ images = [] }) {
             onClick={() => openModal(0)}
             data-testid="image-main"
           >
-            <img
+            <Image
               src={mainImage}
               alt="Main tour image"
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="100vw"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <Button
@@ -79,10 +82,12 @@ export default function ImageGallery({ images = [] }) {
                   onClick={() => openModal(index + 1)}
                   data-testid={`image-thumbnail-${index + 1}`}
                 >
-                  <img
+                  <Image
                     src={img}
                     alt={`Tour image ${index + 2}`}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="33vw"
                   />
                   {index === 2 && safeImages.length > 4 && (
                     <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
@@ -106,10 +111,12 @@ export default function ImageGallery({ images = [] }) {
             onClick={() => openModal(0)}
             data-testid="image-main"
           >
-            <img
+            <Image
               src={mainImage}
               alt="Main tour image"
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 640px) 100vw, 60vw"
             />
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -138,10 +145,12 @@ export default function ImageGallery({ images = [] }) {
                 onClick={() => openModal(index + 1)}
                 data-testid={`image-thumbnail-${index + 1}`}
               >
-                <img
+                <Image
                   src={img}
                   alt={`Tour image ${index + 2}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 640px) 33vw, 20vw"
                 />
 
                 {index === 2 && safeImages.length > 4 && (
@@ -226,9 +235,11 @@ export default function ImageGallery({ images = [] }) {
             )}
 
             {isOpen && (
-              <img
+              <Image
                 src={safeImages[currentIndex]}
                 alt={`Tour image ${currentIndex + 1}`}
+                width={1200}
+                height={800}
                 className="max-w-[90vw] max-h-[90vh] object-contain"
                 data-testid="image-modal"
               />

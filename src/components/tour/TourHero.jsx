@@ -2,6 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Clock, MapPin, Star, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../ui/button';
+import Image from 'next/image';
 
 export default function TourHero({
   title,
@@ -22,10 +23,12 @@ export default function TourHero({
     <div className='relative py-28 flex flex-col items-center h-fit min-h-[350px] w-full'>
       {/* Background Image */}
 
-      <img
+      <Image
         src={finalImage}
         alt={title}
-        className='absolute inset-0 h-full w-full object-cover'
+        fill
+        className='object-cover'
+        priority
       />
 
       {/* Overlay */}

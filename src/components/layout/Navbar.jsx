@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Menu, X, Plane } from 'lucide-react';
 import BookingAvatar from '../account/BookingAvatar';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -40,17 +41,19 @@ const Navbar = () => {
           {/* Logo */}
           <Link href='/' className='hidden lg:flex items-center px-4 gap-2'>
             {!isScrolled ? (
-              <img
+              <Image
                 src='/assets/white-logo.png'
                 alt='Logo'
-                className='h-8  lg:h-12'
+                width={120}
+                height={48}
+                className='h-8 lg:h-12'
               />
             ) : (
-              <img src='/assets/logo.png' alt='Logo' className='h-8  lg:h-12' />
+              <Image src='/assets/logo.png' alt='Logo' width={120} height={48} className='h-8 lg:h-12' />
             )}
           </Link>
           <Link href='/' className='flex lg:hidden items-center px-4 gap-2'>
-            <img src='/assets/logo.png' alt='Logo' className='h-8 lg:h-12' />
+            <Image src='/assets/logo.png' alt='Logo' width={120} height={48} className='h-8 lg:h-12' />
           </Link>
 
           {/* Desktop Nav */}
