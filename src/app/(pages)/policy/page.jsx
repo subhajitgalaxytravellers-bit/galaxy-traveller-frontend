@@ -3,7 +3,8 @@ import { parsePolicy } from "@/lib/policy";
 
 export async function generateMetadata() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/policy`, {
-    cache: "no-store",
+    cache: "force-cache",
+    next: { revalidate: 3600 },
   });
   const data = await res.json();
 
@@ -15,7 +16,8 @@ export async function generateMetadata() {
 
 async function getPolicy() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/policy`, {
-    cache: "no-store",
+    cache: "force-cache",
+    next: { revalidate: 3600 },
   });
   return res.json();
 }

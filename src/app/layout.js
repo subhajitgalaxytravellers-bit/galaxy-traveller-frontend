@@ -14,6 +14,9 @@ export const metadata = {
   },
 };
 
+// Keep server rendering close to the GCP backend (Mumbai)
+export const preferredRegion = ["bom1"];
+
 const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",

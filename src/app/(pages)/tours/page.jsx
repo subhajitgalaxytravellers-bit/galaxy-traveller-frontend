@@ -11,7 +11,8 @@ export async function generateMetadata() {
 
   try {
     const res = await fetch(`${API_BASE}/api/site_global`, {
-      cache: "no-store",
+      cache: "force-cache",
+      next: { revalidate: 900 },
     });
     const data = await res.json();
     const seo = data?.data?.defaultSeo || {};

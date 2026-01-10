@@ -1,13 +1,25 @@
 import client from "@/api/client";
 
-export async function getTours(params = {}) {
-  const res = await client.get("/tour");
-  return res?.data?.data?.items || [];
+const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || "").replace(/\/$/, "");
+
+export async function getTours() {
+  const res = await fetch(`${API_BASE}/api/tour`, {
+    cache: "force-cache",
+    next: { revalidate: 300 },
+  });
+  if (!res.ok) return [];
+  const json = await res.json();
+  return json?.data?.items || [];
 }
 
 export async function getTour(slug) {
-  const res = await client.get(`/tour/${slug}`);
-  return res?.data?.data || null;
+  const res = await fetch(`${API_BASE}/api/tour/${slug}`, {
+    cache: "force-cache",
+    next: { revalidate: 300 },
+  });
+  if (!res.ok) return null;
+  const json = await res.json();
+  return json?.data || null;
 }
 
 export async function getSearchTours(params = {}) {

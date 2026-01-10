@@ -10,7 +10,10 @@ export async function generateMetadata() {
   let shareImage = "/opengraph-blogs.jpg";
 
   try {
-    const res = await fetch(`${API_BASE}/api/site_global`, { cache: "no-store" });
+    const res = await fetch(`${API_BASE}/api/site_global`, {
+      cache: "force-cache",
+      next: { revalidate: 900 },
+    });
     const data = await res.json();
     const seo = data?.data?.defaultSeo || {};
     title = seo.metaTitle || title;

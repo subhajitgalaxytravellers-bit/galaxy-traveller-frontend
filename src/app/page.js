@@ -7,20 +7,22 @@ import Testimonials from "@/components/home/Testimonials";
 import BlogSection from "@/components/home/BlogSection";
 import DetailSection from "@/components/home/DetailSection";
 import CTA from "@/components/common/CTA";
-import client from "@/api/client";
 
 const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || "").replace(/\/$/, "");
 
+export const revalidate = 300; // cache home payload for 5 minutes
+export const preferredRegion = ["bom1"]; // keep Vercel compute close to GCP (Mumbai)
+
 async function getSiteData() {
-  console.log(`${process.env.NEXT_PUBLIC_BASE_API}/api/home`);
-  const res = await client.get(`/home`, {
-    next: { revalidate: 60 },
+  const res = await fetch(`${API_BASE}/api/home`, {
+    cache: "force-cache",
+    next: { revalidate },
   });
 
-  const data = res.data;
-  console.log(data);
-  if (res.status !== 200) throw new Error("Failed to load site data");
-  return data;
+  if (!res.ok) throw new Error("Failed to load site data");
+
+  // backend responds with { success, data }
+  return res.json();
 }
 
 export async function generateMetadata() {
@@ -29,7 +31,10 @@ export async function generateMetadata() {
   let shareImage = "/opengraph-home.jpg";
 
   try {
-    const res = await fetch(`${API_BASE}/api/site_global`, { cache: "no-store" });
+    const res = await fetch(`${API_BASE}/api/site_global`, {
+      cache: "force-cache",
+      next: { revalidate: 900 },
+    });
     const data = await res.json();
     const seo = data?.data?.defaultSeo || {};
     title = seo.metaTitle || title;
