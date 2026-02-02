@@ -47,7 +47,7 @@ const Hero = ({ slides = [] }) => {
     <section className="relative h-screen overflow-hidden">
       {/* Carousel */}
       <div className="overflow-hidden h-full" ref={emblaRef}>
-        <div className="flex h-full">
+        <div className="flex lg:h-full h-5/6">
           {slides.map((slide, index) => (
             <div key={index} className="flex-[0_0_100%] min-w-0 relative">
               {/* Background Image */}

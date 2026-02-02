@@ -27,14 +27,15 @@ export default function TourHero({
         src={finalImage}
         alt={title}
         fill
-        className='object-cover'
+        className='object-cover '
         priority
       />
 
       {/* Overlay */}
-      <div className='absolute inset-0 bg-linear-to-r from-black/80 via-black/60 to-transparent' />
+      <div className='absolute inset-0 bg-linear-to-r from-black/80 via-black/60 to-transparent z-10' />
+      <div className="absolute inset-0 hero-bottom-fade z-10"></div>
 
-      <div className='relative container mx-auto h-full w-full  flex items-center px-4 sm:px-6 lg:px-10'>
+      <div className='relative z-20 container mx-auto h-full w-full  flex items-center px-4 sm:px-6 lg:px-10'>
         <div className='max-w-xl md:max-w-2xl text-white space-y-4 max-lg:w-full lg:max-w-[50vw] text-wrap wrap-break-word sm:space-y-6'>
           {/* Back */}
           <Link

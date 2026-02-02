@@ -85,12 +85,12 @@ export default function PopularDestinations({ destinations }) {
           initial='hidden'
           whileInView='visible'
           viewport={{ once: true, amount: 0.2 }}
-          className='grid grid-cols-1 md:grid-cols-2  lg:grid-cols-4 gap-6'>
+          className='grid grid-flow-col auto-cols-[minmax(260px,1fr)] overflow-x-auto gap-6 pb-2 snap-x snap-mandatory'>
           {destinations?.map((destination, idx) => (
             <Link
               href={`/destinations/${destination.slug}`}
               key={idx}
-              className='min-w-[280px] md:min-w-[350px] lg:min-w-[380px]'>
+              className='w-full snap-start'>
               <motion.div className='p-2' variants={destinationVariants}>
                 <Card className='group overflow-hidden p-0 border-0 card-shadow hover:hover-shadow transition-all duration-300 cursor-pointer'>
                   <CardContent className='p-0'>

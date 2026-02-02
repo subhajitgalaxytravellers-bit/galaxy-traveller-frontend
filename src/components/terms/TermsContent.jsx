@@ -23,7 +23,7 @@ export default function TermsContent({ sections }) {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
+        <div className="absolute inset-0 hero-bottom-fade" />
 
         <div className="relative h-full flex flex-col items-center justify-center text-center px-4">
           <motion.div

@@ -13,6 +13,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "developers.google.com",
         pathname: "/**",
+      },{
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
       }
     ],
   },

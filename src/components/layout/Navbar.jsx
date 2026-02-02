@@ -37,7 +37,7 @@ const Navbar = () => {
           : 'bg-white lg:bg-transparent'
       }`}>
       <div className='container mx-auto relative'>
-        <div className='flex items-center justify-between h-20'>
+        <div className='flex items-center justify-between lg:h-20 h-16'>
           {/* Logo */}
           <Link href='/' className='hidden lg:flex items-center px-4 gap-2'>
             {!isScrolled ? (
@@ -46,14 +46,14 @@ const Navbar = () => {
                 alt='Logo'
                 width={120}
                 height={48}
-                className='h-8 lg:h-12'
+                className='h-8 lg:h-14'
               />
             ) : (
-              <Image src='/assets/logo.png' alt='Logo' width={120} height={48} className='h-8 lg:h-12' />
+              <Image src='/assets/logo.png' alt='Logo' width={120} height={48} className='h-8 lg:h-14' />
             )}
           </Link>
           <Link href='/' className='flex lg:hidden items-center px-4 gap-2'>
-            <Image src='/assets/logo.png' alt='Logo' width={120} height={48} className='h-8 lg:h-12' />
+            <Image src='/assets/logo.png' alt='Logo' width={80} height={48} className='h-8 lg:h-12' />
           </Link>
 
           {/* Desktop Nav */}

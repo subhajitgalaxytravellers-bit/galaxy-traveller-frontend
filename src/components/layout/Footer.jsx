@@ -6,17 +6,18 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const Footer = ({ footer, global }) => {
+  console.log(footer);
   return (
     <footer id='contact' className='bg-white/30  pt-16 pb-8'>
       <div className='container mx-auto px-4 md:px-16'>
-        <div className=' grid grid-cols-1 lg:grid-cols-4 space-y-12 mb-12'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12 items-stretch'>
           {/* Brand */}
-          <div className='max-lg:px-4 max-lg:text-center max-lg:items-center'>
-            <div className='flex items-center gap-2 mb-4 max-lg:justify-center'>
-              <Image src='/assets/logo.png' alt='Logo' width={150} height={48} className='h-12' />
+          <div className='h-full p-6 max-lg:px-4 max-lg:text-center flex flex-col gap-4'>
+            <div className='flex items-center gap-2 max-lg:justify-center w-full'>
+              <Image src='/assets/logo.png' alt='Logo' width={120} height={0} className='lg:ml-4 mx-auto lg:mx-0' />
             </div>
-            <p className='text-muted-foreground mb-6'> {footer?.brief || ''}</p>
-            <div className='flex gap-4 justify-center lg:justify-start'>
+            <p className='text-muted-foreground'>{footer?.brief || ''}</p>
+            <div className='flex gap-4 justify-center lg:justify-start w-full'>
               {global.facebook && (
                 <a
                   href={global.facebook}
@@ -48,138 +49,120 @@ const Footer = ({ footer, global }) => {
             </div>
           </div>
 
-          <div className='px-4  flex max-lg:flex-col max-lg:items-center max-lg:text-center  justify-between col-span-1 md:col-span-2 lg:col-span-3 w-full'>
-            {/* Quick Links */}
-            <div className='max-lg:text-center'>
-              <h3 className='text-lg font-bold mb-4'>Quick Links</h3>
-              <ul className='my-3'>
-                <li>
-                  <Link
-                    href='/about'
-                    className='text-muted-foreground hover:text-primary transition-colors'>
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/destinations'
-                    className='text-muted-foreground hover:text-primary transition-colors'>
-                    Destinations
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/tours'
-                    className='text-muted-foreground hover:text-primary transition-colors'>
-                    Tours
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/blogs'
-                    className='text-muted-foreground hover:text-primary transition-colors'>
-                    Blog
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/contact'
-                    className='text-muted-foreground hover:text-primary transition-colors'>
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          {/* Quick Links */}
+          <div className='h-full p-6 max-lg:text-center flex flex-col'>
+            <h3 className='text-lg font-bold mb-4'>Quick Links</h3>
+            <ul className='space-y-2 flex-1'>
+              <li>
+                <Link
+                  href='/about'
+                  className='text-muted-foreground hover:text-primary transition-colors'>
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href='/destinations'
+                  className='text-muted-foreground hover:text-primary transition-colors'>
+                  Destinations
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href='/tours'
+                  className='text-muted-foreground hover:text-primary transition-colors'>
+                  Tours
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href='/blogs'
+                  className='text-muted-foreground hover:text-primary transition-colors'>
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href='/contact'
+                  className='text-muted-foreground hover:text-primary transition-colors'>
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-            {/* Support */}
-            <div>
-              <h3 className='text-lg font-bold mb-4'>Support</h3>
-              <ul className='my-3'>
-                <li>
-                  <a
-                    href='/contact'
-                    className='text-muted-foreground hover:text-primary transition-colors'>
-                    Help Center
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href='/policy'
-                    className='text-muted-foreground hover:text-primary transition-colors'>
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href='/terms'
-                    className='text-muted-foreground hover:text-primary transition-colors'>
-                    Terms of Service
-                  </a>
-                </li>
-                {/* <li>
+          {/* Support */}
+          <div className='h-full p-6 max-lg:text-center flex flex-col'>
+            <h3 className='text-lg font-bold mb-4'>Support</h3>
+            <ul className='space-y-2 flex-1'>
+              <li>
                 <a
-                  href="#"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  FAQs
+                  href='/contact'
+                  className='text-muted-foreground hover:text-primary transition-colors'>
+                  Help Center
                 </a>
-              </li> */}
-                {/* <li>
+              </li>
+              <li>
                 <a
-                  href="#"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Travel Insurance
+                  href='/policy'
+                  className='text-muted-foreground hover:text-primary transition-colors'>
+                  Privacy Policy
                 </a>
-              </li> */}
-              </ul>
-            </div>
+              </li>
+              <li>
+                <a
+                  href='/terms'
+                  className='text-muted-foreground hover:text-primary transition-colors'>
+                  Terms of Service
+                </a>
+              </li>
+            </ul>
+          </div>
 
-            {/* Contact */}
-            <div>
-              <h3 className='text-lg font-bold mb-4'>Contact Us</h3>
+          {/* Contact */}
+          <div className='h-full p-6 max-lg:text-center flex flex-col'>
+            <h3 className='text-lg font-bold mb-4'>Contact Us</h3>
 
-              <ul className='my-3 text-muted-foreground'>
-                {/* Email */}
-                <li className='mb-4'>
-                  <p className='font-medium text-foreground mb-1'>Email</p>
+            <ul className='my-3 text-muted-foreground space-y-4 flex-1'>
+              {/* Email */}
+              <li>
+                <p className='font-medium text-foreground mb-1'>Email</p>
+                <a
+                  href={`mailto:${footer?.email}`}
+                  className='hover:text-primary transition-colors'>
+                  {footer?.email || 'Not available'}
+                </a>
+              </li>
+
+              {/* Phone */}
+              <li>
+                <p className='font-medium text-foreground mb-1'>Phone</p>
+
+                {/* primary contact */}
+                {footer?.contact1 && (
                   <a
-                    href={`mailto:${footer?.email}`}
-                    className='hover:text-primary transition-colors'>
-                    {footer?.email || 'Not available'}
+                    href={`tel:${footer.contact1}`}
+                    className='hover:text-primary transition-colors block'>
+                    {footer.contact1}
                   </a>
-                </li>
+                )}
 
-                {/* Phone */}
-                <li className='mb-4'>
-                  <p className='font-medium text-foreground mb-1'>Phone</p>
+                {/* secondary contact */}
+                {footer?.contact2 && (
+                  <a
+                    href={`tel:${footer.contact2}`}
+                    className='hover:text-primary transition-colors block mt-1'>
+                    {footer.contact2}
+                  </a>
+                )}
+              </li>
 
-                  {/* primary contact */}
-                  {footer?.contact1 && (
-                    <a
-                      href={`tel:${footer.contact1}`}
-                      className='hover:text-primary transition-colors block'>
-                      {footer.contact1}
-                    </a>
-                  )}
-
-                  {/* secondary contact */}
-                  {footer?.contact2 && (
-                    <a
-                      href={`tel:${footer.contact2}`}
-                      className='hover:text-primary transition-colors block mt-1'>
-                      {footer.contact2}
-                    </a>
-                  )}
-                </li>
-
-                {/* Address */}
-                <li>
-                  <p className='font-medium text-foreground mb-1'>Address</p>
-                  <p>{footer?.location || 'No address available'}</p>
-                </li>
-              </ul>
-            </div>
+              {/* Address */}
+              <li>
+                <p className='font-medium text-foreground mb-1'>Address</p>
+                <p>{footer?.location || 'No address available'}</p>
+              </li>
+            </ul>
           </div>
         </div>
 
