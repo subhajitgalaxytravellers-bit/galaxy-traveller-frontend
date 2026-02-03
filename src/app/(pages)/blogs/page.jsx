@@ -43,7 +43,6 @@ export async function generateMetadata() {
 
 export default async function Page() {
   const blogs = await getAllBlogs();
-  console.log(...blogs);
 
   return <BlogListClient blogs={blogs} />;
 }

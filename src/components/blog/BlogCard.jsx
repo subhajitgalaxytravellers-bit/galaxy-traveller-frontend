@@ -16,16 +16,15 @@ export const BlogCard = ({
   author,
 }) => {
   const formattedDate = formatDate(date);
-  console.log({ formattedDate });
   return (
-    <Card className="overflow-hidden p-0 border-0 shadow-md hover:shadow-lg transition-shadow duration-300 group h-full flex flex-col">
+    <Card className="overflow-hidden p-0 border-0 shadow-md group h-full flex flex-col transform-gpu will-change-transform hover:-translate-y-1 transition-transform duration-300">
       <Link href={`/blogs/${id}`} className="flex flex-col h-full">
         <div className="relative h-56 overflow-hidden flex-shrink-0">
           <Image
             src={image}
             alt={title}
             fill
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105 transform-gpu will-change-transform"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           {category && (

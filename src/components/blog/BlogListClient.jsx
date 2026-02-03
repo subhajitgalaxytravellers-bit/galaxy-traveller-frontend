@@ -87,7 +87,7 @@ export default function BlogListClient({ blogs }) {
 
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
               {filtered.map((post, index) => (
-                <div key={post.slug || index}>
+                <div key={post._id || post.slug || index}>
                   <BlogCard
                     id={post.slug}
                     title={post.title}
