@@ -27,17 +27,26 @@ export default function BookingAvatar({ isScrolled }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token);
-    
-    if (stored) {
-      try {
-        setUser(JSON.parse(stored));
-      } catch {
-        setUser(null);
+    let active = true;
+    (async () => {
+      const stored = localStorage.getItem('user');
+      const token = localStorage.getItem('token');
+
+      if (!active) return;
+      setIsLoggedIn(!!token);
+
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (active) setUser(parsed);
+        } catch {
+          if (active) setUser(null);
+        }
       }
-    }
+    })();
+    return () => {
+      active = false;
+    };
   }, []);
 
   const initials = useMemo(

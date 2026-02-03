@@ -55,10 +55,10 @@ export default function BlogDetailClient({ post }) {
           <div className="absolute inset-0 hero-bottom-fade z-10"></div>
         </div>
         <div className="relative z-10 container mx-auto px-4 text-center text-white">
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             {post.title}
           </h1>
-          <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
+          <p className="text-base md:text-lg text-white/90 max-w-3xl mx-auto">
             {post.bodyAlt}
           </p>
         </div>

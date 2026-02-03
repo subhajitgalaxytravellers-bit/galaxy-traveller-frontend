@@ -56,20 +56,25 @@ export async function generateMetadata() {
 
 export default async function AboutPage() {
   // Fetch stats and timeline in parallel
-  const statsPromise = fetch(`${API_BASE}/api/site_global`, { cache: 'no-store' })
-    .then(res => res.json())
+  const statsPromise = fetch(`${API_BASE}/api/site_global`, {
+    cache: 'no-store',
+  })
+    .then((res) => res.json())
     .catch(() => ({}));
-  
+
   const timelinePromise = getTimelineData();
 
-  const [statsData, timeline] = await Promise.all([statsPromise, timelinePromise]);
+  const [statsData, timeline] = await Promise.all([
+    statsPromise,
+    timelinePromise,
+  ]);
 
   const globalData = statsData?.data || statsData || {};
   const stats = {
     happyTravelers: globalData.happyTravelers || '50K+',
     countries: globalData.countries || '100+',
     tourPackages: globalData.tourPackages || '500+',
-    yearsExperience: globalData.yearsExperience || '15'
+    yearsExperience: globalData.yearsExperience || '15',
   };
 
   const values = [
@@ -99,12 +104,10 @@ export default async function AboutPage() {
     },
   ];
 
-
-
   return (
     <div className='min-h-screen'>
       {/* Hero Section */}
-      <section className='relative h-[60vh] min-h-[360px] flex items-center justify-center overflow-hidden'>
+      <section className='relative h-[70vh] min-h-[420px] md:h-[70vh] md:min-h-[420px] flex items-center justify-center overflow-hidden'>
         <div className='absolute inset-0 z-0'>
           <Image
             src={'/assets/hero-mountains.jpg'}
@@ -113,29 +116,35 @@ export default async function AboutPage() {
             className='object-cover'
             priority
           />
-          <div className="absolute inset-0 hero-bottom-fade z-10"></div>
+          <div className='absolute inset-0 hero-bottom-fade z-10'></div>
         </div>
-        
+
         <div className='relative z-10 text-center text-white px-4 animate-fade-in'>
-          <h1 className='text-4xl md:text-6xl font-bold mb-4 md:mb-6'>
+          <h1 className='text-3xl md:text-5xl mt-8 font-bold mb-4 md:mb-6'>
             About GalaxyTravel
           </h1>
-          <p className='text-base sm:text-lg md:text-2xl max-w-3xl mx-auto mb-6 md:mb-8 opacity-95 px-2'>
+          <p className='text-sm sm:text-lg md:text-xl max-w-3xl mx-auto mb-6 md:mb-8 opacity-95 px-2'>
             Crafting extraordinary journeys around the globe since 2009
           </p>
           <div className='flex gap-3 md:gap-4 justify-center flex-wrap px-2'>
             <div className='bg-background/10 backdrop-blur-sm border border-white/20 rounded-lg px-5 py-3 min-w-[120px]'>
-              <div className='text-2xl md:text-3xl font-bold'>{stats.happyTravelers}</div>
+              <div className='text-2xl md:text-3xl font-bold'>
+                {stats.happyTravelers}
+              </div>
               <div className='text-xs md:text-sm opacity-90'>
                 Happy Travelers
               </div>
             </div>
             <div className='bg-background/10 backdrop-blur-sm border border-white/20 rounded-lg px-5 py-3 min-w-[120px]'>
-              <div className='text-2xl md:text-3xl font-bold'>{stats.countries}</div>
+              <div className='text-2xl md:text-3xl font-bold'>
+                {stats.countries}
+              </div>
               <div className='text-xs md:text-sm opacity-90'>Countries</div>
             </div>
             <div className='bg-background/10 backdrop-blur-sm border border-white/20 rounded-lg px-5 py-3 min-w-[120px]'>
-              <div className='text-2xl md:text-3xl font-bold'>{stats.yearsExperience}</div>
+              <div className='text-2xl md:text-3xl font-bold'>
+                {stats.yearsExperience}
+              </div>
               <div className='text-xs md:text-sm opacity-90'>Years</div>
             </div>
           </div>
@@ -203,11 +212,11 @@ export default async function AboutPage() {
                 crafted to exceed expectations.
               </p>
             </div>
-            <div className="flex justify-center">
-              <ImageCollage 
-                img1="/assets/destination-alps.jpg"
-                img2="/assets/hero-mountains.jpg"
-                img3="/assets/hero-blog.jpg"
+            <div className='flex justify-center'>
+              <ImageCollage
+                img1='/assets/destination-alps.jpg'
+                img2='/assets/hero-mountains.jpg'
+                img3='/assets/hero-blog.jpg'
               />
             </div>
           </div>
@@ -245,7 +254,7 @@ export default async function AboutPage() {
 
       {/* Timeline Section */}
       <div className='w-full'>
-          <Timeline data={timeline} />
+        <Timeline data={timeline} />
       </div>
 
       {/* Team Section */}

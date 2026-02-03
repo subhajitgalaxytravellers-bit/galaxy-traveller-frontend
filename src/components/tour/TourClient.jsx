@@ -27,13 +27,12 @@ function useDebounce(value, delay = 400) {
   return debounced;
 }
 
-export default function ToursClient() {
-  const [showInitialLoader, setShowInitialLoader] = useState(true);
-  const [items, setItems] = useState([]);
-  const [total, setTotal] = useState(0);
+export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
+  const [items, setItems] = useState(initialPage?.items || []);
+  const [total, setTotal] = useState(initialPage?.total || 0);
   const [loading, setLoading] = useState(false);
 
-  const [limit, setLimit] = useState(6);
+  const [limit, setLimit] = useState(initialPage?.limit || initialLimit);
 
   // Filters
   const [priceRange, setPriceRange] = useState([0, 500000]);
@@ -48,47 +47,38 @@ export default function ToursClient() {
   const [hydrated, setHydrated] = useState(false);
   const observerRef = useRef(null);
 
-  // Prevent the loader from being cut off mid-animation; keep it on screen briefly.
-  useEffect(() => {
-    const timer = setTimeout(() => setShowInitialLoader(false), 900);
-    return () => clearTimeout(timer);
-  }, []);
-
   const tourTypeOptions = ['fixed_date', 'selectable_date', 'both'];
   const durationOptions = ['1', '3', '5', '7', '14', '30'];
   const ratingOptions = [1, 2, 3, 4, 5];
+  const initialFetchSkipped = useRef(false);
 
   // -----------------------------
   // HYDRATE FROM URL QUERY PARAMS
   // -----------------------------
   useEffect(() => {
-    const q = searchParams.get('search') || searchParams.get('q') || '';
-    setSearch(q);
+    let active = true;
+    const hydrate = async () => {
+      const q = searchParams.get('search') || searchParams.get('q') || '';
+      const urlTypes = searchParams.getAll('tourType');
+      const cat = searchParams.get('category');
+      const urlDur = searchParams.getAll('duration');
+      const urlRatings = searchParams.getAll('minRating');
+      const min = searchParams.get('min');
+      const max = searchParams.get('max');
 
-    // MULTI TOUR TYPES (tourType=?&tourType=?)
-    const urlTypes = searchParams.getAll('tourType');
-    setTourTypes(urlTypes.length ? urlTypes : []);
-
-    // Allow fallback: category=
-    const cat = searchParams.get('category');
-    if (cat && !urlTypes.length) setTourTypes([cat]);
-
-    // MULTI DURATION
-    const urlDur = searchParams.getAll('duration');
-    setDurations(urlDur.length ? urlDur : []);
-
-    // MULTI RATING
-    const urlRatings = searchParams.getAll('minRating');
-    setRatings(urlRatings.length ? urlRatings.map(Number) : []);
-
-    // PRICE
-    const min = searchParams.get('min');
-    const max = searchParams.get('max');
-
-    setPriceRange([min ? Number(min) : 0, max ? Number(max) : 1000000]);
-
-    setHydrated(true);
-  }, []);
+      if (!active) return;
+      setSearch(q);
+      setTourTypes(urlTypes.length ? urlTypes : cat ? [cat] : []);
+      setDurations(urlDur.length ? urlDur : []);
+      setRatings(urlRatings.length ? urlRatings.map(Number) : []);
+      setPriceRange([min ? Number(min) : 0, max ? Number(max) : 1000000]);
+      setHydrated(true);
+    };
+    hydrate();
+    return () => {
+      active = false;
+    };
+  }, [searchParams]);
 
   // ---------------------------
   // FETCH TOURS (API)
@@ -127,9 +117,30 @@ export default function ToursClient() {
   // -----------------------------------------
   useEffect(() => {
     if (!hydrated) return;
-    setLimit(6);
-    fetchTours(6);
-  }, [hydrated, priceRange, durations, ratings, tourTypes, debouncedSearch]);
+    let active = true;
+    const run = async () => {
+      if (
+        !initialFetchSkipped.current &&
+        initialPage?.items?.length &&
+        !search &&
+        !tourTypes.length &&
+        !durations.length &&
+        !ratings.length &&
+        priceRange[0] === 0 &&
+        priceRange[1] === 500000
+      ) {
+        initialFetchSkipped.current = true;
+        return;
+      }
+      if (!active) return;
+      setLimit(6);
+      await fetchTours(6);
+    };
+    run();
+    return () => {
+      active = false;
+    };
+  }, [hydrated, priceRange, durations, ratings, tourTypes, debouncedSearch, fetchTours]);
 
   // ---------------------------
   // LOAD MORE
@@ -137,8 +148,16 @@ export default function ToursClient() {
   useEffect(() => {
     if (!hydrated) return;
     if (limit === 6) return;
-    fetchTours(limit);
-  }, [limit]);
+    let active = true;
+    const run = async () => {
+      if (!active) return;
+      await fetchTours(limit);
+    };
+    run();
+    return () => {
+      active = false;
+    };
+  }, [limit, hydrated, fetchTours]);
 
   // ---------------------------
   // INFINITE SCROLL WATCHER
@@ -173,10 +192,6 @@ export default function ToursClient() {
   // ---------------------------
   // RENDER
   // ---------------------------
-  if (showInitialLoader) {
-    return <AiLoader />;
-  }
-
   const renderFilters = () => (
     <div className='space-y-6'>
       <div className='flex justify-between items-center'>
@@ -278,11 +293,15 @@ export default function ToursClient() {
     </div>
   );
 
+  if (loading && items.length === 0) {
+    return <AiLoader />;
+  }
+
   return (
     <>
       <div className='min-h-screen bg-background'>
         {/* HERO */}
-        <section className='relative h-[60vh] min-h-[400px] overflow-hidden'>
+        <section className='relative h-[70vh] min-h-[420px] md:h-[70vh] md:min-h-[420px] overflow-hidden'>
           <Image
             src='/assets/hero-blog.jpg'
             alt='Tours'
@@ -293,8 +312,8 @@ export default function ToursClient() {
           <div className='absolute inset-0 hero-bottom-fade'></div>
 
           <div className='relative z-10 container mx-auto px-4 h-full flex flex-col justify-center text-center text-white'>
-            <h1 className='text-5xl font-bold'>Discover Your Next Adventure</h1>
-            <p className='text-lg mt-4'>
+            <h1 className='text-4xl md:text-5xl font-bold'>Discover Your Next Adventure</h1>
+            <p className='text-base md:text-lg mt-4'>
               Explore handpicked tours and experiences across incredible
               destinations
             </p>
@@ -341,7 +360,7 @@ export default function ToursClient() {
               {/* Cards */}
               <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
                 {items.map((tour) => (
-                  <TourCard key={tour._id} tour={tour} />
+                  <TourCard key={tour._id || tour.slug} tour={tour} />
                 ))}
               </div>
 

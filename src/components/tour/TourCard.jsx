@@ -16,8 +16,8 @@ export const TourCard = ({ tour }) => {
         />
 
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-white/12 mix-blend-screen" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-transparent" />
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-black/50" />
 
         {/* Content */}
         <div className="absolute inset-0 p-6 flex flex-col justify-between">
@@ -57,12 +57,12 @@ export const TourCard = ({ tour }) => {
             <div className="flex items-center justify-between pt-2 border-t border-white/20">
               <div className="flex items-center gap-1.5 text-white/90">
                 <Clock className="h-4 w-4" />
-                <span className="text-sm">{tour.details.duration} Days</span>
+                <span className="text-sm">{tour.details?.duration} Days</span>
               </div>
               <div className="text-right">
                 <p className="text-sm text-white/70">From</p>
                 <p className="text-xl font-bold text-white">
-                  Rs. {tour.details.pricePerPerson.toLocaleString()}
+                  Rs. {tour.details?.pricePerPerson?.toLocaleString?.() || "—"}
                 </p>
               </div>
             </div>

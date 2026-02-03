@@ -1,5 +1,5 @@
 import BlogListClient from '@/components/blog/BlogListClient';
-import { getAllBlogs } from '@/lib/blogs';
+import { getBlogsPage } from '@/lib/blogs';
 
 const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || '').replace(/\/$/, '');
 
@@ -42,7 +42,8 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const blogs = await getAllBlogs();
+  const limit = 9;
+  const initialPage = await getBlogsPage({ page: 1, limit });
 
-  return <BlogListClient blogs={blogs} />;
+  return <BlogListClient initialPage={initialPage} limit={limit} />;
 }

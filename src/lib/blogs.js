@@ -1,45 +1,58 @@
+import client from "@/api/client";
+
 const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || "").replace(/\/$/, "");
 
-export async function getAllBlogs() {
-  const res = await fetch(`${API_BASE}/api/blog`, {
+// Server-friendly paginated fetch (uses fetch to avoid browser-only APIs)
+export async function getBlogsPage({ page = 1, limit = 9, q = "" } = {}) {
+  const params = new URLSearchParams();
+  params.append("page", page);
+  params.append("limit", limit);
+  if (q?.trim()) params.append("q", q.trim());
+
+  const res = await fetch(`${API_BASE}/api/blog?${params.toString()}`, {
     cache: "force-cache",
     next: { revalidate: 300 },
   });
-  if (!res.ok) return [];
-  const json = await res.json();
-  /* 
-     We map explicitly to REMOVE 'body' and other heavy unused fields. 
-     This dramatically reduces the JSON payload size for the list page.
-  */
-  const result = json.data.items.map(({
-    _id,
-    title,
-    slug,
-    // description, // Removed: potential duplicate of bodyAlt/excerpt
-    // body,        // Removed: HEAVY content, not needed for list
-    author,
-    // createdBy,   // Removed: technical field
-    // status,      // Removed: technical field
-    // tagMonths,   // Removed: unused
-    updatedAt,
-    displayImg,
-    category,       // Added: needed for badge
-    readTime,       // Added: needed for card
-    bodyAlt         // Added: used as excerpt
-  }) => ({
-    _id,
-    title,
-    slug,
-    author,
-    updatedAt,
-    displayImg,
-    category,
-    readTime,
-    bodyAlt
-  }));
 
-  console.log("Optimized Payload Count:", result.length); // useful log, but small info
-  return result;
+  if (!res.ok) {
+    return { items: [], total: 0, page, totalPages: 1, limit };
+  }
+
+  const json = await res.json();
+  const data =
+    json?.data || { items: [], total: 0, page, totalPages: 1, limit };
+
+  const items = (data.items || []).map(
+    ({
+      _id,
+      title,
+      slug,
+      author,
+      updatedAt,
+      displayImg,
+      category,
+      readTime,
+      bodyAlt,
+    }) => ({
+      _id,
+      title,
+      slug,
+      author,
+      updatedAt,
+      displayImg,
+      category,
+      readTime,
+      bodyAlt,
+    })
+  );
+
+  return { ...data, items };
+}
+
+// Legacy helper: returns first page items array for callers expecting a list
+export async function getAllBlogs() {
+  const { items } = await getBlogsPage({ page: 1, limit: 50 });
+  return items;
 }
 
 export async function getBlog(slug) {

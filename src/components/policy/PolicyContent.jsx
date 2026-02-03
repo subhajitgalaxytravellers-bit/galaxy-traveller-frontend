@@ -15,7 +15,7 @@ export default function PolicyContent({ sections }) {
   return (
     <div className="min-h-screen bg-background">
       {/* HERO */}
-      <section className="relative h-[60vh] min-h-[400px]">
+      <section className="relative h-[70vh] min-h-[420px] md:h-[70vh] md:min-h-[420px]">
         <Image
           src="/assets/terms-bg.jpeg"
           alt="Privacy Policy"

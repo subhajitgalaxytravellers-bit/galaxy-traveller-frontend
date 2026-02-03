@@ -9,7 +9,7 @@ export default function TourInclusions({ included, excluded }) {
         <CardContent className="p-6">
           <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
             <Check className="h-5 w-5 text-green-600" />
-            What's Included
+            What&apos;s Included
           </h3>
           <ul className="space-y-3">
             {included.map((item, index) => (
@@ -32,7 +32,7 @@ export default function TourInclusions({ included, excluded }) {
         <CardContent className="p-6">
           <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
             <X className="h-5 w-5 text-red-500" />
-            What's Not Included
+            What&apos;s Not Included
           </h3>
           <ul className="space-y-3">
             {excluded.map((item, index) => (

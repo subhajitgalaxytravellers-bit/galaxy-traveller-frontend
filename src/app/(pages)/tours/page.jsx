@@ -1,5 +1,5 @@
 import ToursClient from "@/components/tour/TourClient";
-import { getTours } from "@/lib/tours";
+import { getSearchToursPage } from "@/lib/tours";
 
 export async function generateMetadata() {
   const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || "").replace(/\/$/, "");
@@ -50,5 +50,8 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  return <ToursClient />;
+  const limit = 6;
+  const initialPage = await getSearchToursPage({ page: 1, limit });
+
+  return <ToursClient initialPage={initialPage} limit={limit} />;
 }

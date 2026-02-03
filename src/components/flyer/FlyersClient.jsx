@@ -57,7 +57,7 @@ export default function FlyersClient({ initialData, limit }) {
   return (
     <div className="min-h-screen bg-background">
       {/* HERO */}
-      <section className="relative h-[60vh] min-h-[400px] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[70vh] min-h-[420px] md:h-[70vh] md:min-h-[420px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 hero-bottom-fade z-10"></div>
 
         <Image
@@ -68,10 +68,10 @@ export default function FlyersClient({ initialData, limit }) {
           priority
         />
         <div className="relative z-20 text-center px-4 text-white">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          <h1 className="text-3xl md:text-5xl font-bold mb-4">
             Promotional Flyers
           </h1>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto">
             Explore our latest travel packages and special offers
           </p>
         </div>

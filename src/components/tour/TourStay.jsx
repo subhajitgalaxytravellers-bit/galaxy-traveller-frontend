@@ -18,7 +18,7 @@ export default function TourStays({ stays }) {
 
   return (
     <div className="space-y-6 mb-6">
-      <h2 className="text-2xl font-bold mb-6">Where You'll Stay</h2>
+      <h2 className="text-2xl font-bold mb-6">Where You&apos;ll Stay</h2>
 
       <div className="space-y-6">
         {stays.map((stay, index) => (

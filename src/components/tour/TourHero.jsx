@@ -58,13 +58,13 @@ export default function TourHero({
           {/* Title */}
           <h1
             className='font-heading font-bold leading-tight
-                         text-3xl sm:text-4xl md:text-5xl lg:text-6xl'>
+                          text-2xl sm:text-4xl md:text-5xl lg:text-6xl'>
             {title}
           </h1>
 
           {/* Subtitle */}
           {subtitle && (
-            <p className='text-sm sm:text-base md:text-lg text-wrap wrap-break-word text-white/90 max-w-xl'>
+            <p className='text-xs sm:text-base md:text-lg text-wrap wrap-break-word text-white/90 max-w-xl'>
               {subtitle}
             </p>
           )}

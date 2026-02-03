@@ -42,11 +42,11 @@ export default function TourVideoTestimonials({ videos = [] }) {
   const [api, setApi] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [playingIndex, setPlayingIndex] = useState(null);
+  const [ytReadyFlag, setYtReadyFlag] = useState(false);
   // console.log("videos", videos);
 
   const videoRefs = useRef([]);
   const ytPlayers = useRef({});
-  const ytReady = useRef(false);
   const hasYouTube = videos.some((v) => !!getYouTubeId(v));
   const hasInstagram = videos.some((v) => v.includes("instagram.com"));
 
@@ -55,7 +55,7 @@ export default function TourVideoTestimonials({ videos = [] }) {
     if (!hasYouTube || typeof window === "undefined") return;
 
     if (window.YT && window.YT.Player) {
-      ytReady.current = true;
+      setYtReadyFlag(true);
       return;
     }
 
@@ -64,7 +64,7 @@ export default function TourVideoTestimonials({ videos = [] }) {
     document.body.appendChild(tag);
 
     window.onYouTubeIframeAPIReady = () => {
-      ytReady.current = true;
+      setYtReadyFlag(true);
     };
   }, [hasYouTube]);
 
@@ -181,7 +181,7 @@ export default function TourVideoTestimonials({ videos = [] }) {
                   isYouTube={isYouTube}
                   isInstagram={isInstagram}
                   isMuted={playingIndex !== i}
-                  ytReady={ytReady.current}
+                  ytReady={ytReadyFlag}
                   attachVideoRef={(el) => (videoRefs.current[i] = el)}
                   registerYT={(player) => (ytPlayers.current[i] = player)}
                   onClick={() => handleToggle(i)}
@@ -256,7 +256,7 @@ function VideoCard({
         player.destroy();
       } catch {}
     };
-  }, [isYouTube, ytReady, youTubeId]);
+  }, [isYouTube, ytReady, youTubeId, registerYT, isMuted]);
 
   /* --- Reprocess Instagram embeds after mount --- */
   useEffect(() => {

@@ -52,11 +52,18 @@ export default function PaymentDialog({
   const [selectedPayment, setSelectedPayment] = useState("full");
 
   useEffect(() => {
-    if (paymentMode === "partial" && paymentConfig?.partial?.enabled) {
-      setSelectedPayment("partial");
-    } else {
-      setSelectedPayment("full");
-    }
+    let active = true;
+    const updateSelection = async () => {
+      const next =
+        paymentMode === "partial" && paymentConfig?.partial?.enabled
+          ? "partial"
+          : "full";
+      if (active) setSelectedPayment(next);
+    };
+    updateSelection();
+    return () => {
+      active = false;
+    };
   }, [paymentMode, paymentConfig]);
 
   // FIX: final amount must always compute using correct full / partial logic

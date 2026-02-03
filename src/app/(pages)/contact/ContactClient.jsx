@@ -187,10 +187,10 @@ export default function ContactClient() {
   return (
     <div className='min-h-screen'>
       {/* HERO */}
-      <section className='relative h-[60vh] min-h-[400px] flex items-center justify-center overflow-hidden'>
+      <section className='relative h-[70vh] min-h-[420px] md:h-[70vh] md:min-h-[420px] flex items-center justify-center overflow-hidden'>
         <div className='relative z-15 text-center px-4'>
-          <h1 className='text-5xl font-bold text-white mb-4'>Get in Touch</h1>
-          <p className='text-xl text-gray-300 max-w-2xl mx-auto'>
+          <h1 className='text-4xl md:text-5xl font-bold text-white mb-4'>Get in Touch</h1>
+          <p className='text-base md:text-lg text-gray-300 max-w-2xl mx-auto'>
             Ready to embark on your next adventure? Tell us your plans and
             we&apos;ll tailor your trip.
           </p>

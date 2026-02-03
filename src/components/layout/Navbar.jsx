@@ -2,9 +2,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Plane } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import BookingAvatar from '../account/BookingAvatar';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 
 const Navbar = () => {
@@ -29,6 +29,13 @@ const Navbar = () => {
   ];
 
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isActive = (href = '') => {
+    if (href === '/') return pathname === '/';
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
   return (
     <nav
       className={`fixed top-0 lg:px-4 left-0 right-0 z-50 transition-all duration-300 ${
@@ -70,24 +77,29 @@ const Navbar = () => {
 
           {/* Desktop Nav */}
           <div className='hidden lg:flex items-center gap-8'>
-            {links.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className={`relative text-sm font-medium transition-all duration-300 ${
-                  isScrolled
-                    ? 'text-foreground hover:text-primary'
-                    : 'text-white hover:text-white'
-                } hover:tracking-wide group`}>
-                {item.label}
+            {links.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className={`relative text-sm font-medium transition-all duration-300 group ${
+                    isScrolled
+                      ? active
+                        ? 'text-primary'
+                        : 'text-foreground hover:text-primary'
+                      : 'text-white hover:text-white'
+                  } ${active ? 'tracking-wide' : ''}`}>
+                  {item.label}
 
-                {/* Underline */}
-                <span
-                  className={`absolute left-0 -bottom-1 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${
-                    isScrolled ? 'bg-primary' : 'bg-white'
-                  }`}></span>
-              </a>
-            ))}
+                  {/* Underline */}
+                  <span
+                    className={`absolute left-0 -bottom-1 h-0.5 transition-all duration-300 ${
+                      isScrolled ? 'bg-primary' : 'bg-white'
+                    } ${active ? 'w-full' : 'w-0'} group-hover:w-full`}></span>
+                </a>
+              );
+            })}
           </div>
 
           {/* CTA */}
@@ -134,15 +146,25 @@ const Navbar = () => {
         {isMobileMenuOpen && (
           <div className='lg:hidden absolute left-0 right-0 top-full p-4 bg-background/95 backdrop-blur-md shadow-lg border-t border-border'>
             <div className='flex flex-col gap-4'>
-              {links.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className='relative text-sm font-medium text-foreground hover:text-primary transition-all duration-300 hover:tracking-wide group'>
-                  {item.label}
-                  <span className='absolute left-0 -bottom-1 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full'></span>
-                </a>
-              ))}
+              {links.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className={`relative text-sm font-medium transition-all duration-300 group ${
+                      active
+                        ? 'text-primary tracking-wide'
+                        : 'text-foreground hover:text-primary'
+                    }`}>
+                    {item.label}
+                    <span
+                      className={`absolute left-0 -bottom-1 h-0.5 bg-primary transition-all duration-300 ${
+                        active ? 'w-full' : 'w-0'
+                      } group-hover:w-full`}></span>
+                  </a>
+                );
+              })}
 
               <Button
                 onClick={() => router.push('/tours')}
