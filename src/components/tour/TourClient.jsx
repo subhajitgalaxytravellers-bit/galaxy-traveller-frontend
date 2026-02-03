@@ -15,7 +15,6 @@ import CTA from '@/components/common/CTA';
 import { getSearchTours } from '@/lib/tours';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import PageLoader from '@/components/ui/page-loader';
 import { AiLoader } from '../ui/ai-loader';
 
 // Debounce
