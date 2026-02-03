@@ -1,5 +1,5 @@
-import PageLoader from '@/components/ui/page-loader';
+import { AiLoader } from '@/components/ui/ai-loader';
 
 export default function ToursLoading() {
-  return <PageLoader />;
+  return <AiLoader text="Loading tours..." />;
 }
