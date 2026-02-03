@@ -31,7 +31,7 @@ const Navbar = () => {
   const router = useRouter();
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 lg:px-4 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
           ? 'bg-white lg:bg-background/95 lg:backdrop-blur-md lg:shadow-md'
           : 'bg-white lg:bg-transparent'
@@ -49,11 +49,23 @@ const Navbar = () => {
                 className='h-8 lg:h-14'
               />
             ) : (
-              <Image src='/assets/logo.png' alt='Logo' width={120} height={48} className='h-8 lg:h-14' />
+              <Image
+                src='/assets/logo.png'
+                alt='Logo'
+                width={120}
+                height={48}
+                className='h-8 lg:h-14'
+              />
             )}
           </Link>
           <Link href='/' className='flex lg:hidden items-center px-4 gap-2'>
-            <Image src='/assets/logo.png' alt='Logo' width={80} height={48} className='h-8 lg:h-12' />
+            <Image
+              src='/assets/logo.png'
+              alt='Logo'
+              width={80}
+              height={48}
+              className='h-8 lg:h-12'
+            />
           </Link>
 
           {/* Desktop Nav */}
@@ -132,7 +144,11 @@ const Navbar = () => {
                 </a>
               ))}
 
-              <Button onClick={() => router.push('/tours')} variant='default' size='lg' className='w-full'>
+              <Button
+                onClick={() => router.push('/tours')}
+                variant='default'
+                size='lg'
+                className='w-full'>
                 Book Now
               </Button>
             </div>

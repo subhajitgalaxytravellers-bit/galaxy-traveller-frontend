@@ -2,11 +2,8 @@
 
 import { useMemo, useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import CTA from '@/components/common/CTA';
-import Link from 'next/link';
 import Image from 'next/image';
 import { BlogCard } from './BlogCard';
 

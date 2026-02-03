@@ -122,18 +122,13 @@ export default function PageLoader() {
           className="h-1 w-64 overflow-hidden rounded-full bg-muted"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.25, duration: 0.35 }}
         >
           <motion.div
             className="h-full bg-gradient-to-r from-primary to-primary/60"
-            animate={{
-              x: ['-100%', '100%'],
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
+            initial={{ width: '0%' }}
+            animate={{ width: '100%' }}
+            transition={{ duration: 0.9, ease: 'easeInOut' }}
           />
         </motion.div>
       </div>

@@ -15,6 +15,8 @@ import CTA from '@/components/common/CTA';
 import { getSearchTours } from '@/lib/tours';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import PageLoader from '@/components/ui/page-loader';
+import { AiLoader } from '../ui/ai-loader';
 
 // Debounce
 function useDebounce(value, delay = 400) {
@@ -27,6 +29,7 @@ function useDebounce(value, delay = 400) {
 }
 
 export default function ToursClient() {
+  const [showInitialLoader, setShowInitialLoader] = useState(true);
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -45,6 +48,12 @@ export default function ToursClient() {
 
   const [hydrated, setHydrated] = useState(false);
   const observerRef = useRef(null);
+
+  // Prevent the loader from being cut off mid-animation; keep it on screen briefly.
+  useEffect(() => {
+    const timer = setTimeout(() => setShowInitialLoader(false), 900);
+    return () => clearTimeout(timer);
+  }, []);
 
   const tourTypeOptions = ['fixed_date', 'selectable_date', 'both'];
   const durationOptions = ['1', '3', '5', '7', '14', '30'];
@@ -165,6 +174,10 @@ export default function ToursClient() {
   // ---------------------------
   // RENDER
   // ---------------------------
+  if (showInitialLoader) {
+    return <AiLoader />;
+  }
+
   const renderFilters = () => (
     <div className='space-y-6'>
       <div className='flex justify-between items-center'>
