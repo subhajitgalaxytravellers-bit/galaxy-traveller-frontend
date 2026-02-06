@@ -190,7 +190,7 @@ export default function DestinationsClient({ continents }) {
                     <motion.div
                       key={destination._id || index}
                       variants={itemVariants}>
-                      <Link href={`/destinations/${destination.slug}`}>
+                      <Link href={`/destination/${destination.slug}`}>
                         <Card className='group p-0 overflow-hidden border-0 card-shadow hover:hover-shadow transition-all duration-300 cursor-pointer h-full'>
                           <CardContent className='p-0 relative h-80'>
                             <div className='relative overflow-hidden h-full'>

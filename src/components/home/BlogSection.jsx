@@ -76,7 +76,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
                 key={index}
                 className='opacity-0 animate-fade-in-up'
                 style={{ animationDelay: `${index * 0.1}s` }}>
-                <a href={`/blogs/${post.slug}`}>
+                <a href={`/blog/${post.slug}`}>
                   <Card className='group p-0 overflow-hidden border-0 card-shadow hover:hover-shadow transition-all duration-300 cursor-pointer relative'>
                     <CardContent className='p-0'>
                       {/* Image */}
@@ -134,7 +134,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
 
                           <button
                             onClick={() => {
-                              router.push(`/blogs/${post.slug}`);
+                              router.push(`/blog/${post.slug}`);
                             }}
                             className='flex items-center gap-1 text-primary font-medium text-sm hover:gap-2 transition-all'>
                             Read More
@@ -145,7 +145,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
                     </CardContent>
                     <button
                       aria-label={`Open blog ${post.title}`}
-                      onClick={() => router.push(`/blogs/${post.slug}`)}
+                      onClick={() => router.push(`/blog/${post.slug}`)}
                       className='absolute inset-0'
                     />
                   </Card>

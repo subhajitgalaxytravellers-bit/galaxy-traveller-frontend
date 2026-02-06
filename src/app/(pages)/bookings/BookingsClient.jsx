@@ -333,7 +333,7 @@ export default function BookingsPage() {
                 '';
               const tourTitle =
                 booking.tourName || booking.tour?.title || 'Tour';
-              const tourHref = tourSlug ? `/tours/${tourSlug}` : null;
+              const tourHref = tourSlug ? `/tour/${tourSlug}` : null;
 
               const payAmount = isPartialPaid
                 ? remaining
@@ -354,7 +354,7 @@ export default function BookingsPage() {
                         alt={tourTitle}
                         fill
                         className='object-cover transition-transform duration-500 group-hover:scale-105'
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
                       />
                     ) : (
                       <div className='h-full w-full bg-gradient-to-r from-primary/20 via-primary/10 to-accent/20' />
@@ -421,10 +421,10 @@ export default function BookingsPage() {
                           {formatRs(amountPaid)}
                         </p>
                       </div>
-                    <div className='rounded-lg border border-border/70 bg-muted/30 px-3 py-2'>
-                      <p className='text-xs text-muted-foreground'>
-                        Remaining
-                      </p>
+                      <div className='rounded-lg border border-border/70 bg-muted/30 px-3 py-2'>
+                        <p className='text-xs text-muted-foreground'>
+                          Remaining
+                        </p>
                         <p className='text-foreground font-medium'>
                           {formatRs(remaining)}
                         </p>
@@ -437,7 +437,10 @@ export default function BookingsPage() {
                           <p className='text-foreground font-medium flex items-center gap-2'>
                             {booking.appliedCoupon.code}
                             <span className='text-xs text-green-600'>
-                              -{formatRs(Number(booking.appliedCoupon.discount || 0))}
+                              -
+                              {formatRs(
+                                Number(booking.appliedCoupon.discount || 0),
+                              )}
                             </span>
                           </p>
                         </div>
@@ -456,7 +459,9 @@ export default function BookingsPage() {
                         <Button
                           variant='secondary'
                           className='w-full h-11 rounded-full'
-                          disabled={downloadingId === (booking._id || booking.id)}
+                          disabled={
+                            downloadingId === (booking._id || booking.id)
+                          }
                           onClick={() => handleDownloadInvoice(booking)}>
                           {downloadingId === (booking._id || booking.id)
                             ? 'Downloading...'
@@ -492,7 +497,8 @@ export default function BookingsPage() {
         )}
       </div>
 
-      {activeBooking && (() => {
+      {activeBooking &&
+        (() => {
           const modalAdults = Number(activeBooking.guests?.adults ?? 0);
           const modalChildren = Number(activeBooking.guests?.children ?? 0);
           const modalTotal =
@@ -500,61 +506,63 @@ export default function BookingsPage() {
             modalAdults + modalChildren ||
             1;
           return (
-        <PaymentDialog
-          showBookingModal={paymentOpen}
-          setShowBookingModal={setPaymentOpen}
-          tourName={
-            activeBooking.tourName || activeBooking.tour?.title || 'Tour'
-          }
-          tourLocation={
-            activeBooking.tour?.place ||
-            activeBooking.tourLocation ||
-            activeBooking.tourPlace ||
-            ''
-          }
-          dateRange={{
-            startDate: activeBooking.startDate
-              ? new Date(activeBooking.startDate)
-              : null,
-            endDate: activeBooking.endDate
-              ? new Date(activeBooking.endDate)
-              : null,
-          }}
-          paymentMode={
-            activeBooking.payment?.paymentStatus === 'partial' &&
-            Number(activeBooking.payment?.amountPaid || 0) > 0
-              ? 'full'
-              : activeBooking.payment?.paymentMode || 'full'
-          }
-          fullLabel={
-            activeBooking.payment?.paymentStatus === 'partial' &&
-            Number(activeBooking.payment?.amountPaid || 0) > 0
-              ? 'Pay Remaining'
-              : 'Full Payment'
-          }
-          guests={{
-            adults: modalAdults || modalTotal,
-            children: modalChildren,
-          }}
-          amount={
-            activeBooking.payment?.paymentStatus === 'partial' &&
-            Number(activeBooking.payment?.amountPaid || 0) > 0
-              ? Number(activeBooking.payment?.remainingAmount || 0)
-              : Number(activeBooking.payment?.totalAmount || 0)
-          }
-          paymentConfig={{
-            full: { enabled: true },
-            partial: {
-              enabled:
-                !!activeBooking.payment?.partialAmount &&
-                Number(activeBooking.payment?.amountPaid || 0) === 0,
-              price: Number(activeBooking.payment?.partialAmount || 0),
-              totalAmount: Number(activeBooking.payment?.partialAmount || 0),
-            },
-          }}
-          onConfirmPayment={handleConfirmPayment}
-          coupon={activeBooking.appliedCoupon}
-        />
+            <PaymentDialog
+              showBookingModal={paymentOpen}
+              setShowBookingModal={setPaymentOpen}
+              tourName={
+                activeBooking.tourName || activeBooking.tour?.title || 'Tour'
+              }
+              tourLocation={
+                activeBooking.tour?.place ||
+                activeBooking.tourLocation ||
+                activeBooking.tourPlace ||
+                ''
+              }
+              dateRange={{
+                startDate: activeBooking.startDate
+                  ? new Date(activeBooking.startDate)
+                  : null,
+                endDate: activeBooking.endDate
+                  ? new Date(activeBooking.endDate)
+                  : null,
+              }}
+              paymentMode={
+                activeBooking.payment?.paymentStatus === 'partial' &&
+                Number(activeBooking.payment?.amountPaid || 0) > 0
+                  ? 'full'
+                  : activeBooking.payment?.paymentMode || 'full'
+              }
+              fullLabel={
+                activeBooking.payment?.paymentStatus === 'partial' &&
+                Number(activeBooking.payment?.amountPaid || 0) > 0
+                  ? 'Pay Remaining'
+                  : 'Full Payment'
+              }
+              guests={{
+                adults: modalAdults || modalTotal,
+                children: modalChildren,
+              }}
+              amount={
+                activeBooking.payment?.paymentStatus === 'partial' &&
+                Number(activeBooking.payment?.amountPaid || 0) > 0
+                  ? Number(activeBooking.payment?.remainingAmount || 0)
+                  : Number(activeBooking.payment?.totalAmount || 0)
+              }
+              paymentConfig={{
+                full: { enabled: true },
+                partial: {
+                  enabled:
+                    !!activeBooking.payment?.partialAmount &&
+                    Number(activeBooking.payment?.amountPaid || 0) === 0,
+                  price: Number(activeBooking.payment?.partialAmount || 0),
+                  totalAmount: Number(
+                    activeBooking.payment?.partialAmount || 0,
+                  ),
+                },
+              }}
+              onConfirmPayment={handleConfirmPayment}
+              coupon={activeBooking.appliedCoupon}
+            />
           );
         })()}
 
@@ -602,9 +610,7 @@ export default function BookingsPage() {
             </Button>
             <Button
               variant='destructive'
-              disabled={
-                cancelOverLimit || !cancelReason.trim() || cancelSaving
-              }
+              disabled={cancelOverLimit || !cancelReason.trim() || cancelSaving}
               onClick={handleConfirmCancel}>
               {cancelSaving ? 'Cancelling...' : 'Confirm cancel'}
             </Button>

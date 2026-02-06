@@ -182,7 +182,7 @@ export default function MakeReview({ tourIdOrSlug }) {
     if (!toUpload.length) return;
 
     try {
-      const folder = `reviews/tours/${tourIdOrSlug || 'unknown'}`;
+      const folder = `reviews/tour/${tourIdOrSlug || 'unknown'}`;
       const urls = await Promise.all(
         toUpload.map((file) => uploadFileToGCS(file, folder, token)),
       );

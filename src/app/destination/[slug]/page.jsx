@@ -29,7 +29,7 @@ export async function generateMetadata({ params }) {
   const shareImage =
     seo.shareImage || destination.heroImg || '/default-share.jpg'; // fallback image you provide
 
-  const url = `/destinations/${slug}`;
+  const url = `/destination/${slug}`;
 
   return {
     title,

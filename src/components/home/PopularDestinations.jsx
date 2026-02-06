@@ -31,7 +31,8 @@ export default function PopularDestinations({ destinations }) {
   const containerRef = useRef(null);
 
   // Detect reduced motion preference
-  const prefersReducedMotion = typeof window !== 'undefined' && 
+  const prefersReducedMotion =
+    typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
@@ -88,7 +89,7 @@ export default function PopularDestinations({ destinations }) {
           className='grid grid-flow-col auto-cols-[minmax(260px,1fr)] overflow-x-auto gap-6 pb-2 snap-x snap-mandatory'>
           {destinations?.map((destination, idx) => (
             <Link
-              href={`/destinations/${destination.slug}`}
+              href={`/destination/${destination.slug}`}
               key={idx}
               className='w-full snap-start'>
               <motion.div className='p-2' variants={destinationVariants}>
