@@ -57,7 +57,7 @@ export default function DestinationsClient({ continents }) {
     <>
       {/* HERO SECTION */}
       <section className='relative h-[70vh] min-h-[420px] md:h-[70vh] md:min-h-[420px] flex items-center justify-center overflow-hidden'>
-        <div className='absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-accent/20' />
+        <div className='absolute inset-0 bg-linear-to-br from-primary/20 via-background to-accent/20' />
         <div className='relative z-20 text-center px-4'>
           <h1 className='text-3xl md:text-5xl font-bold text-white mb-4'>
             Feel the Adventure of a Lifetime
@@ -68,7 +68,7 @@ export default function DestinationsClient({ continents }) {
         </div>
         <div className='absolute inset-0 hero-bottom-fade z-10'></div>
         <Image
-          src='/assets/hero-blog.jpg'
+          src='/hero/destinations.jpeg'
           alt='Destinations Hero'
           fill
           className='object-cover'
@@ -298,7 +298,7 @@ export default function DestinationsClient({ continents }) {
         </div>
       </div>
 
-      <CTA />
+      {/* <CTA /> */}
     </>
   );
 }

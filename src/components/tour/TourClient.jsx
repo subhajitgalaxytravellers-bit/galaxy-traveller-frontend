@@ -140,7 +140,15 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
     return () => {
       active = false;
     };
-  }, [hydrated, priceRange, durations, ratings, tourTypes, debouncedSearch, fetchTours]);
+  }, [
+    hydrated,
+    priceRange,
+    durations,
+    ratings,
+    tourTypes,
+    debouncedSearch,
+    fetchTours,
+  ]);
 
   // ---------------------------
   // LOAD MORE
@@ -293,17 +301,13 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
     </div>
   );
 
-  if (loading && items.length === 0) {
-    return <AiLoader />;
-  }
-
   return (
     <>
       <div className='min-h-screen bg-background'>
         {/* HERO */}
         <section className='relative h-[70vh] min-h-[420px] md:h-[70vh] md:min-h-[420px] overflow-hidden'>
           <Image
-            src='/assets/hero-blog.jpg'
+            src='/hero/tours.jpeg'
             alt='Tours'
             fill
             className='object-cover'
@@ -312,7 +316,9 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
           <div className='absolute inset-0 hero-bottom-fade'></div>
 
           <div className='relative z-10 container mx-auto px-4 h-full flex flex-col justify-center text-center text-white'>
-            <h1 className='text-4xl md:text-5xl font-bold'>Discover Your Next Adventure</h1>
+            <h1 className='text-4xl md:text-5xl font-bold'>
+              Discover Your Next Adventure
+            </h1>
             <p className='text-base md:text-lg mt-4'>
               Explore handpicked tours and experiences across incredible
               destinations
@@ -350,7 +356,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
                     </PopoverTrigger>
                     <PopoverContent
                       align='end'
-                      className='w-[240px] max-h-[50vh] overflow-y-auto p-4'>
+                      className='w-60 max-h-[50vh] overflow-y-auto p-4'>
                       {renderFilters()}
                     </PopoverContent>
                   </Popover>
@@ -362,6 +368,23 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
                 {items.map((tour) => (
                   <TourCard key={tour._id || tour.slug} tour={tour} />
                 ))}
+
+                {loading && (
+                  <div className='col-span-full flex justify-center py-10'>
+                    <AiLoader />
+                  </div>
+                )}
+
+                {!loading && items.length === 0 && (
+                  <div className='col-span-full text-center text-muted-foreground py-10'>
+                    No tours match these filters.
+                    <div className='mt-3 flex justify-center'>
+                      <Button variant='secondary' onClick={resetFilters}>
+                        Reset Filters
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Infinite Scroll Trigger */}
@@ -377,7 +400,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
         </section>
       </div>
 
-      <CTA />
+      {/* <CTA /> */}
     </>
   );
 }

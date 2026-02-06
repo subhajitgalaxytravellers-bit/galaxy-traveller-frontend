@@ -47,7 +47,7 @@ const blogPost = [
 ];
 
 const BlogSection = ({ blogPosts = blogPost }) => {
-  const navigate = useRouter();
+  const router = useRouter();
 
   return (
     <section className='py-24 bg-muted/30'>
@@ -134,7 +134,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
 
                           <button
                             onClick={() => {
-                              navigate(`/blogs/${post.slug}`);
+                              router.push(`/blogs/${post.slug}`);
                             }}
                             className='flex items-center gap-1 text-primary font-medium text-sm hover:gap-2 transition-all'>
                             Read More
@@ -145,7 +145,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
                     </CardContent>
                     <button
                       aria-label={`Open blog ${post.title}`}
-                      onClick={() => navigate(`/blogs/${post.slug}`)}
+                      onClick={() => router.push(`/blogs/${post.slug}`)}
                       className='absolute inset-0'
                     />
                   </Card>
@@ -161,7 +161,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
           style={{ animationDelay: '0.4s' }}>
           <Button
             onClick={() => {
-              navigate('/blogs');
+              router.push('/blogs');
             }}
             variant='outline'
             size='lg'

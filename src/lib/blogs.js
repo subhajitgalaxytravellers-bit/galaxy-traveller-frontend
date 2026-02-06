@@ -58,7 +58,7 @@ export async function getAllBlogs() {
 export async function getBlog(slug) {
   const res = await fetch(`${API_BASE}/api/blog/${slug}`, {
     cache: "force-cache",
-    next: { revalidate: 300 },
+    next: { revalidate: 120 },
   });
   if (!res.ok) return null;
   const json = await res.json();

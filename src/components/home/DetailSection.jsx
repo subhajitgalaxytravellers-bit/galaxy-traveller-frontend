@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 export default function DetailSection() {
-  const navigate = useRouter();
+  const router = useRouter();
 
   return (
     <section className='relative bg-background max-w-[99rem] mx-auto py-16 sm:py-20 px-4 sm:px-8 overflow-hidden'>
@@ -62,7 +62,7 @@ export default function DetailSection() {
 
           <Button
             onClick={() => {
-              navigate('/tours');
+              router.push('/tours');
             }}
             className='bg-primary hover:bg-primary/90 text-white px-6 py-4 h-12 rounded-lg'>
             Book Your Trip

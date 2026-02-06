@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
-import client from "@/api/client";
-import CTA from "../common/CTA";
-import { FlyerCard } from "./flyerCard";
-import Image from "next/image";
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
+import client from '@/api/client';
+import CTA from '../common/CTA';
+import { FlyerCard } from './flyerCard';
+import Image from 'next/image';
 
 export default function FlyersClient({ initialData, limit }) {
   const sentinelRef = useRef(null);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
     useInfiniteQuery({
-      queryKey: ["flyers", limit],
+      queryKey: ['flyers', limit],
       queryFn: async ({ pageParam = 1 }) => {
-        const res = await client.get("/flyer", {
+        const res = await client.get('/flyer', {
           params: { page: pageParam, limit },
         });
         return res.data.data; // MUST match initialData shape
@@ -47,7 +47,7 @@ export default function FlyersClient({ initialData, limit }) {
           fetchNextPage();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
 
     observer.observe(el);
@@ -55,31 +55,31 @@ export default function FlyersClient({ initialData, limit }) {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className='min-h-screen bg-background'>
       {/* HERO */}
-      <section className="relative h-[70vh] min-h-[420px] md:h-[70vh] md:min-h-[420px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 hero-bottom-fade z-10"></div>
+      <section className='relative h-[70vh] min-h-[420px] md:h-[70vh] md:min-h-[420px] flex items-center justify-center overflow-hidden'>
+        <div className='absolute inset-0 hero-bottom-fade z-10'></div>
 
         <Image
-          src={"/assets/hero-blog.jpg"}
-          alt="Flyers hero"
+          src={'/hero/flyers.jpeg'}
+          alt='Flyers hero'
           fill
-          className="object-cover"
+          className='object-cover'
           priority
         />
-        <div className="relative z-20 text-center px-4 text-white">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">
+        <div className='relative z-20 text-center px-4 text-white'>
+          <h1 className='text-3xl md:text-5xl font-bold mb-4'>
             Promotional Flyers
           </h1>
-          <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto">
+          <p className='text-base md:text-lg text-gray-300 max-w-2xl mx-auto'>
             Explore our latest travel packages and special offers
           </p>
         </div>
       </section>
 
       {/* GRID */}
-      <section className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+      <section className='container mx-auto px-4 py-8'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6'>
           {flyers?.map((flyer, index) => {
             console.log(flyer);
             return <FlyerCard key={index} flyer={flyer} />;
@@ -87,21 +87,18 @@ export default function FlyersClient({ initialData, limit }) {
         </div>
 
         {/* Infinite Scroll Sentinel */}
-        <div className="mt-6 flex justify-center">
+        <div className='mt-6 flex justify-center'>
           {isFetchingNextPage ? (
-            <div className="text-sm text-gray-500">Loading more...</div>
+            <div className='text-sm text-gray-500'>Loading more...</div>
           ) : hasNextPage ? (
-            <div ref={sentinelRef} className="h-10 w-full" />
+            <div ref={sentinelRef} className='h-10 w-full' />
           ) : (
-            <div className="text-sm text-gray-400">No more flyers.</div>
+            <div className='text-sm text-gray-400'>No more flyers.</div>
           )}
         </div>
       </section>
 
-      <CTA />
+      {/* <CTA /> */}
     </div>
   );
 }
-
-
-

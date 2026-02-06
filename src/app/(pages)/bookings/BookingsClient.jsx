@@ -38,6 +38,7 @@ export default function BookingsPage() {
   const [cancelTarget, setCancelTarget] = useState(null);
   const [cancelReason, setCancelReason] = useState('');
   const [cancelSaving, setCancelSaving] = useState(false);
+  const [downloadingId, setDownloadingId] = useState(null);
   const router = useRouter();
   const cancelWordCount = countWords(cancelReason);
   const cancelOverLimit = cancelWordCount > 500;
@@ -140,6 +141,40 @@ export default function BookingsPage() {
       toast.error('Payment failed to start');
     } finally {
       setProcessing(false);
+    }
+  };
+
+  const handleDownloadInvoice = async (booking) => {
+    if (!booking?.invoiceId) {
+      toast.info('Invoice is not ready yet.');
+      return;
+    }
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setAuthOpen(true);
+      return;
+    }
+    const id = booking._id || booking.id;
+    try {
+      setDownloadingId(id);
+      const res = await fetch(`${API_BASE}/api/booking/${id}/invoice`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error('Failed to download invoice');
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${booking.invoiceId || 'invoice'}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error(e);
+      toast.error(e?.message || 'Could not download invoice');
+    } finally {
+      setDownloadingId(null);
     }
   };
 
@@ -390,11 +425,24 @@ export default function BookingsPage() {
                       <p className='text-xs text-muted-foreground'>
                         Remaining
                       </p>
-                      <p className='text-foreground font-medium'>
-                        {formatRs(remaining)}
-                      </p>
+                        <p className='text-foreground font-medium'>
+                          {formatRs(remaining)}
+                        </p>
+                      </div>
+                      {booking.appliedCoupon?.code && (
+                        <div className='rounded-lg border border-border/70 bg-green-50 dark:bg-emerald-950/30 px-3 py-2 col-span-2'>
+                          <p className='text-xs text-muted-foreground'>
+                            Coupon Applied
+                          </p>
+                          <p className='text-foreground font-medium flex items-center gap-2'>
+                            {booking.appliedCoupon.code}
+                            <span className='text-xs text-green-600'>
+                              -{formatRs(Number(booking.appliedCoupon.discount || 0))}
+                            </span>
+                          </p>
+                        </div>
+                      )}
                     </div>
-                  </div>
 
                     <div className='flex flex-col gap-2'>
                       {canPay && (
@@ -402,6 +450,17 @@ export default function BookingsPage() {
                           className='w-full h-11 rounded-full shadow-lg shadow-primary/20 transition-all duration-300 group-hover:shadow-primary/30'
                           onClick={() => handlePayClick(booking)}>
                           {isPartialPaid ? 'Pay remaining amount' : 'Pay now'}
+                        </Button>
+                      )}
+                      {booking.invoiceId && (
+                        <Button
+                          variant='secondary'
+                          className='w-full h-11 rounded-full'
+                          disabled={downloadingId === (booking._id || booking.id)}
+                          onClick={() => handleDownloadInvoice(booking)}>
+                          {downloadingId === (booking._id || booking.id)
+                            ? 'Downloading...'
+                            : 'Download invoice'}
                         </Button>
                       )}
                       {canCancel && (
@@ -494,6 +553,7 @@ export default function BookingsPage() {
             },
           }}
           onConfirmPayment={handleConfirmPayment}
+          coupon={activeBooking.appliedCoupon}
         />
           );
         })()}

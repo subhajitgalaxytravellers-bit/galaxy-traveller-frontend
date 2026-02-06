@@ -90,7 +90,7 @@ export default async function HomePage() {
         {data?.blogs?.length > 0 && <BlogSection blogPosts={data.blogs} />}
       </div>
 
-      <CTA />
+      {/* <CTA /> */}
     </div>
   );
 }

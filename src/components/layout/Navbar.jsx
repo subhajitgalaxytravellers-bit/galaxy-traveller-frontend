@@ -65,13 +65,15 @@ const Navbar = () => {
               />
             )}
           </Link>
+
+          {/* mobile logo */}
           <Link href='/' className='flex lg:hidden items-center px-4 gap-2'>
             <Image
               src='/assets/logo.png'
               alt='Logo'
               width={80}
-              height={48}
-              className='h-8 lg:h-12'
+              height={50}
+              className='h-8 lg:h-14'
             />
           </Link>
 
@@ -119,7 +121,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <div className='flex items-center justify-center lg:hidden px-4 gap-2'>
-            <BookingAvatar />
+            <BookingAvatar isScrolled={true} />
             <button
               className='px-4'
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>

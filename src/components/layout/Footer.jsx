@@ -1,176 +1,185 @@
 'use client';
-import client from '@/api/client';
+
 import { Plane, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
-const Footer = ({ footer, global }) => {
-  console.log(footer);
+// Primary-toned, glassy footer
+const Footer = ({ footer = {}, global = {} }) => {
+  const quickLinks = [
+    { id: 'q1', label: 'About', href: '/about' },
+    { id: 'q2', label: 'Destinations', href: '/destinations' },
+    { id: 'q3', label: 'Tours', href: '/tours' },
+    { id: 'q4', label: 'Blog', href: '/blogs' },
+    { id: 'q5', label: 'Contact', href: '/contact' },
+  ];
+
+  const supportLinks = [
+    { id: 's1', label: 'Help Center', href: '/contact' },
+    { id: 's2', label: 'Privacy Policy', href: '/policy' },
+    { id: 's3', label: 'Terms of Service', href: '/terms' },
+  ];
+
+  const socials = [
+    { id: 'f', icon: Facebook, href: global.facebook },
+    { id: 'i', icon: Instagram, href: global.instagram },
+    { id: 't', icon: Twitter, href: global.twitter },
+    { id: 'y', icon: Youtube, href: global.youtube },
+  ].filter((s) => !!s.href);
+
   return (
-    <footer id='contact' className='bg-white/30  pt-16 pb-8'>
-      <div className='container mx-auto px-4 md:px-16'>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12 items-stretch'>
-          {/* Brand */}
-          <div className='h-full p-6 max-lg:px-4 max-lg:text-center flex flex-col gap-4'>
-            <div className='flex items-center gap-2 max-lg:justify-center w-full'>
-              <Image src='/assets/logo.png' alt='Logo' width={120} height={0} className='lg:ml-4 mx-auto lg:mx-0' />
+    <footer
+      id='contact'
+      className='border-t border-white/15 bg-primary text-white'>
+      <div className='container mx-auto px-4 md:px-10 lg:px-16 py-12 space-y-10'>
+        {/* CTA strip */}
+        <div className='flex flex-col lg:flex-row items-center lg:items-center justify-between gap-6 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md shadow-lg shadow-black/20 px-6 py-6 text-center lg:text-left'>
+          <div className='flex items-center lg:items-start gap-4'>
+            <div className='h-12 w-12 min-h-12 min-w-12 rounded-xl bg-white/20 text-white flex items-center justify-center shrink-0'>
+              <Plane className='h-6 w-6' />
             </div>
-            <p className='text-muted-foreground'>{footer?.brief || ''}</p>
-            <div className='flex gap-4 justify-center lg:justify-start w-full'>
-              {global.facebook && (
-                <a
-                  href={global.facebook}
-                  className='w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors'>
-                  <Facebook className='w-5 h-5' />
-                </a>
-              )}
-              {global.instagram && (
-                <a
-                  href={global.instagram}
-                  className='w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors'>
-                  <Instagram className='w-5 h-5' />
-                </a>
-              )}
-              {global.twitter && (
-                <a
-                  href={global.twitter}
-                  className='w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors'>
-                  <Twitter className='w-5 h-5' />
-                </a>
-              )}
-              {global.youtube && (
-                <a
-                  href={global.youtube}
-                  className='w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors'>
-                  <Youtube className='w-5 h-5' />
-                </a>
-              )}
+            <div>
+              <p className='text-xs uppercase tracking-[0.18em] text-white/75'>
+                Your journey, curated
+              </p>
+              <h3 className='text-xl md:text-2xl font-semibold leading-snug'>
+                {footer?.heading || 'Travel stories start here.'}
+              </h3>
+              <p className='text-sm text-white/80 mt-2 max-w-2xl'>
+                {footer?.brief ||
+                  'Handpicked experiences, flexible payments, and humans who care about your itinerary.'}
+              </p>
             </div>
           </div>
+          <Link
+            href='/contact'
+            className='inline-flex items-center justify-center rounded-full bg-white text-primary px-5 py-3 font-semibold shadow-lg shadow-black/25 hover:shadow-black/35 transition-all self-center lg:self-auto'>
+            Plan My Trip
+          </Link>
+        </div>
 
-          {/* Quick Links */}
-          <div className='h-full p-6 max-lg:text-center flex flex-col'>
-            <h3 className='text-lg font-bold mb-4'>Quick Links</h3>
-            <ul className='space-y-2 flex-1'>
-              <li>
-                <Link
-                  href='/about'
-                  className='text-muted-foreground hover:text-primary transition-colors'>
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href='/destinations'
-                  className='text-muted-foreground hover:text-primary transition-colors'>
-                  Destinations
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href='/tours'
-                  className='text-muted-foreground hover:text-primary transition-colors'>
-                  Tours
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href='/blogs'
-                  className='text-muted-foreground hover:text-primary transition-colors'>
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href='/contact'
-                  className='text-muted-foreground hover:text-primary transition-colors'>
-                  Contact
-                </Link>
-              </li>
-            </ul>
+        {/* main grid */}
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 text-center sm:text-left'>
+          <div className='space-y-4 flex flex-col items-center sm:items-start'>
+            <Image
+              src='/assets/white-logo.png'
+              alt='Logo'
+              width={150}
+              height={60}
+              className='drop-shadow-sm'
+            />
+            <p className='text-white/80 leading-relaxed'>
+              {footer?.brief ||
+                'Designing seamless getaways with local expertise and global standards.'}
+            </p>
+            {socials.length > 0 && (
+              <div className='flex gap-3'>
+                {socials.map(({ icon: Icon, href, id }) => (
+                  <a
+                    key={id}
+                    href={href}
+                    target='_blank'
+                    rel='noreferrer'
+                    className='h-10 w-10 rounded-full border border-white/25 bg-white/15 flex items-center justify-center text-white/80 hover:text-white hover:border-white/60 transition-colors backdrop-blur'>
+                    <Icon className='h-5 w-5' />
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Support */}
-          <div className='h-full p-6 max-lg:text-center flex flex-col'>
-            <h3 className='text-lg font-bold mb-4'>Support</h3>
-            <ul className='space-y-2 flex-1'>
-              <li>
-                <a
-                  href='/contact'
-                  className='text-muted-foreground hover:text-primary transition-colors'>
-                  Help Center
-                </a>
-              </li>
-              <li>
-                <a
-                  href='/policy'
-                  className='text-muted-foreground hover:text-primary transition-colors'>
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a
-                  href='/terms'
-                  className='text-muted-foreground hover:text-primary transition-colors'>
-                  Terms of Service
-                </a>
-              </li>
-            </ul>
+          <div className='lg:ml-20'>
+            <h4 className='text-lg font-semibold mb-4'>Explore</h4>
+            <div className='grid gap-3 text-white/80'>
+              {quickLinks.map((item, idx) => (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  className='inline-flex max-md:mx-auto   max-md:w-fit  items-center gap-2 hover:text-white transition-colors'>
+                  <span className='h-1.5 w-1.5 rounded-full bg-white/70' />
+                  {item.label}
+                </Link>
+              ))}
+            </div>
           </div>
 
-          {/* Contact */}
-          <div className='h-full p-6 max-lg:text-center flex flex-col'>
-            <h3 className='text-lg font-bold mb-4'>Contact Us</h3>
+          <div className='lg:ml-20'>
+            <h4 className='text-lg font-semibold mb-4'>Support</h4>
+            <div className='grid gap-3 text-white/80'>
+              {supportLinks.map((item, idx) => (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  className='inline-flex  max-md:mx-auto  max-md:w-fit items-center gap-2 hover:text-white transition-colors'>
+                  <span className='h-1.5 w-1.5 rounded-full bg-white/70' />
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
 
-            <ul className='my-3 text-muted-foreground space-y-4 flex-1'>
-              {/* Email */}
-              <li>
-                <p className='font-medium text-foreground mb-1'>Email</p>
+          <div className='space-y-3 lg:ml-20'>
+            <h4 className='text-lg font-semibold'>Contact</h4>
+            <div className='space-y-3 text-white/80'>
+              <div>
+                <p className='text-xs uppercase tracking-[0.15em] text-white/70 mb-1'>
+                  Email
+                </p>
                 <a
-                  href={`mailto:${footer?.email}`}
-                  className='hover:text-primary transition-colors'>
-                  {footer?.email || 'Not available'}
+                  href={footer?.email ? `mailto:${footer.email}` : '#'}
+                  className='hover:text-white transition-colors'>
+                  {footer?.email || 'hello@galaxytravel.com'}
                 </a>
-              </li>
-
-              {/* Phone */}
-              <li>
-                <p className='font-medium text-foreground mb-1'>Phone</p>
-
-                {/* primary contact */}
+              </div>
+              <div>
+                <p className='text-xs uppercase tracking-[0.15em] text-white/70 mb-1'>
+                  Phone
+                </p>
                 {footer?.contact1 && (
                   <a
                     href={`tel:${footer.contact1}`}
-                    className='hover:text-primary transition-colors block'>
+                    className='block hover:text-white transition-colors'>
                     {footer.contact1}
                   </a>
                 )}
-
-                {/* secondary contact */}
                 {footer?.contact2 && (
                   <a
                     href={`tel:${footer.contact2}`}
-                    className='hover:text-primary transition-colors block mt-1'>
+                    className='block hover:text-white transition-colors'>
                     {footer.contact2}
                   </a>
                 )}
-              </li>
-
-              {/* Address */}
-              <li>
-                <p className='font-medium text-foreground mb-1'>Address</p>
-                <p>{footer?.location || 'No address available'}</p>
-              </li>
-            </ul>
+                {!footer?.contact1 && !footer?.contact2 && (
+                  <p>+91 98765 43210</p>
+                )}
+              </div>
+              <div>
+                <p className='text-xs uppercase tracking-[0.15em] text-white/70 mb-1'>
+                  Address
+                </p>
+                <p className='leading-relaxed'>
+                  {footer?.location || 'HQ: Mumbai, India'}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className='border-t border-border pt-8'>
-          <p className='text-center text-muted-foreground'>
-            © {new Date().getFullYear()} GalaxyTravel. All rights reserved.
-            Built with ❤️ for travelers.
+        {/* bottom bar */}
+        <div className='border-t border-white/20 pt-6 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between text-sm text-white/75'>
+          <p>
+            © {new Date().getFullYear()} GalaxyTravel. Crafted for explorers.
           </p>
+          <div className='flex flex-wrap gap-4'>
+            {quickLinks.slice(0, 3).map((item, idx) => (
+              <Link
+                key={item.id}
+                href={item.href}
+                className='hover:text-white transition-colors'>
+                {item.label}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </footer>

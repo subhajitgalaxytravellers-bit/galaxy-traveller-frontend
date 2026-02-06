@@ -40,26 +40,21 @@ export default function BlogListClient({ initialPage, limit = 9 }) {
     );
   };
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isFetching,
-  } = useInfiniteQuery({
-    queryKey: ['blogs', limit, debounced],
-    queryFn: fetchPage,
-    initialPageParam: 1,
-    getNextPageParam: (last) => {
-      if (!last) return undefined;
-      const next = last.page + 1;
-      return next > (last.totalPages || 1) ? undefined : next;
-    },
-    initialData: initialPage
-      ? { pages: [initialPage], pageParams: [1] }
-      : undefined,
-    refetchOnWindowFocus: false,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
+    useInfiniteQuery({
+      queryKey: ['blogs', limit, debounced],
+      queryFn: fetchPage,
+      initialPageParam: 1,
+      getNextPageParam: (last) => {
+        if (!last) return undefined;
+        const next = last.page + 1;
+        return next > (last.totalPages || 1) ? undefined : next;
+      },
+      initialData: initialPage
+        ? { pages: [initialPage], pageParams: [1] }
+        : undefined,
+      refetchOnWindowFocus: false,
+    });
 
   const pages = data?.pages || [];
   const blogs = pages.flatMap((p) => p.items || []);
@@ -87,7 +82,7 @@ export default function BlogListClient({ initialPage, limit = 9 }) {
         <section className='relative h-[70vh] min-h-[420px] md:h-[70vh] md:min-h-[420px] image-overlay'>
           <div className=''>
             <Image
-              src='/assets/hero-blog.jpg'
+              src='/hero/blogs.jpeg'
               alt='Featured blog post'
               fill
               className='object-cover'
@@ -151,19 +146,19 @@ export default function BlogListClient({ initialPage, limit = 9 }) {
 
             {/* Infinite Scroll Trigger */}
             <div className='flex justify-center items-center h-12 text-sm text-muted-foreground'>
-              {isFetchingNextPage
-                ? 'Loading more...'
-                : hasNextPage
-                  ? <div ref={sentinelRef} className='h-full w-full' />
-                  : blogs.length > 0
-                    ? 'No more articles.'
-                    : null}
+              {isFetchingNextPage ? (
+                'Loading more...'
+              ) : hasNextPage ? (
+                <div ref={sentinelRef} className='h-full w-full' />
+              ) : blogs.length > 0 ? (
+                'No more articles.'
+              ) : null}
             </div>
           </div>
         </section>
       </div>
 
-      <CTA />
+      {/* <CTA /> */}
     </>
   );
 }

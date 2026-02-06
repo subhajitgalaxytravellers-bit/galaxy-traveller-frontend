@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { CalendarIcon, Users, Plus, Minus } from 'lucide-react';
+import { CalendarIcon, Users, Plus, Minus, BadgePercent } from 'lucide-react';
 import { format, addDays } from 'date-fns';
 import {
   Card,
@@ -31,6 +31,13 @@ import { getPaymentGateways, createPayment } from '../../lib/razorpay';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import EnquiryDialog from './EnquiryDialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
 
 export default function BookingCard({
   tourName,
@@ -114,6 +121,44 @@ export default function BookingCard({
   const [showAuth, setShowAuth] = useState(false);
   const [pendingBookingPayload, setPendingBookingPayload] = useState(null);
   const router = useRouter();
+
+  const [couponCode, setCouponCode] = useState('');
+  const [couponState, setCouponState] = useState({
+    applied: null, // { code, discount }
+    loading: false,
+    message: '',
+  });
+  const [availableCoupons, setAvailableCoupons] = useState([]);
+  const [couponsLoading, setCouponsLoading] = useState(false);
+
+  const computeDiscount = (coupon, amount) => {
+    if (!coupon) return 0;
+    const value = Number(coupon.value || 0);
+    let discount =
+      coupon.type === 'percent' ? (Number(amount || 0) * value) / 100 : value;
+    if (coupon.maxOff && coupon.maxOff > 0) {
+      discount = Math.min(discount, coupon.maxOff);
+    }
+    return Math.max(0, Math.round(discount));
+  };
+
+  const applyCoupon = (payload, message = 'Coupon applied') => {
+    if (!payload) {
+      setCouponState({
+        applied: null,
+        loading: false,
+        message: 'No coupon applied',
+      });
+      setCouponCode('');
+      return;
+    }
+    setCouponState({
+      applied: { code: payload.code, discount: Number(payload.discount || 0) },
+      loading: false,
+      message,
+    });
+    setCouponCode(payload.code || '');
+  };
   const handleTabChange = (type) => {
     setSelectedTab(type);
     if (type === 'fixed_date') {
@@ -122,6 +167,129 @@ export default function BookingCard({
   };
 
   const effectiveType = tourType === 'both' ? selectedTab : tourType;
+
+  // Include currently applied coupon even if it's hidden (so dropdown shows it)
+  const displayCoupons = (() => {
+    const list = [...availableCoupons];
+    const applied = couponState.applied;
+    if (applied?.code && !list.find((c) => c.code === applied.code)) {
+      list.push({
+        code: applied.code,
+        discount: applied.discount,
+        message: applied.message,
+        type: applied.type,
+        value: applied.value,
+        maxOff: applied.maxOff,
+        hidden: true,
+      });
+    }
+    return list;
+  })();
+
+  useEffect(() => {
+    let active = true;
+    const fetchCoupons = async () => {
+      setCouponsLoading(true);
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_API}/api/coupons/available?tourId=${tourId}&amount=${fullAmount}`,
+        );
+        const data = await res.json();
+        if (!active) return;
+        if (data?.success) {
+          const items = (data.data?.items || []).filter((c) => !c.hidden);
+          setAvailableCoupons(items);
+          if (couponState.applied?.code) {
+            const refreshed = items.find(
+              (c) => c.code === couponState.applied.code,
+            );
+            if (refreshed) {
+              const discount =
+                refreshed.discount ?? computeDiscount(refreshed, fullAmount);
+              applyCoupon(
+                { code: refreshed.code, discount },
+                refreshed.message || 'Coupon applied',
+              );
+            } else {
+              setCouponState({
+                applied: null,
+                loading: false,
+                message: 'Coupon no longer valid for this booking',
+              });
+            }
+          }
+        } else {
+          setAvailableCoupons([]);
+        }
+      } catch (err) {
+        console.error('Failed to load coupons', err);
+        if (active) setAvailableCoupons([]);
+      } finally {
+        if (active) setCouponsLoading(false);
+      }
+    };
+    fetchCoupons();
+    return () => {
+      active = false;
+    };
+  }, [tourId, fullAmount]);
+
+  const handleCouponSelectFromDropdown = (coupon) => {
+    if (!coupon) {
+      applyCoupon(null, 'No coupon applied');
+      return;
+    }
+    const discount = coupon.discount ?? computeDiscount(coupon, fullAmount);
+    applyCoupon(
+      { code: coupon.code, discount },
+      coupon.message || 'Coupon applied',
+    );
+  };
+
+  const handleApplyCouponCode = async () => {
+    const code = couponCode.trim();
+    if (!code) {
+      toast.error('Enter a coupon code');
+      return;
+    }
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setShowAuth(true);
+      return;
+    }
+    setCouponState((s) => ({ ...s, loading: true, message: '' }));
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_API}/api/coupons/validate`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            code,
+            tourId,
+            subtotal: fullAmount,
+          }),
+        },
+      );
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data?.message || 'Coupon not valid');
+      }
+      const payload = data.data || data;
+      applyCoupon(
+        { code: payload.code, discount: payload.discount || 0 },
+        payload.message || 'Coupon applied',
+      );
+      toast.success(payload.message || 'Coupon applied');
+    } catch (err) {
+      console.error(err);
+      setCouponState({ applied: null, loading: false, message: err.message });
+      toast.error(err.message || 'Coupon not valid');
+    }
+  };
 
   const handleSendEnquiry = async (payload) => {
     const res = await fetch(
@@ -150,7 +318,11 @@ export default function BookingCard({
     toast.success('Enquiry sent successfully');
   };
 
-  const handleConfirmPayment = async ({ selectedPayment, finalPayable }) => {
+  const handleConfirmPayment = async ({
+    selectedPayment,
+    finalPayable,
+    coupon,
+  }) => {
     const token = localStorage.getItem('token');
 
     // 🔐 1. Login check
@@ -160,13 +332,29 @@ export default function BookingCard({
       return;
     }
 
+    const appliedCoupon = coupon || couponState.applied;
+    const discountAmount = Number(appliedCoupon?.discount || 0);
+    const netAmount = Math.max(0, fullAmount - discountAmount);
+
+    const partialTotalOverride = Number(
+      paymentConfig?.partial?.totalAmount || 0,
+    );
+    const basePartialAmount = paymentConfig?.partial?.enabled
+      ? partialTotalOverride > 0
+        ? partialTotalOverride
+        : Number(paymentConfig.partial.price || 0) * totalGuests
+      : netAmount;
+    const partialRatio = fullAmount > 0 ? basePartialAmount / fullAmount : 1;
+    const discountedPartial = Math.min(
+      Math.max(0, Math.round(netAmount * partialRatio)),
+      netAmount,
+    );
+
     try {
       setBookingProcessing(true);
 
       const partialAmount =
-        selectedPayment === 'partial'
-          ? paymentConfig.partial.price * totalGuests
-          : null;
+        selectedPayment === 'partial' ? discountedPartial : null;
 
       console.log(
         'Booking Payment Details:',
@@ -194,11 +382,11 @@ export default function BookingCard({
             payment: {
               paymentMode: selectedPayment,
               partialAmount,
-              totalAmount: fullAmount,
+              totalAmount: netAmount,
               amountPaid: 0,
-              remainingAmount: fullAmount,
+              remainingAmount: netAmount,
             },
-
+            couponCode: appliedCoupon?.code || undefined,
             bookingStatus: 'pending',
           }),
         },
@@ -242,7 +430,7 @@ export default function BookingCard({
         modal: {
           ondismiss: () => {
             toast.error(
-              'Payment was cancelled. Your booking is still pending.',
+              'Payment was cancelled. No payment was taken.',
             );
           },
         },
@@ -473,6 +661,40 @@ export default function BookingCard({
               </div>
             )}
           </div>
+          {/* Coupon */}
+          <div className='flex flex-col gap-2'>
+            <Label className='text-sm sm:text-base font-medium text-muted-foreground flex items-center gap-2'>
+              <BadgePercent className='h-4 w-4 text-primary' />
+              Coupon
+            </Label>
+            <div className='flex gap-2'>
+              <Input
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                placeholder='SAVE10'
+                className='flex-1'
+              />
+              <Button
+                type='button'
+                variant='outline'
+                onClick={handleApplyCouponCode}
+                disabled={couponState.loading}>
+                {couponState.loading ? 'Checking...' : 'Apply'}
+              </Button>
+            </div>
+
+            {couponState.applied && (
+              <div className='text-sm text-green-600'>
+                Applied {couponState.applied.code} (₹
+                {couponState.applied.discount} off)
+              </div>
+            )}
+            {!couponState.applied && couponState.message && (
+              <div className='text-sm text-muted-foreground'>
+                {couponState.message}
+              </div>
+            )}
+          </div>
           {/* Action Buttons */}{' '}
           {showBookingBtn &&
             (effectiveType !== 'fixed_date' ? (
@@ -485,7 +707,7 @@ export default function BookingCard({
                   setShowDialog(true);
                 }}
                 className='w-full h-11 sm:h-12 bg-primary text-white font-medium'>
-                Continue
+                Send Enquiry
               </Button>
             ) : (
               <Button
@@ -515,9 +737,13 @@ export default function BookingCard({
         tourLocation={tourLocation}
         dateRange={dateRange}
         guests={guests}
-        amount={fullAmount} // always pass full price
+        amount={fullAmount} // full price before discount
         paymentMode='full' // default
         paymentConfig={paymentConfig}
+        coupon={couponState.applied}
+        availableCoupons={availableCoupons}
+        couponsLoading={couponsLoading}
+        onSelectCoupon={handleCouponSelectFromDropdown}
         onConfirmPayment={handleConfirmPayment}
       />
       <BookingProcessingOverlay

@@ -141,7 +141,7 @@ export default function ContactClient() {
   const sendOtp = async () => {
     const phoneNum = form.getValues('contact');
     const code = form.getValues('countryCode');
-    
+
     if (!phoneNum || phoneNum.length < 5) {
       toast.error('Enter valid phone number');
       return;
@@ -189,7 +189,9 @@ export default function ContactClient() {
       {/* HERO */}
       <section className='relative h-[70vh] min-h-[420px] md:h-[70vh] md:min-h-[420px] flex items-center justify-center overflow-hidden'>
         <div className='relative z-15 text-center px-4'>
-          <h1 className='text-4xl md:text-5xl font-bold text-white mb-4'>Get in Touch</h1>
+          <h1 className='text-4xl md:text-5xl font-bold text-white mb-4'>
+            Get in Touch
+          </h1>
           <p className='text-base md:text-lg text-gray-300 max-w-2xl mx-auto'>
             Ready to embark on your next adventure? Tell us your plans and
             we&apos;ll tailor your trip.
@@ -199,7 +201,7 @@ export default function ContactClient() {
         <div className='absolute inset-0 hero-bottom-fade z-10' />
 
         <Image
-          src={'/assets/hero-blog.jpg'}
+          src={'/hero/contact.jpeg'}
           alt='Contact'
           fill
           className='object-cover'
@@ -331,7 +333,7 @@ export default function ContactClient() {
                             defaultValue={field.countryCode}>
                             <FormControl>
                               <SelectTrigger className={'w-full'}>
-                                <SelectValue  placeholder='Country code' />
+                                <SelectValue placeholder='Country code' />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>

@@ -5,7 +5,7 @@ const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || "").replace(/\/$/, "");
 export async function getTours() {
   const res = await fetch(`${API_BASE}/api/tour`, {
     cache: "force-cache",
-    next: { revalidate: 300 },
+    next: { revalidate: 120 },
   });
   if (!res.ok) return [];
   const json = await res.json();
@@ -15,7 +15,7 @@ export async function getTours() {
 export async function getTour(slug) {
   const res = await fetch(`${API_BASE}/api/tour/${slug}`, {
     cache: "force-cache",
-    next: { revalidate: 300 },
+    next: { revalidate: 120 },
   });
   if (!res.ok) return null;
   const json = await res.json();
@@ -103,7 +103,7 @@ export async function getSearchToursPage(params = {}) {
 
   const res = await fetch(`${API_BASE}/api/tour/search?${qs.toString()}`, {
     cache: "force-cache",
-    next: { revalidate: 300 },
+    next: { revalidate: 120 },
   });
 
   if (!res.ok) {

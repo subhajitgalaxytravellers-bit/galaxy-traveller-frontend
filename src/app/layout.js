@@ -12,6 +12,9 @@ export const metadata = {
     default: "Galaxy Travelers",
     template: "%s | Galaxy Travelers",
   },
+  icons: {
+    icon: "/assets/flaticon.ico",
+  },
 };
 
 // Keep server rendering close to the GCP backend (Mumbai)
