@@ -48,6 +48,11 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
   const observerRef = useRef(null);
 
   const tourTypeOptions = ['fixed_date', 'selectable_date', 'both'];
+  const tourTypeLabels = {
+    fixed_date: 'Fixed Dates',
+    selectable_date: 'Flexible Dates',
+    both: 'Fixed + Flexible',
+  };
   const durationOptions = ['1', '3', '5', '7', '14', '30'];
   const ratingOptions = [1, 2, 3, 4, 5];
   const initialFetchSkipped = useRef(false);
@@ -283,7 +288,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
 
       {/* TOUR TYPE */}
       <div>
-        <h4 className='text-sm font-medium mb-2'>Type</h4>
+        <h4 className='text-sm font-medium mb-2'>Travel Style</h4>
         {tourTypeOptions.map((t) => (
           <div key={t} className='flex items-center gap-2 my-1'>
             <Checkbox
@@ -294,7 +299,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
                 )
               }
             />
-            <span className='capitalize'>{t.replace('_', ' ')}</span>
+            <span>{tourTypeLabels[t] || t.replace('_', ' ')}</span>
           </div>
         ))}
       </div>

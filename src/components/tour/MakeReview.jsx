@@ -15,6 +15,7 @@ import { Star, Upload, X, Image as ImageIcon } from 'lucide-react';
 import AuthDialog from '../Auth/authDialog';
 import { Base_Url } from '@/api/client';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 
 // ---------- constants ----------
 const API_BASE = `${Base_Url}`.replace(/\/+$/, '');
@@ -111,14 +112,15 @@ export default function MakeReview({ tourIdOrSlug }) {
       : null;
 
     if (!endpoint) {
-      alert('Missing tour id/slug');
+      toast.error('Missing tour id/slug');
       return;
     }
 
     const text = reviewContent.trim();
-    if (text.length < 10) return alert('Review must be at least 10 chars.');
-    if (rating < 1 || rating > 5) return alert('Pick 1–5 stars.');
-    if (!reviewerName.trim()) return alert('Please provide your name.');
+    if (text.length < 10)
+      return toast.error('Review must be at least 10 chars.');
+    if (rating < 1 || rating > 5) return toast.error('Pick 1-5 stars.');
+    if (!reviewerName.trim()) return toast.error('Please provide your name.');
 
     const payload = {
       name: reviewerName.trim(),
@@ -144,7 +146,7 @@ export default function MakeReview({ tourIdOrSlug }) {
         throw new Error(errText || `HTTP ${res.status}`);
       }
 
-      alert(
+      toast.success(
         'Thank you for your review! It will be published after moderation.',
       );
       setRating(0);
@@ -154,7 +156,7 @@ export default function MakeReview({ tourIdOrSlug }) {
       setUploadedImages([]);
     } catch (err) {
       console.error('Review submit failed:', err);
-      alert(err?.message || 'Failed to submit review');
+      toast.error(err?.message || 'Failed to submit review');
     } finally {
       setSubmitting(false);
     }
@@ -189,7 +191,7 @@ export default function MakeReview({ tourIdOrSlug }) {
       setUploadedImages((prev) => [...prev, ...urls]);
     } catch (err) {
       console.error('upload failed', err);
-      alert(err.message || 'Failed to upload image(s)');
+      toast.error(err.message || 'Failed to upload image(s)');
     } finally {
       setShowImageUpload(false);
       e.target.value = '';

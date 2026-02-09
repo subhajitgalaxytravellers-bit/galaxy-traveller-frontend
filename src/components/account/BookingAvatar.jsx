@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import AuthDialog from '@/components/Auth/authDialog';
 import { UserRound } from 'lucide-react';
+import ProfileDialog from '@/components/account/ProfileDialog';
 
 const getInitials = (name = '') => {
   const parts = String(name).trim().split(' ');
@@ -23,6 +24,7 @@ const getInitials = (name = '') => {
 export default function BookingAvatar({ isScrolled }) {
   const [open, setOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -72,8 +74,11 @@ export default function BookingAvatar({ isScrolled }) {
               'bg-transparent px-2 py-1 hover:border-primary transition-colors'
             }>
             <Avatar className='h-8 w-8 md:h-9 md:w-9'>
-              {isLoggedIn && user?.avatar ? (
-                <AvatarImage src={user.avatar} alt={user.name || 'User'} />
+              {isLoggedIn && (user?.profileImg || user?.avatar) ? (
+                <AvatarImage
+                  src={user.profileImg || user.avatar}
+                  alt={user.name || 'User'}
+                />
               ) : null}
               <AvatarFallback
                 className={
@@ -103,6 +108,16 @@ export default function BookingAvatar({ isScrolled }) {
                 </p>
                 <p className='text-xs text-muted-foreground'>{user.email}</p>
               </div>
+              <Button
+                variant='outline'
+                className='w-full'
+                size='sm'
+                onClick={() => {
+                  setProfileOpen(true);
+                  setOpen(false);
+                }}>
+                Profile
+              </Button>
               <Link
                 href='/bookings'
                 className='block w-full'
@@ -138,10 +153,25 @@ export default function BookingAvatar({ isScrolled }) {
         open={authOpen}
         onOpenChange={setAuthOpen}
         onAuthSuccess={(data) => {
-          setUser(data?.user || null);
+          const merged = data?.user
+            ? {
+                ...data.user,
+                avatar: data.user.profileImg || data.user.avatar || '',
+              }
+            : null;
+          if (merged) {
+            localStorage.setItem('user', JSON.stringify(merged));
+          }
+          setUser(merged);
           setIsLoggedIn(!!data?.token);
           setAuthOpen(false);
         }}
+      />
+      <ProfileDialog
+        open={profileOpen}
+        onOpenChange={setProfileOpen}
+        user={user}
+        onUserUpdated={(next) => setUser(next)}
       />
     </>
   );

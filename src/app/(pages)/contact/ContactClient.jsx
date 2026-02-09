@@ -115,7 +115,7 @@ export default function ContactClient() {
       const payload = {
         ...data,
         contact: `${data.countryCode}${data.contact.trim()}`, // Merge code + number
-        countryCode: undefined, // Remove if backend doesn't need separate field, or keep if logging
+        countryCode: data.countryCode,
         people: Number(data.people),
         budget: Number(data.budget),
         year: Number(data.year),
@@ -125,7 +125,19 @@ export default function ContactClient() {
       await createLead.mutateAsync(payload);
 
       toast.success('Lead submitted successfully!');
-      form.reset();
+      form.reset({
+        name: '',
+        email: '',
+        contact: '',
+        countryCode: '+91',
+        month: '',
+        year: '',
+        duration: '',
+        people: '',
+        budget: '',
+        destination: '',
+        comment: '',
+      });
     } catch (err) {
       toast.error(err?.response?.data?.message || 'Submission failed');
     } finally {
@@ -330,7 +342,7 @@ export default function ContactClient() {
                           <Select
                             onValueChange={field.onChange}
                             disabled={otpVerified}
-                            defaultValue={field.countryCode}>
+                            value={field.value}>
                             <FormControl>
                               <SelectTrigger className={'w-full'}>
                                 <SelectValue placeholder='Country code' />

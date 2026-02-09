@@ -15,6 +15,11 @@ import { useRouter } from 'next/navigation';
 
 const durationOptions = ['1', '3', '5', '7', '14', '30', '60', '90', '120']; // SAME AS ToursClient FILTERS
 const typeOptions = ['fixed_date', 'selectable_date', 'both'];
+const typeLabels = {
+  fixed_date: 'Fixed Dates',
+  selectable_date: 'Flexible Dates',
+  both: 'Fixed + Flexible',
+};
 
 const SearchBar = () => {
   const router = useRouter();
@@ -58,21 +63,24 @@ const SearchBar = () => {
             <div className='space-y-2 w-full'>
               <label className='text-sm font-medium text-muted-foreground flex items-center gap-2'>
                 <Compass className='w-4 h-4 text-primary' />
-                Type
+                Travel Style
               </label>
-              <Select className='h-12 py-4 w-full' onValueChange={setTourType}>
+              <Select onValueChange={setTourType}>
                 <SelectTrigger
                   style={{ height: '3rem !important' }}
-                  className={'w-full'}>
+                  className='w-full'>
                   <SelectValue
                     className='h-12 py-4 w-full'
                     placeholder='Select Type'
                   />
                 </SelectTrigger>
-                <SelectContent className='h-12 py-4 w-full'>
+                <SelectContent>
                   {typeOptions.map((t) => (
-                    <SelectItem className='h-12 py-4 w-full' key={t} value={t}>
-                      {t.replace('_', ' ')}
+                    <SelectItem
+                      key={t}
+                      value={t}
+                      className='focus:bg-primary focus:text-primary-foreground'>
+                      {typeLabels[t] || t.replace('_', ' ')}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -93,7 +101,10 @@ const SearchBar = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {durationOptions.map((d) => (
-                    <SelectItem key={d} value={d}>
+                    <SelectItem
+                      key={d}
+                      value={d}
+                      className='focus:bg-primary focus:text-primary-foreground'>
                       {d}+ Days
                     </SelectItem>
                   ))}

@@ -23,7 +23,7 @@ const Newsletter = () => {
               placeholder="Enter your email"
               className="h-12 bg-white text-foreground border-0"
             />
-            <Button size="lg" variant="secondary" className="whitespace-nowrap">
+            <Button size="lg" variant="default" className="whitespace-nowrap">
               Subscribe Now
             </Button>
           </div>
