@@ -1,36 +1,36 @@
-import { Poppins, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import { ToastContainer } from "react-toastify";
-import ReactQueryProvider from "@/providers/ReactQueryProvider";
-import WhatsAppButton from "@/components/common/Whatapp";
+import { Poppins, Geist_Mono } from 'next/font/google';
+import './globals.css';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { ToastContainer } from 'react-toastify';
+import ReactQueryProvider from '@/providers/ReactQueryProvider';
+import WhatsAppButton from '@/components/common/Whatapp';
 
 export const metadata = {
   title: {
-    default: "Galaxy Travelers",
-    template: "%s | Galaxy Travelers",
+    default: 'Galaxy Travelers',
+    template: '%s | Galaxy Travelers',
   },
   icons: {
-    icon: "/assets/flaticon.ico",
+    icon: '/assets/flaticon.ico',
   },
 };
 
 // Keep server rendering close to the GCP backend (Mumbai)
-export const preferredRegion = ["bom1"];
+export const preferredRegion = ['bom1'];
 
 const poppins = Poppins({
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-geist-sans", // reuse existing CSS var for sans
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-geist-sans', // reuse existing CSS var for sans
 });
 
 const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-geist-mono",
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-geist-mono',
 });
 
 export default async function RootLayout({ children }) {
@@ -43,7 +43,7 @@ export default async function RootLayout({ children }) {
       `${process.env.NEXT_PUBLIC_BASE_API}/api/settings`,
       {
         next: { revalidate: 60 }, // Cache for 60 seconds
-      }
+      },
     );
     if (settingsRes.ok) {
       settings = await settingsRes.json();
@@ -57,7 +57,7 @@ export default async function RootLayout({ children }) {
       `${process.env.NEXT_PUBLIC_BASE_API}/api/site_global`,
       {
         next: { revalidate: 60 }, // Cache for 60 seconds
-      }
+      },
     );
     if (globalsRes.ok) {
       globals = await globalsRes.json();
@@ -66,33 +66,31 @@ export default async function RootLayout({ children }) {
     console.error('Failed to fetch site globals:', error);
   }
 
-  const whatsappNumber = settings?.data?.whatsapp?.number || "";
+  const whatsappNumber = settings?.data?.whatsapp?.number || '';
   const footerContact = settings?.data?.footerContact || {};
   const tracking = settings?.data?.tracking || {};
-  const gtmId = String(tracking?.gtmId || "").trim();
-  const fbPixel = String(tracking?.fbPixel || "").trim();
-  const extraScripts = String(tracking?.extraScripts || "").trim();
+  const gtmId = String(tracking?.gtmId || '').trim();
+  const fbPixel = String(tracking?.fbPixel || '').trim();
+  const extraScripts = String(tracking?.extraScripts || '').trim();
   const siteGlobal = globals?.data || {};
-  console.log("Site Global Data:", siteGlobal);
+  console.log('Site Global Data:', siteGlobal);
 
   return (
-    <html lang="en">
+    <html lang='en'>
       <head>
         {gtmId && (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(gtmId)}`}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-                `,
-              }}
-            />
-          </>
+          // eslint-disable-next-line @next/next/next-script-for-ga
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','${gtmId}');
+      `,
+            }}
+          />
         )}
         {fbPixel && (
           <script
@@ -116,30 +114,34 @@ export default async function RootLayout({ children }) {
           <script dangerouslySetInnerHTML={{ __html: extraScripts }} />
         )}
       </head>
-      <body className={`${poppins.className} ${poppins.variable} ${geistMono.variable}`}>
+      <body
+        className={`${poppins.className} ${poppins.variable} ${geistMono.variable}`}>
         {gtmId && (
-          <noscript>
-            <iframe
-              src={`https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(gtmId)}`}
-              height="0"
-              width="0"
-              style={{ display: "none", visibility: "hidden" }}
-            />
-          </noscript>
+          <>
+            <noscript>
+              <iframe
+                src={`https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(gtmId)}`}
+                height='0'
+                width='0'
+                style={{ display: 'none', visibility: 'hidden' }}
+              />
+            </noscript>
+          </>
         )}
         {fbPixel && (
           <noscript>
             <img
-              height="1"
-              width="1"
-              style={{ display: "none" }}
+              height='1'
+              width='1'
+              style={{ display: 'none' }}
               src={`https://www.facebook.com/tr?id=${encodeURIComponent(fbPixel)}&ev=PageView&noscript=1`}
-              alt=""
+              alt=''
             />
           </noscript>
         )}
         <ReactQueryProvider>
-          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+          <GoogleOAuthProvider
+            clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
             {/* SITE NAV */}
             <Navbar />
 
