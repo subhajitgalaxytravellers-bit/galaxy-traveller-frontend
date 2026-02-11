@@ -1,8 +1,19 @@
 import axios from "axios";
+import {
+  clearAuth,
+  getValidToken,
+  isAuthErrorResponse,
+  setAuth,
+} from "@/lib/auth";
+
+const API_BASE =
+  (process.env.NEXT_PUBLIC_BASE_API || "http://localhost:8080").replace(
+    /\/$/,
+    ""
+  );
 
 const client = axios.create({
-  baseURL:
-    `${process.env.NEXT_PUBLIC_BASE_API}/api` || "http://localhost:8080/api",
+  baseURL: `${API_BASE}/api`,
   timeout: 10000,
 });
 
@@ -12,7 +23,7 @@ const client = axios.create({
 client.interceptors.request.use(
   (config) => {
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
+      const token = getValidToken();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -22,21 +33,32 @@ client.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+client.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error?.response?.status;
+    const message = error?.response?.data?.message || error?.message || "";
+    if (typeof window !== "undefined" && isAuthErrorResponse(status, message)) {
+      clearAuth("expired");
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default client;
 
-export const Base_Url =
-  `${process.env.NEXT_PUBLIC_BASE_API}` || "http://localhost:8080";
+export const Base_Url = API_BASE;
 
 /**
  * Optional manual setters (still useful)
  */
-export const setToken = (token) => {
-  localStorage.setItem("token", token);
+export const setToken = (token, user) => {
+  setAuth({ token, user });
   client.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 };
 
 export const removeToken = () => {
-  localStorage.removeItem("token");
+  clearAuth("logout");
   delete client.defaults.headers.common["Authorization"];
 };
 

@@ -16,6 +16,12 @@ import AuthDialog from '../Auth/authDialog';
 import { Base_Url } from '@/api/client';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
+import {
+  clearAuth,
+  getValidToken,
+  isAuthErrorResponse,
+  subscribeAuthChanges,
+} from '@/lib/auth';
 
 // ---------- constants ----------
 const API_BASE = `${Base_Url}`.replace(/\/+$/, '');
@@ -78,7 +84,7 @@ export default function MakeReview({ tourIdOrSlug }) {
   // read token
   useEffect(() => {
     try {
-      const t = localStorage.getItem('token') || '';
+      const t = getValidToken();
       if (t) setToken(t);
       const storedUser = localStorage.getItem('user');
       if (storedUser) {
@@ -90,6 +96,18 @@ export default function MakeReview({ tourIdOrSlug }) {
       }
     } catch {}
   }, [reviewerName]);
+
+  useEffect(() => {
+    const syncAuth = () => {
+      const t = getValidToken();
+      setToken(t || '');
+      if (!t) {
+        setCurrentUser(null);
+      }
+    };
+    const unsubscribe = subscribeAuthChanges(syncAuth);
+    return unsubscribe;
+  }, []);
 
   const onAuthSuccess = ({ token: t, user }) => {
     localStorage.setItem('token', t);
@@ -143,6 +161,10 @@ export default function MakeReview({ tourIdOrSlug }) {
 
       if (!res.ok) {
         const errText = await res.text();
+        if (isAuthErrorResponse(res.status, errText)) {
+          clearAuth('expired');
+          setAuthOpen(true);
+        }
         throw new Error(errText || `HTTP ${res.status}`);
       }
 

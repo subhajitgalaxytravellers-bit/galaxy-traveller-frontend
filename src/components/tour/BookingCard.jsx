@@ -32,6 +32,13 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import EnquiryDialog from './EnquiryDialog';
 import {
+  clearAuth,
+  getValidToken,
+  isAuthErrorResponse,
+  isAuthenticated,
+  subscribeAuthChanges,
+} from '@/lib/auth';
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -121,6 +128,7 @@ export default function BookingCard({
   const [showAuth, setShowAuth] = useState(false);
   const [pendingBookingPayload, setPendingBookingPayload] = useState(null);
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [couponCode, setCouponCode] = useState('');
   const [couponState, setCouponState] = useState({
@@ -130,6 +138,13 @@ export default function BookingCard({
   });
   const [availableCoupons, setAvailableCoupons] = useState([]);
   const [couponsLoading, setCouponsLoading] = useState(false);
+
+  useEffect(() => {
+    const syncAuth = () => setIsLoggedIn(isAuthenticated());
+    syncAuth();
+    const unsubscribe = subscribeAuthChanges(syncAuth);
+    return unsubscribe;
+  }, []);
 
   const computeDiscount = (coupon, amount) => {
     if (!coupon) return 0;
@@ -252,7 +267,7 @@ export default function BookingCard({
       toast.error('Enter a coupon code');
       return;
     }
-    const token = localStorage.getItem('token');
+    const token = getValidToken();
     if (!token) {
       setShowAuth(true);
       return;
@@ -276,6 +291,9 @@ export default function BookingCard({
       );
       const data = await res.json();
       if (!res.ok || !data.success) {
+        if (isAuthErrorResponse(res.status, data?.message)) {
+          clearAuth('expired');
+        }
         throw new Error(data?.message || 'Coupon not valid');
       }
       const payload = data.data || data;
@@ -323,7 +341,7 @@ export default function BookingCard({
     finalPayable,
     coupon,
   }) => {
-    const token = localStorage.getItem('token');
+    const token = getValidToken();
 
     // 🔐 1. Login check
     if (!token) {
@@ -396,6 +414,10 @@ export default function BookingCard({
       console.log('Booking Response:', bookingData);
 
       if (!bookingData?.success) {
+        if (isAuthErrorResponse(bookingRes.status, bookingData?.message)) {
+          clearAuth('expired');
+          setShowAuth(true);
+        }
         throw new Error(bookingData?.message || 'Booking creation failed');
       }
 
@@ -488,6 +510,10 @@ export default function BookingCard({
     const verifyData = await verifyRes.json();
 
     if (!verifyData.success) {
+      if (isAuthErrorResponse(verifyRes.status, verifyData?.message)) {
+        clearAuth('expired');
+        setShowAuth(true);
+      }
       toast.error('Payment verification failed');
       return;
     }
@@ -711,9 +737,15 @@ export default function BookingCard({
               </Button>
             ) : (
               <Button
-                onClick={() => setShowBookingModal(true)}
+                onClick={() => {
+                  if (!isLoggedIn) {
+                    setShowAuth(true);
+                    return;
+                  }
+                  setShowBookingModal(true);
+                }}
                 className='w-full h-11 sm:h-12 bg-primary text-white font-medium'>
-                Book Now
+                {isLoggedIn ? 'Book Now' : 'Login'}
               </Button>
             ))}
         </CardContent>

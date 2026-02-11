@@ -8,21 +8,29 @@ import BlogSection from "@/components/home/BlogSection";
 import DetailSection from "@/components/home/DetailSection";
 import CTA from "@/components/common/CTA";
 
-const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || "").replace(/\/$/, "");
+const API_BASE = (
+  process.env.NEXT_PUBLIC_BASE_API ||
+  process.env.BASE_API_URL ||
+  "http://localhost:8080"
+).replace(/\/$/, "");
 
 export const revalidate = 300; // cache home payload for 5 minutes
 export const preferredRegion = ["bom1"]; // keep Vercel compute close to GCP (Mumbai)
 
 async function getSiteData() {
-  const res = await fetch(`${API_BASE}/api/home`, {
-    cache: "force-cache",
-    next: { revalidate },
-  });
+  try {
+    const res = await fetch(`${API_BASE}/api/home`, {
+      cache: "force-cache",
+      next: { revalidate },
+    });
 
-  if (!res.ok) throw new Error("Failed to load site data");
+    if (!res.ok) throw new Error("Failed to load site data");
 
-  // backend responds with { success, data }
-  return res.json();
+    // backend responds with { success, data }
+    return res.json();
+  } catch (_error) {
+    return { data: {}, reviews: [] };
+  }
 }
 
 export async function generateMetadata() {
@@ -63,8 +71,6 @@ export async function generateMetadata() {
 
 export default async function HomePage() {
   const { data, reviews } = await getSiteData();
-
-  console.log(data, reviews);
 
   return (
     <div className="p-0 m-0">

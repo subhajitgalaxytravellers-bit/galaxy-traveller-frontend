@@ -6,10 +6,14 @@ import { Menu, X } from 'lucide-react';
 import BookingAvatar from '../account/BookingAvatar';
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
+import AuthDialog from '@/components/Auth/authDialog';
+import { isAuthenticated, subscribeAuthChanges } from '@/lib/auth';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +21,13 @@ const Navbar = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const sync = () => setIsLoggedIn(isAuthenticated());
+    sync();
+    const unsubscribe = subscribeAuthChanges(sync);
+    return unsubscribe;
   }, []);
 
   const links = [
@@ -107,14 +118,20 @@ const Navbar = () => {
           {/* CTA */}
           <div className='hidden lg:flex items-center gap-3'>
             <Button
-              onClick={() => router.push('/tours')}
+              onClick={() => {
+                if (!isLoggedIn) {
+                  setAuthOpen(true);
+                  return;
+                }
+                router.push('/tours');
+              }}
               className={
                 isScrolled
                   ? 'text-white'
                   : 'bg-white text-primary hover:bg-white hover:text-primary'
               }
               size='lg'>
-              Book Now
+              {isLoggedIn ? 'Book Now' : 'Login'}
             </Button>
             <BookingAvatar isScrolled={isScrolled} />
           </div>
@@ -169,16 +186,23 @@ const Navbar = () => {
               })}
 
               <Button
-                onClick={() => router.push('/tours')}
+                onClick={() => {
+                  if (!isLoggedIn) {
+                    setAuthOpen(true);
+                    return;
+                  }
+                  router.push('/tours');
+                }}
                 variant='default'
                 size='lg'
                 className='w-full'>
-                Book Now
+                {isLoggedIn ? 'Book Now' : 'Login'}
               </Button>
             </div>
           </div>
         )}
       </div>
+      <AuthDialog open={authOpen} onOpenChange={setAuthOpen} />
     </nav>
   );
 };

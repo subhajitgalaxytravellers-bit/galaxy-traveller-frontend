@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import AuthDialog from '@/components/Auth/authDialog';
 import { UserRound } from 'lucide-react';
 import ProfileDialog from '@/components/account/ProfileDialog';
+import { clearAuth, getValidToken, subscribeAuthChanges } from '@/lib/auth';
 
 const getInitials = (name = '') => {
   const parts = String(name).trim().split(' ');
@@ -29,26 +30,26 @@ export default function BookingAvatar({ isScrolled }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    let active = true;
-    (async () => {
+    const syncAuth = () => {
+      const token = getValidToken();
       const stored = localStorage.getItem('user');
-      const token = localStorage.getItem('token');
-
-      if (!active) return;
       setIsLoggedIn(!!token);
 
       if (stored) {
         try {
           const parsed = JSON.parse(stored);
-          if (active) setUser(parsed);
+          setUser(parsed);
         } catch {
-          if (active) setUser(null);
+          setUser(null);
         }
+      } else {
+        setUser(null);
       }
-    })();
-    return () => {
-      active = false;
     };
+
+    syncAuth();
+    const unsubscribe = subscribeAuthChanges(syncAuth);
+    return unsubscribe;
   }, []);
 
   const initials = useMemo(
@@ -57,8 +58,7 @@ export default function BookingAvatar({ isScrolled }) {
   );
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    clearAuth('logout');
     setUser(null);
     setIsLoggedIn(false);
     setOpen(false);

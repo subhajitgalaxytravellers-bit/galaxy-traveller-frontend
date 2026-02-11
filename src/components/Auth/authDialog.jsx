@@ -69,8 +69,7 @@ function AuthDialog({ open, onOpenChange, onAuthSuccess }) {
       const res = await post('/auth/google', { token });
       const data = res.data;
 
-      setToken(data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      setToken(data.token, data.user);
 
       toast.success('Signed in successfully!');
       onAuthSuccess?.(data);
@@ -116,8 +115,7 @@ function AuthDialog({ open, onOpenChange, onAuthSuccess }) {
         })
       ).data,
     onSuccess: (data) => {
-      setToken(data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      setToken(data.token, data.user);
       toast.success('Logged in!');
       onAuthSuccess?.(data);
       resetForm();

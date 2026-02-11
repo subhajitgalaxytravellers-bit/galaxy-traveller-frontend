@@ -7,6 +7,12 @@ import { ToastContainer } from 'react-toastify';
 import ReactQueryProvider from '@/providers/ReactQueryProvider';
 import WhatsAppButton from '@/components/common/Whatapp';
 
+const API_BASE = (
+  process.env.NEXT_PUBLIC_BASE_API ||
+  process.env.BASE_API_URL ||
+  'http://localhost:8080'
+).replace(/\/$/, '');
+
 export const metadata = {
   title: {
     default: 'Galaxy Travelers',
@@ -39,12 +45,9 @@ export default async function RootLayout({ children }) {
   let globals = { data: {} };
 
   try {
-    const settingsRes = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/api/settings`,
-      {
-        next: { revalidate: 60 }, // Cache for 60 seconds
-      },
-    );
+    const settingsRes = await fetch(`${API_BASE}/api/settings`, {
+      next: { revalidate: 60 }, // Cache for 60 seconds
+    });
     if (settingsRes.ok) {
       settings = await settingsRes.json();
     }
@@ -53,12 +56,9 @@ export default async function RootLayout({ children }) {
   }
 
   try {
-    const globalsRes = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/api/site_global`,
-      {
-        next: { revalidate: 60 }, // Cache for 60 seconds
-      },
-    );
+    const globalsRes = await fetch(`${API_BASE}/api/site_global`, {
+      next: { revalidate: 60 }, // Cache for 60 seconds
+    });
     if (globalsRes.ok) {
       globals = await globalsRes.json();
     }
@@ -73,8 +73,6 @@ export default async function RootLayout({ children }) {
   const fbPixel = String(tracking?.fbPixel || '').trim();
   const extraScripts = String(tracking?.extraScripts || '').trim();
   const siteGlobal = globals?.data || {};
-  console.log('Site Global Data:', siteGlobal);
-
   return (
     <html lang='en'>
       <head>

@@ -22,6 +22,7 @@ import BookingProcessingOverlay from '@/components/common/ProcessDialog';
 import AuthDialog from '@/components/Auth/authDialog';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
+import { clearAuth, getValidToken, isAuthErrorResponse } from '@/lib/auth';
 
 const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || '').replace(/\/$/, '');
 const countWords = (text = '') =>
@@ -55,7 +56,7 @@ export default function BookingsPage() {
     `Rs. ${Number(value || 0).toLocaleString('en-IN')}`;
 
   const fetchBookings = async () => {
-    const token = localStorage.getItem('token');
+    const token = getValidToken();
     if (!token) {
       setAuthOpen(true);
       setLoading(false);
@@ -66,6 +67,10 @@ export default function BookingsPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
+      if (!res.ok && isAuthErrorResponse(res.status, data?.message)) {
+        clearAuth('expired');
+        setAuthOpen(true);
+      }
       setBookings(data?.data?.items || data?.items || []);
     } catch (e) {
       toast.error('Failed to load bookings');
@@ -85,7 +90,7 @@ export default function BookingsPage() {
 
   const handleConfirmPayment = async ({ selectedPayment }) => {
     if (!activeBooking) return;
-    const token = localStorage.getItem('token');
+    const token = getValidToken();
     if (!token) {
       setAuthOpen(true);
       return;
@@ -111,7 +116,7 @@ export default function BookingsPage() {
           contact: activeBooking.contactInfo?.phone,
         },
         handler: async function (response) {
-          await fetch(`${API_BASE}/api/payment/verify`, {
+          const verifyRes = await fetch(`${API_BASE}/api/payment/verify`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -125,6 +130,12 @@ export default function BookingsPage() {
               paymentMode: selectedPayment,
             }),
           });
+          const verifyData = await verifyRes.json();
+          if (!verifyRes.ok && isAuthErrorResponse(verifyRes.status, verifyData?.message)) {
+            clearAuth('expired');
+            setAuthOpen(true);
+            return;
+          }
           toast.success('Payment successful');
           setPaymentOpen(false);
           fetchBookings();
@@ -149,7 +160,7 @@ export default function BookingsPage() {
       toast.info('Invoice is not ready yet.');
       return;
     }
-    const token = localStorage.getItem('token');
+    const token = getValidToken();
     if (!token) {
       setAuthOpen(true);
       return;
@@ -190,7 +201,7 @@ export default function BookingsPage() {
       toast.info('Trip has already started. Cancellation is disabled.');
       return;
     }
-    const token = localStorage.getItem('token');
+    const token = getValidToken();
     if (!token) {
       setAuthOpen(true);
       return;
@@ -211,7 +222,7 @@ export default function BookingsPage() {
       toast.error('Cancellation reason must be 500 words or fewer.');
       return;
     }
-    const token = localStorage.getItem('token');
+    const token = getValidToken();
     if (!token) {
       setAuthOpen(true);
       return;
@@ -230,6 +241,10 @@ export default function BookingsPage() {
         },
       );
       const data = await res.json();
+      if (!res.ok && isAuthErrorResponse(res.status, data?.message)) {
+        clearAuth('expired');
+        setAuthOpen(true);
+      }
       if (!res.ok || data?.success === false) {
         throw new Error(data?.message || 'Failed to cancel booking');
       }
