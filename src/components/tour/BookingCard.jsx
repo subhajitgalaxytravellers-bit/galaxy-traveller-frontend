@@ -60,6 +60,13 @@ export default function BookingCard({
     partial: { enabled: false, price: 0 },
   },
 }) {
+  const roundMoney = (value) =>
+    Math.round((Number(value || 0) + Number.EPSILON) * 100) / 100;
+  const clampPercent = (value) => {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return 0;
+    return Math.max(0, Math.min(100, n));
+  };
   // console.log("tourType", tourType, tourId);
 
   useEffect(() => {
@@ -118,12 +125,34 @@ export default function BookingCard({
 
   const [paymentMode, setPaymentMode] = useState('full');
   const [bookingProcessing, setBookingProcessing] = useState(false);
+  const [settingsGstRate, setSettingsGstRate] = useState(0);
 
   const totalGuests = guests.adults + guests.children;
   const partialEnabled = paymentConfig?.partial?.enabled;
   const partialPrice = Number(paymentConfig?.partial?.price || 0);
 
-  const fullAmount = basePrice * totalGuests;
+  const gstRate = clampPercent(settingsGstRate);
+  const subtotalAmount = roundMoney(Number(basePrice || 0) * totalGuests);
+
+  useEffect(() => {
+    let active = true;
+    const fetchSettingsGst = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/settings`);
+        const data = await res.json();
+        if (!active) return;
+        const rate = Number(data?.data?.invoice?.gstRate || 0);
+        setSettingsGstRate(Number.isFinite(rate) ? rate : 0);
+      } catch (err) {
+        console.error('Failed to load GST settings', err);
+        if (active) setSettingsGstRate(0);
+      }
+    };
+    fetchSettingsGst();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const [showAuth, setShowAuth] = useState(false);
   const [pendingBookingPayload, setPendingBookingPayload] = useState(null);
@@ -205,9 +234,9 @@ export default function BookingCard({
     let active = true;
     const fetchCoupons = async () => {
       setCouponsLoading(true);
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_API}/api/coupons/available?tourId=${tourId}&amount=${fullAmount}`,
+        try {
+          const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_API}/api/coupons/available?tourId=${tourId}&amount=${subtotalAmount}`,
         );
         const data = await res.json();
         if (!active) return;
@@ -220,7 +249,7 @@ export default function BookingCard({
             );
             if (refreshed) {
               const discount =
-                refreshed.discount ?? computeDiscount(refreshed, fullAmount);
+                refreshed.discount ?? computeDiscount(refreshed, subtotalAmount);
               applyCoupon(
                 { code: refreshed.code, discount },
                 refreshed.message || 'Coupon applied',
@@ -247,14 +276,14 @@ export default function BookingCard({
     return () => {
       active = false;
     };
-  }, [tourId, fullAmount]);
+  }, [tourId, subtotalAmount]);
 
   const handleCouponSelectFromDropdown = (coupon) => {
     if (!coupon) {
       applyCoupon(null, 'No coupon applied');
       return;
     }
-    const discount = coupon.discount ?? computeDiscount(coupon, fullAmount);
+    const discount = coupon.discount ?? computeDiscount(coupon, subtotalAmount);
     applyCoupon(
       { code: coupon.code, discount },
       coupon.message || 'Coupon applied',
@@ -285,7 +314,7 @@ export default function BookingCard({
           body: JSON.stringify({
             code,
             tourId,
-            subtotal: fullAmount,
+            subtotal: subtotalAmount,
           }),
         },
       );
@@ -351,8 +380,13 @@ export default function BookingCard({
     }
 
     const appliedCoupon = coupon || couponState.applied;
-    const discountAmount = Number(appliedCoupon?.discount || 0);
-    const netAmount = Math.max(0, fullAmount - discountAmount);
+    const discountAmount = Math.min(
+      subtotalAmount,
+      Number(appliedCoupon?.discount || 0),
+    );
+    const netTaxableAmount = roundMoney(Math.max(0, subtotalAmount - discountAmount));
+    const netGstAmount = roundMoney((netTaxableAmount * gstRate) / 100);
+    const netAmount = roundMoney(netTaxableAmount + netGstAmount);
 
     const partialTotalOverride = Number(
       paymentConfig?.partial?.totalAmount || 0,
@@ -362,7 +396,7 @@ export default function BookingCard({
         ? partialTotalOverride
         : Number(paymentConfig.partial.price || 0) * totalGuests
       : netAmount;
-    const partialRatio = fullAmount > 0 ? basePartialAmount / fullAmount : 1;
+    const partialRatio = subtotalAmount > 0 ? basePartialAmount / subtotalAmount : 1;
     const discountedPartial = Math.min(
       Math.max(0, Math.round(netAmount * partialRatio)),
       netAmount,
@@ -769,7 +803,8 @@ export default function BookingCard({
         tourLocation={tourLocation}
         dateRange={dateRange}
         guests={guests}
-        amount={fullAmount} // full price before discount
+        amount={subtotalAmount} // full price before discount/tax
+        gstPercent={gstRate}
         paymentMode='full' // default
         paymentConfig={paymentConfig}
         coupon={couponState.applied}

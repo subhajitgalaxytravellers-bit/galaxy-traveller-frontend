@@ -1,17 +1,17 @@
-import ToursClient from "@/components/tour/TourClient";
-import { getSearchToursPage } from "@/lib/tours";
+import ToursClient from '@/components/tour/TourClient';
+import { getSearchToursPage } from '@/lib/tours';
 
 export async function generateMetadata() {
-  const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || "").replace(/\/$/, "");
+  const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || '').replace(/\/$/, '');
 
-  let title = "Explore Tours | Galaxy Travelers";
+  let title = 'Explore Tours | Galaxy Travelers';
   let description =
-    "Discover premium travel tours, curated adventures, and breathtaking experiences across the world.";
-  let shareImage = "/opengraph-tours.jpg";
+    'Discover premium travel tours, curated adventures, and breathtaking experiences across the world.';
+  let shareImage = '/opengraph-tours.jpg';
 
   try {
     const res = await fetch(`${API_BASE}/api/site_global`, {
-      cache: "force-cache",
+      cache: 'force-cache',
       next: { revalidate: 900 },
     });
     const data = await res.json();
@@ -30,18 +30,18 @@ export async function generateMetadata() {
     openGraph: {
       title,
       description,
-      url: `${process.env.NEXT_PUBLIC_URL || ""}/tours`,
+      url: `${process.env.NEXT_PUBLIC_URL || ''}/tours`,
       images: [
         {
           url: shareImage,
           width: 1200,
           height: 630,
-          alt: "Tours",
+          alt: 'Tours',
         },
       ],
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title,
       description,
       images: [shareImage],

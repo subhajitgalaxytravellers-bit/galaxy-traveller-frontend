@@ -28,6 +28,7 @@ export default function PaymentDialog({
   dateRange,
   guests,
   amount, // FULL AMOUNT ALWAYS
+  gstPercent = 0,
   fullLabel = "Full Payment",
   paymentMode, // "full" or "partial" (initial mode)
   paymentConfig,
@@ -37,6 +38,14 @@ export default function PaymentDialog({
   onSelectCoupon,
   onConfirmPayment,
 }) {
+  const roundMoney = (value = 0) =>
+    Math.round((Number(value || 0) + Number.EPSILON) * 100) / 100;
+  const clampPercent = (value = 0) => {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return 0;
+    return Math.max(0, Math.min(100, n));
+  };
+
   const { adults, children } = guests;
   const totalGuests = adults + children;
 
@@ -46,10 +55,14 @@ export default function PaymentDialog({
   const formatRs = (value = 0) =>
     `Rs. ${Number(value || 0).toLocaleString("en-IN")}`;
 
-  // FIX: fullAmount = raw full amount
-  const fullAmount = Number(amount || 0);
-  const couponDiscount = Number(coupon?.discount || 0);
-  const netAmount = Math.max(0, fullAmount - couponDiscount);
+  const gstRate = clampPercent(gstPercent);
+  const fullAmount = roundMoney(Number(amount || 0));
+  const couponDiscount = roundMoney(
+    Math.min(fullAmount, Number(coupon?.discount || 0)),
+  );
+  const taxableAmount = roundMoney(Math.max(0, fullAmount - couponDiscount));
+  const gstAmount = roundMoney((taxableAmount * gstRate) / 100);
+  const netAmount = roundMoney(taxableAmount + gstAmount);
 
   // Allow parent to pass absolute partial total, otherwise fall back to per-guest price
   const partialTotalOverride = Number(paymentConfig?.partial?.totalAmount || 0);
@@ -64,8 +77,8 @@ export default function PaymentDialog({
   // Apply coupon proportionally to partial amount so upfront shrinks with discount
   const partialRatio = fullAmount > 0 ? basePartialAmount / fullAmount : 1;
   const partialAmount = Math.min(
-    Math.max(0, Math.round(netAmount * partialRatio)),
-    netAmount
+    Math.max(0, roundMoney(netAmount * partialRatio)),
+    netAmount,
   );
 
   // FIX: Always default to FULL unless partial is allowed & parent explicitly asked partial
@@ -188,13 +201,25 @@ export default function PaymentDialog({
 
           <div className="flex justify-between">
             <span>Subtotal:</span>
-            <span className="font-medium">{formatRs(netAmount)}</span>
+            <span className="font-medium">{formatRs(fullAmount)}</span>
           </div>
 
           {couponDiscount > 0 && (
             <div className="flex justify-between text-green-600">
               <span>Coupon ({coupon?.code}):</span>
               <span>-{formatRs(couponDiscount)}</span>
+            </div>
+          )}
+
+          <div className="flex justify-between">
+            <span>Taxable amount:</span>
+            <span className="font-medium">{formatRs(taxableAmount)}</span>
+          </div>
+
+          {gstRate > 0 && (
+            <div className="flex justify-between">
+              <span>GST ({gstRate}%):</span>
+              <span className="font-medium">{formatRs(gstAmount)}</span>
             </div>
           )}
 

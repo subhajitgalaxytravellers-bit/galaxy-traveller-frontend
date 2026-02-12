@@ -194,13 +194,6 @@ export default function BookingsPage() {
       toast.info('This booking is already cancelled.');
       return;
     }
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tripStart = booking.startDate ? new Date(booking.startDate) : null;
-    if (tripStart && tripStart < today) {
-      toast.info('Trip has already started. Cancellation is disabled.');
-      return;
-    }
     const token = getValidToken();
     if (!token) {
       setAuthOpen(true);
@@ -339,7 +332,7 @@ export default function BookingsPage() {
                 !tripStarted &&
                 booking.status !== 'cancelled' &&
                 paymentStatus !== 'paid';
-              const canCancel = booking.status !== 'cancelled' && !tripStarted;
+              const canCancel = booking.status !== 'cancelled';
               const tourSlug = booking.tour?.slug || booking.tourSlug;
               const tourPlace =
                 booking.tour?.place ||
