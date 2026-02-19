@@ -258,7 +258,7 @@ export default async function AboutPage() {
       </div>
 
       {/* Team Section */}
-      <TeamSection />
+      {/* <TeamSection /> */}
 
       {/* Stats Section */}
       {/* <StatsSection stats={stats} /> */}
