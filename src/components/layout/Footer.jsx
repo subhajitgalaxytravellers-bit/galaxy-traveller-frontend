@@ -1,6 +1,15 @@
 'use client';
 
-import { Plane, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
+import {
+  Plane,
+  Facebook,
+  Instagram,
+  Twitter,
+  Youtube,
+  HeartHandshakeIcon,
+  HeartHandshake,
+  Heart,
+} from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -167,19 +176,13 @@ const Footer = ({ footer = {}, global = {} }) => {
 
         {/* bottom bar */}
         <div className='border-t border-white/20 pt-6 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between text-sm text-white/75'>
-          <p>
-            © {new Date().getFullYear()} GalaxyTravel. Crafted for explorers.
+          <p className='flex items-center gap-1 '>
+            © 2025–{new Date().getFullYear()} GalaxyTravel | Crafted for
+            explorers by <Heart size={17} fill='red' className='text-red-500' />{' '}
+            <Link className='underline' href='https://webitof.com'>
+              Webitof.
+            </Link>
           </p>
-          <div className='flex flex-wrap gap-4'>
-            {quickLinks.slice(0, 3).map((item, idx) => (
-              <Link
-                key={item.id}
-                href={item.href}
-                className='hover:text-white transition-colors'>
-                {item.label}
-              </Link>
-            ))}
-          </div>
         </div>
       </div>
     </footer>
