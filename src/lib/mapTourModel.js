@@ -82,6 +82,7 @@ export default function toTourModel(api) {
   // ------------------------------
   const badges = [];
   if (api?.tourType === "fixed_date") badges.push("Fixed Date");
+  if (api?.tourType === "enquire") badges.push("Enquire Only");
   if (api?.status === "published") badges.push("Published");
 
   // ------------------------------
@@ -171,6 +172,7 @@ export default function toTourModel(api) {
     dateRange: { startDate, endDate },
     slug: api?.slug,
     id: api?._id || api?.id,
+    creatorId: api?.createdBy?._id || api?.createdBy?.id || api?.createdBy || null,
     status: api?.status,
     createdAt: api?.createdAt,
     updatedAt: api?.updatedAt,

@@ -2,6 +2,7 @@
 
 import CTA from '@/components/common/CTA';
 import BookingCard from '@/components/tour/BookingCard';
+import EnquiryCard from '@/components/tour/EnquiryCard';
 import ImageGallery from '@/components/tour/ImageGallery';
 import MakeReview from '@/components/tour/MakeReview';
 import OverviewCard from '@/components/tour/OverviewCard';
@@ -72,7 +73,7 @@ export default function TourPageClient({ tour }) {
         />
 
         {/* Sticky Nav */}
-        <div className='sticky top-[5rem] bg-white/95 z-50 border-b pl-2 sm:px-5 lg:px-10 shadow-sm'>
+        <div className='sticky top-20 bg-white/95 z-50 border-b pl-2 sm:px-5 lg:px-10 shadow-sm'>
           {/* Desktop */}
           <div className='hidden container mx-auto md:flex gap-6 px-9 py-3'>
             <a
@@ -271,17 +272,25 @@ export default function TourPageClient({ tour }) {
                 />
               </div>
               <div id='booking' className='scroll-mt-28'>
-                <BookingCard
-                  tourLocation={tour.location}
-                  tourName={tour.title}
-                  getDateRange={tour.dateRange}
-                  basePrice={tour.price}
-                  tourType={tour.tourType}
-                  creatorId={tour.creatorId}
-                  tourDuration={tour.overview.duration}
-                  tourId={tour.id}
-                  paymentConfig={tour.payment}
-                />
+                {tour.tourType === 'enquire' ? (
+                  <EnquiryCard
+                    tourId={tour.id}
+                    creatorId={tour.creatorId}
+                    tourName={tour.title}
+                  />
+                ) : (
+                  <BookingCard
+                    tourLocation={tour.location}
+                    tourName={tour.title}
+                    getDateRange={tour.dateRange}
+                    basePrice={tour.price}
+                    tourType={tour.tourType}
+                    creatorId={tour.creatorId}
+                    tourDuration={tour.overview.duration}
+                    tourId={tour.id}
+                    paymentConfig={tour.payment}
+                  />
+                )}
               </div>
             </div>
           </div>
