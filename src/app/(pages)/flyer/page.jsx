@@ -42,12 +42,15 @@ export async function generateMetadata() {
 
 export default async function Page() {
   const limit = 12;
-  const { data: initialData } = await getFlyers({ page: 1, limit });
-
-  console.log(initialData);
+  const result = await getFlyers({ page: 1, limit });
+  const initialData = result?.data ?? null;
 
   if (!initialData) {
-    return <div className="p-10 text-center">Failed to load flyers.</div>;
+    return (
+      <div className="min-h-[50vh] flex items-center justify-center">
+        <p className="text-muted-foreground text-lg">No flyers available right now.</p>
+      </div>
+    );
   }
 
   return <FlyersClient initialData={initialData} limit={limit} />;

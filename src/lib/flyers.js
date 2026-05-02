@@ -1,17 +1,19 @@
-const BASE = process.env.NEXT_PUBLIC_BASE_API.replace(/\/$/, "");
+const BASE = (process.env.NEXT_PUBLIC_BASE_API || '').replace(/\/$/, '');
 
 export async function getFlyers({ page = 1, limit = 12 } = {}) {
-  const url = `${BASE}/api/flyers?page=${page}&limit=${limit}`;
+  try {
+    const url = `${BASE}/api/flyers?page=${page}&limit=${limit}`;
+    const res = await fetch(url, { cache: 'no-store' });
 
-  console.log(url);
-  const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) {
+      console.warn('[Flyers] API error:', res.status);
+      return { data: null };
+    }
 
-  const data = res.json();
-
-  if (res.status !== 200) {
-    console.error("Flyer API error:", res.status);
-    return null;
+    const json = await res.json();
+    return json;
+  } catch (err) {
+    console.warn('[Flyers] network error:', err?.message);
+    return { data: null };
   }
-
-  return data; // this returns parsed JSON
 }

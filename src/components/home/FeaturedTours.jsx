@@ -17,9 +17,9 @@ const TOUR_TYPE_LABELS = {
 const getTypeLabel = (type) =>
   TOUR_TYPE_LABELS[type] || type?.replaceAll('_', ' ') || 'Tour';
 
-const formatPrice = (value) => {
+const hasPrice = (value) => {
   const num = Number(value);
-  return Number.isFinite(num) && num > 0 ? `Rs. ${num.toLocaleString()}` : 'On request';
+  return Number.isFinite(num) && num > 0;
 };
 
 const containerVariants = {
@@ -74,6 +74,10 @@ export default function FeaturedTours({ tours }) {
           className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
           {tours?.map((tour, idx) => (
             <motion.div key={tour.id || idx} variants={cardVariants}>
+              {(() => {
+                const rawPrice = tour.price || tour.details?.pricePerPerson;
+                const priceAvailable = hasPrice(rawPrice);
+                return (
               <Card className='group h-full p-0 overflow-hidden rounded-3xl border border-border/60 bg-card shadow-sm hover:-translate-y-1.5 hover:shadow-2xl transition-all duration-300'>
                 <CardContent className='p-0'>
                   <div className='relative overflow-hidden aspect-[4/3]'>
@@ -119,12 +123,16 @@ export default function FeaturedTours({ tours }) {
                     </div>
 
                     <div className='flex items-center justify-between'>
-                      <div>
-                        <p className='text-xs uppercase tracking-wide text-muted-foreground'>Starting from</p>
-                        <p className='text-2xl font-bold text-primary'>
-                          {formatPrice(tour.price || tour.details?.pricePerPerson)}
-                        </p>
-                      </div>
+                      {priceAvailable ? (
+                        <div>
+                          <p className='text-xs uppercase tracking-wide text-muted-foreground'>Starting from</p>
+                          <p className='text-2xl font-bold text-primary'>
+                            {`Rs. ${Number(rawPrice).toLocaleString()}`}
+                          </p>
+                        </div>
+                      ) : (
+                        <div />
+                      )}
 
                       <Button
                         onClick={() => router.push(`/tour/${tour.slug}`)}
@@ -137,6 +145,8 @@ export default function FeaturedTours({ tours }) {
                   </div>
                 </CardContent>
               </Card>
+                );
+              })()}
             </motion.div>
           ))}
         </motion.div>

@@ -6,7 +6,34 @@ import { ChevronDown, ChevronUp, Clock, Info } from "lucide-react";
 import Image from "next/image";
 
 export default function TourItinerary({ itinerary }) {
-  const [expandedDays, setExpandedDays] = useState(new Set([1]));
+  const normalizedItinerary = useMemo(() => {
+    if (!Array.isArray(itinerary)) return [];
+    return itinerary.map((day, idx) => {
+      const blocks =
+        Array.isArray(day?.blocks) && day.blocks.length > 0
+          ? day.blocks
+          : [
+              {
+                title: day?.title || `Day ${idx + 1} Plan`,
+                activity:
+                  day?.activity || "",
+                notes: day?.notes || "",
+                time: day?.time || "",
+                image: day?.image || "",
+              },
+            ];
+
+      return {
+        day: day?.day || String(idx + 1),
+        title: day?.title || blocks?.[0]?.title || `Day ${idx + 1}`,
+        blocks,
+      };
+    });
+  }, [itinerary]);
+
+  const [expandedDays, setExpandedDays] = useState(
+    () => new Set(normalizedItinerary?.[0]?.day ? [normalizedItinerary[0].day] : [])
+  );
 
   const toggleDay = (day) => {
     setExpandedDays((prev) => {
@@ -22,31 +49,33 @@ export default function TourItinerary({ itinerary }) {
 
   return (
     <div className="space-y-6 mb-6">
-      <h2 className="text-2xl font-bold mb-6">Detailed Itinerary</h2>
+      <h2 className="text-xl lg:text-2xl font-extrabold text-slate-800 mb-6">Detailed Itinerary</h2>
 
-      <div className="space-y-4 flex flex-col gap-3">
-        {itinerary.map((day, idx) => (
+      <div className="space-y-4">
+        {normalizedItinerary.map((day, idx) => {
+          const isExpanded = expandedDays.has(day.day);
+          
+          return (
           <Card
             key={idx}
-            className="p-0 border border-border rounded-lg shadow-sm"
+            className={`p-0 border shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)] rounded-2xl overflow-hidden transition-all duration-200 ${
+              isExpanded ? "border-slate-300 ring-4 ring-slate-50" : "border-slate-200 hover:border-slate-300"
+            }`}
           >
             <div
-              className="p-4 cursor-pointer hover-elevate flex justify-between items-center"
+              className={`p-5 lg:px-8 lg:py-6 cursor-pointer flex justify-between items-center transition-colors hover:bg-slate-50/50`}
               onClick={() => toggleDay(day.day)}
               data-testid={`day-header-${day.day}`}
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-primary/15 text-primary rounded-lg flex items-center justify-center font-medium">
-                  {idx + 1}
+                <div className="w-10 h-10 lg:w-12 lg:h-12 bg-slate-200/60 text-[#1e293b] rounded-xl flex items-center justify-center text-base lg:text-lg font-bold flex-shrink-0">
+                  {day.day}
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-foreground">
-                    {day.day}
+                  <h3 className="text-lg lg:text-xl font-semibold text-slate-800 tracking-tight">
+                    Day {idx + 1}
                   </h3>
-                  <p className="text-sm text-muted-foreground font-medium">
-                    {day.title}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1 font-medium">
+                  <p className="text-[13px] lg:text-[13px] text-slate-500 mt-0.5 font-medium select-none">
                     {day.blocks?.length || 0} activities
                   </p>
                 </div>
@@ -54,71 +83,85 @@ export default function TourItinerary({ itinerary }) {
             <Button
               variant="ghost"
               size="icon"
-              data-testid={`button-toggle-day-${day.day}`}
+              className={`rounded-full h-10 w-10 shrink-0 text-slate-600 hover:bg-slate-100 hover:text-slate-800 transition-transform duration-300 ${isExpanded ? "bg-slate-100" : ""}`}
             >
-              {expandedDays.has(day.day) ? (
-                <ChevronUp className="h-4 w-4 text-primary" />
+              {isExpanded ? (
+                <ChevronUp className="h-5 w-5" />
               ) : (
-                <ChevronDown className="h-4 w-4 text-primary" />
+                <ChevronDown className="h-5 w-5" />
               )}
             </Button>
           </div>
 
-          {expandedDays.has(day.day) && (
+          {isExpanded && (
             <CardContent
-                className="pt-0 pb-4"
-                data-testid={`day-content-${day.day}`}
+                className="pt-0 pb-6 px-5 lg:px-8 border-t-0"
               >
-                <div className="space-y-4 flex flex-col gap-3">
-                  {day.blocks.map((block, index) => (
+                <div className="space-y-4 pt-2">
+                  {day.blocks.map((block, index) => {
+                    const cleanTitle = block.title?.replace(/^[-→\s]+/, '') || "";
+                    const cleanActivity = block.activity?.replace(/^[-→\s]+/, '') || "";
+                    
+                    return (
                     <div
                       key={index}
-                      className="flex gap-4 p-4 bg-muted/30 rounded-lg border border-border"
+                      className="flex gap-4 p-4 lg:p-5 bg-slate-50/50 border border-slate-200 rounded-xl"
                     >
-                      {/* Time */}
-                      <div className="flex-shrink-0 text-center justify-center items-center min-w-[70px]">
-                        <div className="flex items-center justify-center w-12 h-12 bg-primary/15 rounded-lg mb-2">
-                          <Clock className="h-5 w-5 text-primary" />
+                      {/* Icon */}
+                      <div className="flex-shrink-0">
+                        <div className="flex items-center justify-center w-10 h-10 lg:w-11 lg:h-11 bg-slate-200/60 rounded-xl shadow-sm border border-slate-200/50">
+                          <Clock className="h-4 w-4 lg:h-5 lg:w-5 text-slate-700" />
                         </div>
-                        {block.time && (
-                          <span className="text-xs font-medium text-muted-foreground">
-                            {block.time}
-                          </span>
-                        )}
                       </div>
 
                       {/* Content */}
-                      <div className="flex-1">
-                        <h4 className="font-medium text-foreground mb-1">
-                          {block.title}
-                        </h4>
-                        <p className="text-sm text-muted-foreground leading-relaxed  font-medium">
-                          {block.activity}
-                        </p>
-                        <p className="text-xs font-medium text-primary">
-                          {block.notes}
-                        </p>
+                      <div className="flex-1 mt-0">
+                        {cleanTitle && (
+                          <h4 className="text-[16px] lg:text-[17px] font-semibold text-slate-800 mb-1">
+                            {cleanTitle}
+                          </h4>
+                        )}
+                        {cleanActivity && (
+                          <p className="text-[12px] lg:text-[13px] text-slate-600 leading-relaxed font-normal">
+                            {cleanActivity}
+                          </p>
+                        )}
+                        {/* Time & Notes */}
+                        {(block.time || block.notes) && (
+                          <div className="mt-3 flex flex-wrap gap-2 text-[13px] lg:text-sm">
+                            {block.time && (
+                              <span className="inline-flex items-center text-slate-700 bg-slate-200/50 px-2.5 py-1 rounded font-semibold border border-slate-200">
+                                {block.time}
+                              </span>
+                            )}
+                            {block.notes && (
+                              <span className="inline-flex items-center text-amber-700 bg-amber-50 px-2.5 py-1 rounded font-medium border border-amber-100">
+                                {block.notes}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
 
                       {/* Image */}
                       {block.image && (
-                        <div className="flex-shrink-0">
+                        <div className="flex-shrink-0 ml-2 hidden sm:block">
                           <Image
                             src={block.image}
-                            alt={block.title}
-                            width={80}
-                            height={64}
-                            className="w-20 h-16 object-cover rounded-lg hover-elevate cursor-pointer"
+                            alt={cleanTitle || "Activity image"}
+                            width={160}
+                            height={120}
+                            className="w-32 h-24 lg:w-40 lg:h-28 object-cover rounded-xl border border-slate-200"
                           />
                         </div>
                       )}
                     </div>
-                  ))}
+                  )})}
                 </div>
               </CardContent>
             )}
           </Card>
-        ))}
+        )})}
       </div>
     </div>
   );

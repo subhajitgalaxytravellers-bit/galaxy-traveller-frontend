@@ -29,6 +29,33 @@ import { DestinationCard } from "../destinations/DestinationCard";
 export default function BlogDetailClient({ post }) {
   console.log(post);
   const formattedDate = formatDate(post.createdAt);
+  const seoMetaTitle = typeof post?.seo?.metaTitle === "string" ? post.seo.metaTitle.trim() : "";
+  const rawTitle = typeof post?.title === "string" ? post.title.trim() : "";
+  const rawSlug = typeof post?.slug === "string" ? post.slug.trim() : "";
+  const cleanSeoTitle = seoMetaTitle
+    ? seoMetaTitle.replace(/\s*\|\s*Galaxy Travellers\s*$/i, "").trim()
+    : "";
+  const heroTitle = rawSlug || rawTitle || cleanSeoTitle || "Blog";
+  const displayTitle = rawTitle || cleanSeoTitle || rawSlug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()) || "Blog";
+  const displaySummary =
+    typeof post?.bodyAlt === "string" && post.bodyAlt.trim()
+      ? post.bodyAlt.trim().slice(0, 220)
+      : "";
+  const heroImage =
+    post?.displayImg || post?.seo?.shareImage || "/assets/default.jpg";
+  const social = Array.isArray(post?.createdBy?.social)
+    ? post.createdBy.social
+    : [];
+  const youtubeUrl = social?.[0]?.url || "";
+  const instagramUrl = social?.[1]?.url || "";
+  const facebookUrl = social?.[2]?.url || "";
+  const websiteUrl = social?.[3]?.url || "";
+  const bodyText =
+    typeof post?.body === "string" && post.body.trim()
+      ? post.body
+      : post?.bodyAlt || "";
+  const paragraphs = bodyText ? bodyText.split("\n\n") : [];
+  const categories = Array.isArray(post?.categories) ? post.categories : [];
 
   const relatedPosts = Array.isArray(post?.blogs)
     ? post.blogs.filter((b) => b._id !== post._id).slice(0, 4)
@@ -43,24 +70,27 @@ export default function BlogDetailClient({ post }) {
   return (
     <div className="min-h-screen bg-background">
       {/* HERO */}
-      <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center">
+      <section className="relative h-[50vh] min-h-[360px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 image-overlay">
           <Image
-            src={post.displayImg}
-            alt={post.title}
+            src={heroImage}
+            alt={displayTitle}
             fill
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 hero-bottom-fade z-10"></div>
+          <div className="absolute inset-0 bg-black/35 z-10"></div>
+          <div className="absolute inset-0 hero-bottom-fade z-20"></div>
         </div>
-        <div className="relative z-10 container mx-auto px-4 text-center text-white">
-          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            {post.title}
-          </h1>
-          <p className="text-base md:text-lg text-white/90 max-w-3xl mx-auto">
-            {post.bodyAlt}
-          </p>
+        <div className="relative z-30 container mx-auto px-4 text-center text-white">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4 break-words [text-wrap:balance] drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
+            {heroTitle}
+          </h2>
+          {displaySummary && (
+            <p className="text-base md:text-lg text-white/90 max-w-3xl mx-auto drop-shadow-[0_1px_8px_rgba(0,0,0,0.65)]">
+              {displaySummary}
+            </p>
+          )}
         </div>
       </section>
 
@@ -69,34 +99,46 @@ export default function BlogDetailClient({ post }) {
       <article className="bg-background py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold text-foreground mb-6 leading-tight tracking-tight [text-wrap:balance]">
+              {displayTitle}
+            </h1>
+            {displaySummary && (
+              <p className="text-foreground/80 text-lg md:text-xl leading-relaxed mb-10 border-l-4 border-primary/50 pl-5 italic">
+                {displaySummary}
+              </p>
+            )}
             {/* Meta Info */}
-            <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground mb-12 pb-8 border-b">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <User className="h-5 w-5 text-primary" />
+            <div className="flex flex-wrap items-center gap-y-4 gap-x-6 text-sm text-muted-foreground mb-12 pb-8 border-b border-border/60">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary shadow-sm border border-primary/20">
+                  <User className="h-5 w-5" />
                 </div>
-                <div>
-                  <div className="font-semibold text-foreground text-base">
-                    {post?.author || post?.createdBy?.name || "John Doe"}
+                <div className="flex flex-col">
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-primary/70 mb-0.5">Written by</span>
+                  <span className="font-bold text-foreground text-base md:text-lg">
+                    {post?.author || post?.createdBy?.name || "Galaxy Editorial"}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="hidden md:block h-10 w-px bg-border/60 mx-2"></div>
+              
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2.5 bg-secondary/40 px-3.5 py-1.5 rounded-full border border-border/50">
+                  <Calendar className="h-4 w-4 text-primary" />
+                  <span className="font-medium text-foreground/80">{`${formattedDate.day} ${formattedDate.month} ${formattedDate.year}`}</span>
+                </div>
+                {post?.readTime && (
+                  <div className="flex items-center gap-2.5 bg-secondary/40 px-3.5 py-1.5 rounded-full border border-border/50">
+                    <Clock className="h-4 w-4 text-primary" />
+                    <span className="font-medium text-foreground/80">{post.readTime}</span>
                   </div>
-                </div>
+                )}
               </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                <span>{`${formattedDate.day} ${formattedDate.month} ${formattedDate.year}`}</span>
-              </div>
-              {post?.readTime && (
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  <span>{post.readTime}</span>
-                </div>
-              )}
               <div className="ml-auto flex items-center gap-2">
-                {post.createdBy.social[2].url && (
+                {facebookUrl && (
                   <Button
-                    onClick={() =>
-                      window.open(post.createdBy.social[2].url, "_blank")
-                    }
+                    onClick={() => window.open(facebookUrl, "_blank")}
                     variant="ghost"
                     size="icon"
                     className="h-9 w-9 rounded-full hover:bg-primary/10 hover:text-primary"
@@ -104,11 +146,9 @@ export default function BlogDetailClient({ post }) {
                     <Facebook className="h-4 w-4" />
                   </Button>
                 )}
-                {post.createdBy.social[1].url && (
+                {instagramUrl && (
                   <Button
-                    onClick={() =>
-                      window.open(post.createdBy.social[1].url, "_blank")
-                    }
+                    onClick={() => window.open(instagramUrl, "_blank")}
                     variant="ghost"
                     size="icon"
                     className="h-9 w-9 rounded-full hover:bg-primary/10 hover:text-primary"
@@ -116,11 +156,9 @@ export default function BlogDetailClient({ post }) {
                     <Instagram className="h-4 w-4" />
                   </Button>
                 )}
-                {post.createdBy.social[0].url && (
+                {youtubeUrl && (
                   <Button
-                    onClick={() =>
-                      window.open(post.createdBy.social[0].url, "_blank")
-                    }
+                    onClick={() => window.open(youtubeUrl, "_blank")}
                     variant="ghost"
                     size="icon"
                     className="h-9 w-9 rounded-full hover:bg-primary/10 hover:text-primary"
@@ -128,11 +166,9 @@ export default function BlogDetailClient({ post }) {
                     <Youtube className="h-4 w-4" />
                   </Button>
                 )}
-                {post.createdBy.social[3].url && (
+                {websiteUrl && (
                   <Button
-                    onClick={() =>
-                      window.open(post.createdBy.social[3].url, "_blank")
-                    }
+                    onClick={() => window.open(websiteUrl, "_blank")}
                     variant="ghost"
                     size="icon"
                     className="h-9 w-9 rounded-full hover:bg-primary/10 hover:text-primary"
@@ -144,13 +180,13 @@ export default function BlogDetailClient({ post }) {
             </div>
 
             {/* Article Body */}
-            <div className="prose prose-lg max-w-none">
-              {post.body.split("\n\n").map((paragraph, index) => {
+            <div className="prose prose-xl max-w-none prose-headings:font-heading prose-a:text-primary hover:prose-a:text-primary/80 prose-img:rounded-2xl">
+              {paragraphs.map((paragraph, index) => {
                 if (paragraph.startsWith("##")) {
                   return (
                     <h2
                       key={index}
-                      className="font-heading text-3xl md:text-4xl font-bold mt-12 mb-6 text-foreground"
+                      className="font-heading text-3xl md:text-4xl font-extrabold mt-14 mb-8 text-foreground tracking-tight"
                     >
                       {paragraph.replace("## ", "")}
                     </h2>
@@ -159,7 +195,7 @@ export default function BlogDetailClient({ post }) {
                   return (
                     <h3
                       key={index}
-                      className="font-heading text-2xl md:text-3xl font-semibold mt-10 mb-5 text-foreground"
+                      className="font-heading text-2xl md:text-3xl font-bold mt-12 mb-6 text-foreground tracking-tight"
                     >
                       {paragraph.replace("### ", "")}
                     </h3>
@@ -169,16 +205,14 @@ export default function BlogDetailClient({ post }) {
                     .split("\n")
                     .filter((line) => line.startsWith("- "));
                   return (
-                    <ul key={index} className="space-y-3 my-6">
+                    <ul key={index} className="space-y-4 my-8 pl-4 border-l-2 border-primary/20">
                       {items.map((item, i) => (
                         <li
                           key={i}
-                          className="flex items-start gap-3 text-muted-foreground leading-relaxed"
+                          className="flex items-start gap-4 text-foreground/80 leading-relaxed text-lg"
                         >
-                          <span className="text-primary mt-1.5 flex-shrink-0">
-                            •
-                          </span>
-                          <span>{item.replace("- ", "")}</span>
+                          <span className="text-primary mt-2 flex-shrink-0 bg-primary/10 rounded-full h-2 w-2" />
+                          <span className="flex-1">{item.replace("- ", "")}</span>
                         </li>
                       ))}
                     </ul>
@@ -190,8 +224,9 @@ export default function BlogDetailClient({ post }) {
                   return (
                     <blockquote
                       key={index}
-                      className="border-l-4 border-primary pl-6 py-4 my-8 italic text-lg text-foreground bg-secondary/30 rounded-r-lg"
+                      className="relative border-l-4 border-primary pl-8 py-6 my-12 italic text-xl md:text-2xl text-foreground bg-primary/5 rounded-r-2xl font-serif leading-relaxed"
                     >
+                      <span className="absolute -top-4 -left-6 text-6xl text-primary/20 font-serif font-black">&quot;</span>
                       {paragraph.replace(/^"|"$/g, "")}
                     </blockquote>
                   );
@@ -199,12 +234,12 @@ export default function BlogDetailClient({ post }) {
                   const match = paragraph.match(/!\[(.*?)\]\((.*?)\)/);
                   if (match) {
                     return (
-                      <figure key={index} className="my-8 relative w-full h-96">
+                      <figure key={index} className="my-12 relative w-full h-[30rem] md:h-[35rem] shadow-xl group overflow-hidden rounded-2xl">
                         <Image
                           src={match[2]}
                           alt={match[1]}
                           fill
-                          className="object-cover rounded-lg"
+                          className="object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                         {/* {match[1] && (
                             <figcaption className="text-sm text-muted-foreground text-center mt-3">
@@ -218,7 +253,7 @@ export default function BlogDetailClient({ post }) {
                 return (
                   <p
                     key={index}
-                    className="text-muted-foreground leading-relaxed text-lg mb-6"
+                    className="text-foreground/80 leading-[1.8] text-[17px] md:text-[19px] mb-8 font-light"
                   >
                     {paragraph}
                   </p>
@@ -227,18 +262,34 @@ export default function BlogDetailClient({ post }) {
             </div>
 
             {/* Tags & Share */}
-            <div className="flex flex-wrap items-center justify-between gap-4 mt-12 pt-8 border-t">
-              <div className="flex items-center gap-2 flex-wrap">
-                {post.categories.length > 0 &&
-                  post.categories.map((category) => (
+            <div className="flex flex-wrap items-center justify-between gap-6 mt-16 pt-10 border-t border-border/60">
+              <div className="flex items-center gap-3 flex-wrap">
+                {categories.length > 0 &&
+                  categories.map((category, index) => {
+                    const categoryLabel =
+                      typeof category === "string"
+                        ? category
+                        : category?.tag ||
+                          category?.name ||
+                          category?.title ||
+                          "Category";
+                    const categoryKey =
+                      (typeof category === "string" && category) ||
+                      category?.id ||
+                      category?._id ||
+                      category?.slug ||
+                      `category-${index}`;
+
+                    return (
                     <Badge
-                      key={category.id}
+                      key={categoryKey}
                       variant="secondary"
-                      className="text-sm"
+                      className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full bg-secondary hover:bg-primary hover:text-white transition-colors cursor-pointer border border-transparent hover:border-primary/20"
                     >
-                      {category.tag}
+                      {categoryLabel}
                     </Badge>
-                  ))}
+                    );
+                  })}
               </div>
               <Link
                 href="/"

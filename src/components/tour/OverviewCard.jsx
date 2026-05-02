@@ -4,10 +4,16 @@ import { Calendar, IndianRupee, Users, User } from "lucide-react";
 
 export default function OverviewCard({
   duration = "12 Days",
-  price = "5,850",
+  price,
   suggestedAges = "Any",
   maxGroupSize = "Any",
 }) {
+  const numericPrice = Number(price);
+  const hasValidPrice = Number.isFinite(numericPrice) && numericPrice > 0;
+  const priceDisplay = hasValidPrice
+    ? `₹${numericPrice.toLocaleString("en-IN")}`
+    : "_";
+
   const overviewItems = [
     {
       icon: Calendar,
@@ -17,7 +23,7 @@ export default function OverviewCard({
     {
       icon: IndianRupee,
       label: "Price per person",
-      value: price,
+      value: priceDisplay,
     },
     {
       icon: User,

@@ -18,6 +18,8 @@ export default function TourHero({
   const finalImage =
     heroImage ||
     'https://t3.ftcdn.net/jpg/02/99/04/20/360_F_299042079_vGBD7wIlSeNl7vOevWHiL93G4koMM967.jpg';
+  const numericPrice = Number(price);
+  const hasPrice = Number.isFinite(numericPrice) && numericPrice > 0;
 
   return (
     <div className='relative py-28 flex flex-col items-center h-fit min-h-[350px] w-full'>
@@ -33,7 +35,7 @@ export default function TourHero({
 
       {/* Overlay */}
       <div className='absolute inset-0 bg-linear-to-r from-black/80 via-black/60 to-transparent z-10' />
-      <div className="absolute inset-0 hero-bottom-fade z-10"></div>
+      <div className='absolute inset-0 hero-bottom-fade z-10'></div>
 
       <div className='relative z-20 container mx-auto h-full w-full  flex items-center px-4 sm:px-6 lg:px-10'>
         <div className='max-w-xl md:max-w-2xl text-white space-y-4 max-lg:w-full lg:max-w-[50vw] text-wrap wrap-break-word sm:space-y-6'>
@@ -89,7 +91,10 @@ export default function TourHero({
           </div>
 
           {/* Duration + Price */}
-          <div className='grid grid-cols-2 gap-4 sm:gap-6 pt-2 sm:pt-4'>
+          <div
+            className={`grid gap-4 sm:gap-6 pt-2 sm:pt-4 ${
+              hasPrice ? 'grid-cols-2' : 'grid-cols-1'
+            }`}>
             <div>
               <p className='text-xs sm:text-sm text-white/60 uppercase mb-1'>
                 Duration
@@ -102,17 +107,19 @@ export default function TourHero({
               </div>
             </div>
 
-            <div>
-              <p className='text-xs sm:text-sm text-white/60 uppercase mb-1'>
-                Price Per Person
-              </p>
-              <div className='flex items-center gap-2 text-gray-100'>
-                ₹
-                <span className='text-lg sm:text-xl font-semibold text-white'>
-                  {price || '—'}
-                </span>
+            {hasPrice && (
+              <div>
+                <p className='text-xs sm:text-sm text-white/60 uppercase mb-1'>
+                  Price Per Person
+                </p>
+                <div className='flex items-center gap-2 text-gray-100'>
+                  <span>INR</span>
+                  <span className='text-lg sm:text-xl font-semibold text-white'>
+                    {numericPrice.toLocaleString('en-IN')}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className='md:hidden w-full mt-4'>

@@ -6,6 +6,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ToastContainer } from 'react-toastify';
 import ReactQueryProvider from '@/providers/ReactQueryProvider';
 import WhatsAppButton from '@/components/common/Whatapp';
+import ScrollToTop from '@/components/common/ScrollToTop';
 
 const API_BASE = (
   process.env.NEXT_PUBLIC_BASE_API ||
@@ -14,6 +15,9 @@ const API_BASE = (
 ).replace(/\/$/, '');
 
 export const metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_URL || 'https://galaxytravellers.com'
+  ),
   title: {
     default: 'Galaxy Travelers',
     template: '%s | Galaxy Travelers',
@@ -151,6 +155,9 @@ export default async function RootLayout({ children }) {
 
             {/* GLOBAL WHATSAPP BUTTON */}
             {whatsappNumber && <WhatsAppButton phone={whatsappNumber} />}
+            
+            {/* GLOBAL SCROLL TO TOP */}
+            <ScrollToTop />
 
             <ToastContainer />
           </GoogleOAuthProvider>

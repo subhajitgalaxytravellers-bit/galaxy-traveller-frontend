@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Star, Calendar, IndianRupee } from 'lucide-react';
+import { MapPin, IndianRupee } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import CTA from '@/components/common/CTA';
 import Link from 'next/link';
 import { sanitizeGCSUrl } from '@/lib/sanitizeUrl';
 import {
@@ -17,18 +16,96 @@ import {
 import Image from 'next/image';
 
 export default function DestinationsClient({ continents }) {
+  const groups = Array.isArray(continents) ? continents : [];
+  const defaultGroupTitle = groups?.[0]?.title || null;
   const [selectedContinent, setSelectedContinent] = useState(
-    continents?.[0]?.title || null,
+    defaultGroupTitle,
   );
   const [searchQuery, setSearchQuery] = useState('');
 
-  const activeContinent = continents.find((c) => c.title === selectedContinent);
-  const allDestinations = activeContinent?.destinations || [];
+  const normalizeText = (value) =>
+    String(value || '')
+      .trim()
+      .toLowerCase();
 
-  // Filter based on search query
-  const filteredDestinations = allDestinations.filter((d) =>
-    d.title.toLowerCase().includes(searchQuery.toLowerCase()),
+  const destinationId = (destination) =>
+    destination?._id || destination?.id || destination?.slug || destination?.title;
+
+  const dedupeDestinations = (items = []) => {
+    const seen = new Set();
+    return items.filter((destination) => {
+      const key = normalizeText(destinationId(destination));
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  };
+
+  const resolvedContinent = groups.some(
+    (group) => group?.title === selectedContinent,
+  )
+    ? selectedContinent
+    : defaultGroupTitle;
+
+  const flattenedDestinations = dedupeDestinations(
+    groups.flatMap((group) =>
+      Array.isArray(group?.destinations) ? group.destinations : [],
+    ),
   );
+
+  const activeContinent = groups.find(
+    (group) => group?.title === resolvedContinent,
+  );
+
+  const matchesLocationFallback = (destination, groupTitle) => {
+    const target = normalizeText(groupTitle);
+    if (!target) return true;
+
+    const haystack = [
+      destination?.location,
+      destination?.place,
+      destination?.country,
+      destination?.state,
+      destination?.region,
+      destination?.continent,
+      destination?.destinationTitle,
+      destination?.title,
+      destination?.tagline,
+      destination?.description,
+      destination?.slug,
+    ]
+      .filter(Boolean)
+      .map(normalizeText)
+      .join(' ');
+
+    return haystack.includes(target);
+  };
+
+  const fromGroup = dedupeDestinations(activeContinent?.destinations || []);
+  const locationDestinations = fromGroup.length
+    ? fromGroup
+    : flattenedDestinations.filter((destination) =>
+        matchesLocationFallback(destination, resolvedContinent),
+      );
+
+  const query = normalizeText(searchQuery);
+  const filteredDestinations = query
+    ? locationDestinations.filter((destination) => {
+        const searchableText = [
+          destination?.title,
+          destination?.tagline,
+          destination?.description,
+          destination?.place,
+          destination?.location,
+          destination?.slug,
+        ]
+          .filter(Boolean)
+          .map(normalizeText)
+          .join(' ');
+
+        return searchableText.includes(query);
+      })
+    : locationDestinations;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -51,6 +128,11 @@ export default function DestinationsClient({ continents }) {
       .filter(Boolean)
       .map((m) => m.charAt(0).toUpperCase() + m.slice(1));
     return names.length ? names.join(', ') : 'Jan - Dec';
+  };
+
+  const hasStartingPrice = (value) => {
+    const n = Number(value);
+    return Number.isFinite(n) && n > 0;
   };
 
   return (
@@ -85,13 +167,16 @@ export default function DestinationsClient({ continents }) {
                 Select continent
               </label>
               <Select
-                value={selectedContinent || ''}
-                onValueChange={(val) => setSelectedContinent(val)}>
+                value={resolvedContinent || ''}
+                onValueChange={(val) => {
+                  setSelectedContinent(val);
+                  setSearchQuery('');
+                }}>
                 <SelectTrigger className='w-full'>
                   <SelectValue placeholder='Select continent' />
                 </SelectTrigger>
                 <SelectContent>
-                  {continents.map((continent) => (
+                  {groups.map((continent) => (
                     <SelectItem key={continent.title} value={continent.title}>
                       {continent.title.toUpperCase()}
                     </SelectItem>
@@ -156,7 +241,7 @@ export default function DestinationsClient({ continents }) {
               </div>
 
               <nav className='space-y-2'>
-                {continents.map((continent) => (
+                {groups.map((continent) => (
                   <button
                     key={continent.title}
                     onClick={() => {
@@ -164,7 +249,7 @@ export default function DestinationsClient({ continents }) {
                       setSearchQuery(''); // Clear search on tab switch
                     }}
                     className={`w-full text-left px-4 py-3 text-lg font-medium transition-all duration-300 border-l-4 hover:bg-muted/50 ${
-                      selectedContinent === continent.title
+                      resolvedContinent === continent.title
                         ? 'border-primary text-primary bg-primary/5'
                         : 'border-transparent text-muted-foreground hover:text-foreground'
                     }`}>
@@ -180,7 +265,7 @@ export default function DestinationsClient({ continents }) {
             <AnimatePresence mode='wait'>
               {filteredDestinations.length > 0 ? (
                 <motion.div
-                  key={selectedContinent + searchQuery} // Key triggers re-animation only when needed
+                  key={resolvedContinent + searchQuery} // Key triggers re-animation only when needed
                   variants={containerVariants}
                   initial='hidden'
                   animate='visible'
@@ -195,7 +280,10 @@ export default function DestinationsClient({ continents }) {
                           <CardContent className='p-0 relative h-80'>
                             <div className='relative overflow-hidden h-full'>
                               <Image
-                                src={destination.heroImg}
+                                src={
+                                  sanitizeGCSUrl(destination?.heroImg) ||
+                                  '/hero/destinations.jpeg'
+                                }
                                 alt={destination.title}
                                 fill
                                 className='object-cover group-hover:scale-110 transition-transform duration-500'
@@ -220,13 +308,14 @@ export default function DestinationsClient({ continents }) {
                                   {destination.title}
                                 </h3>
 
-                                <div className='flex items-center gap-1'>
-                                  <span className='font-semibold'>
-                                    Starting from Rs.{' '}
-                                    {destination.startingPrice?.toLocaleString() ||
-                                      '-'}
-                                  </span>
-                                </div>
+                                {hasStartingPrice(destination.startingPrice) && (
+                                  <div className='flex items-center gap-1'>
+                                    <span className='font-semibold'>
+                                      Starting from{' '}
+                                      {Number(destination.startingPrice).toLocaleString()}
+                                    </span>
+                                  </div>
+                                )}
                               </div>
 
                               {/* Hover Details */}
@@ -250,14 +339,15 @@ export default function DestinationsClient({ continents }) {
                                     </span>
                                   </div>
 
-                                  <div className='flex items-center gap-3 text-white'>
-                                    <IndianRupee className='w-5 h-5 text-white' />
-                                    <span className='text-sm font-medium'>
-                                      Starting from Rs.{' '}
-                                      {destination.startingPrice?.toLocaleString() ||
-                                        '-'}
-                                    </span>
-                                  </div>
+                                  {hasStartingPrice(destination.startingPrice) && (
+                                    <div className='flex items-center gap-3 text-white'>
+                                      <IndianRupee className='w-5 h-5 text-white' />
+                                      <span className='text-sm font-medium'>
+                                        Starting from{' '}
+                                        {Number(destination.startingPrice).toLocaleString()}
+                                      </span>
+                                    </div>
+                                  )}
 
                                   {/* <div className="flex items-start gap-3 text-white">
                                     <Calendar className="w-5 h-5 mt-0.5 shrink-0" />

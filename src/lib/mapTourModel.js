@@ -1,4 +1,5 @@
 // lib/mapTourModel.js
+import { formatTourPlaceShort, formatTourTitle } from "@/lib/tourText";
 
 const FALLBACK_IMG =
   "https://images.musement.com/cover/0003/14/koh-samui-xxl-jpg_header-213595.jpeg";
@@ -119,10 +120,13 @@ export default function toTourModel(api) {
   // ------------------------------
   // RETURN SAFE JSON OBJECT
   // ------------------------------
+  const normalizedTitle = formatTourTitle(api?.title || "Untitled Tour");
+  const normalizedLocation = formatTourPlaceShort(api?.place, normalizedTitle);
+
   return {
-    title: api?.title || "Untitled Tour",
+    title: normalizedTitle,
     subtitle: api?.brief || "",
-    location: api?.place || "—",
+    location: normalizedLocation,
     rating,
     reviewCount: testimonials.length,
     bookingCount: api?.bookingCount || 0,
@@ -229,10 +233,24 @@ function mapBlocks(blocks) {
 
 function mapItinerary(arr) {
   if (!Array.isArray(arr)) return [];
-  return arr.map((d) => ({
-    day: d?.day,
-    blocks: mapBlocks(d?.blocks),
-  }));
+  return arr.map((d, idx) => {
+    const blocks =
+      Array.isArray(d?.blocks) && d.blocks.length
+        ? mapBlocks(d.blocks)
+        : mapBlocks({
+            time: d?.time,
+            title: d?.title || `Day ${idx + 1} Plan`,
+            activity: d?.activity,
+            notes: d?.notes,
+            image: d?.image,
+          });
+
+    return {
+      day: d?.day || String(idx + 1),
+      title: d?.title || blocks?.[0]?.title || "",
+      blocks,
+    };
+  });
 }
 
 // ----------------------------

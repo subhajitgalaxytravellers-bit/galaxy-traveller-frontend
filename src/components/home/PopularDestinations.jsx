@@ -57,6 +57,11 @@ export default function PopularDestinations({ destinations }) {
     return () => clearInterval(interval);
   }, [prefersReducedMotion]);
 
+  const hasStartingPrice = (value) => {
+    const n = Number(value);
+    return Number.isFinite(n) && n > 0;
+  };
+
   return (
     <section id='destinations' className='py-24 bg-muted/30'>
       <div className='container mx-auto px-4'>
@@ -127,12 +132,14 @@ export default function PopularDestinations({ destinations }) {
                           {destination.description}
                         </p>
 
-                        <div className='flex items-center gap-1'>
-                          <IndianRupeeIcon className='w-4 h-4' />
-                          <span className='font-semibold mb-1'>
-                            {destination.startingPrice}
-                          </span>
-                        </div>
+                        {hasStartingPrice(destination.startingPrice) && (
+                          <div className='flex items-center gap-1'>
+                            <IndianRupeeIcon className='w-4 h-4' />
+                            <span className='font-semibold mb-1'>
+                              Rs. {Number(destination.startingPrice).toLocaleString()}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </CardContent>

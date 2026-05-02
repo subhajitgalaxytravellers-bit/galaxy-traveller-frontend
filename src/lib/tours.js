@@ -49,7 +49,7 @@ export async function getSearchTours(params = {}) {
   if (typeof params.minPrice === "number" && params.minPrice > 0) {
     qs.append("minPrice", params.minPrice);
   }
-  if (typeof params.maxPrice === "number" && params.maxPrice < 30000) {
+  if (typeof params.maxPrice === "number" && params.maxPrice < 1000000) {
     qs.append("maxPrice", params.maxPrice);
   }
 

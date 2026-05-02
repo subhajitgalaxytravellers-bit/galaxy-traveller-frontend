@@ -1,0 +1,626 @@
+{
+  "generatedAt": "2026-04-25T08:03:01.579Z",
+  "range": [
+    0,
+    159
+  ],
+  "toursProcessed": 158,
+  "toursSkipped": 2,
+  "toursWithChanges": 158,
+  "blocksRewritten": 1152,
+  "usedFallbackTours": 153,
+  "failures": [
+    {
+      "slug": "bhutan-package-tour-from-delhi",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "bhutan-package-tour-from-ahmedabad",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "magical-bhutan-7n8d-bagdograbagdogra",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "bhutan-tour-package-from-kolkata",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "best-of-bhutan-6n7d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "amazing-bhutan-package-tour-5n6d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "beautiful-bhutan-7n8d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "bliss-of-bhutan-10n11d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "unforgettable-bhutan-9n10d-bagdogra-bagdogra",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "complete-bhutan-15n16d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "leh-ladakh-kargil-tour-packages-8n-9d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "leh-ladakh-kargil-package-tour-7n-8d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "leh-ladakh-nubravalley-pangong-holiday-packages-5n-6d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-package-tour-with-srinagar-gulmarg-pahalgam-sonmarg",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-houseboat-package-tour",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "north-east-package",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "northeast-tour-5n6d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "wild-assam-7n8d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kaziranga-shillong-cherrapunjee-tour-package-from-guwahati",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "western-arunachal-9n10d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "shillong-meghalaya-tour-packages",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "mesmerizing-northeast-12n13d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "extended-northeast-19n20d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "dooars-package",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "exotic-dooars-4n5d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "west-sikkim",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "extended-sikkim-sparkle-package-8-night-9-days",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "offbeat-sikkim-sparkle-package-4-night-5-days",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "majestic-west-sikkim-package-5-night-6-days",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "sandakphu-trekking-package",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "sikkim-darjeeling-package",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "darjeeling-tour-package",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "darjeeling-kalimpong-rishop-tour-package",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "darjeeling-kalimpong-tour-package-with-charkol-rishop-and-kolakham",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "sikkim-tour-packages-from-bagdogra-njp-siliguri",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "gangtok-darjeeling-tour-packages",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "wonderful-sikkim-8n9d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "complete-west-sikkim-9n10d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "sikkim-darjeeling-5n6d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "tea-tourism-darjeeling",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "north-sikkim",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "north-sikkim-2n-3d-package-tour-from-gangtok-to-gangtok-2-night-3-days-north-sikkim-tour-package",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "amazing-sikkim3n4d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "silk-route-packages",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "sikkim-sparkle-7n8d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "northsikkim-with-silk-route-8n9d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "majestic-silk-route-4n5d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "premium-silk-route-5n6d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "north-bengal-tour-packages",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "lava-lolegaon-rishop-with-kalimpong-tour-package",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "rishop-charkol-lava-tinchuley-6n-7d-north-bengal-offbeat-tour-package",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "reshikhola-sillery-gaon-rishop-tour-package-offbeat-destinations-in-north-bengal",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "nepal-packages",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "traverse-nepal-11n12d-with-muktinath-darshan",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "twin-dale-5n6d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "sundarban-package-tour-from-kolkata",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "sundarban-tour-packages-weekend-special-2night-3days",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "sundarban-house-boat-package-tour",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "andaman-package-tour-havelock-neil-island-cruise",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "bangkok-pattaya-thailand-holiday-package-tour-from-india",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "sweet-silk-route-3n4d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "dream-vale-kathmandu-3n4d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "amazing-silk-route-3n4d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "complete-silk-route-5n6d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "cosmos-nepal-7n8d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "andaman-honeymoon-package-tour",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "assam-arunachal-pradesh-package-tour-from-bangalore-with-kaziranga-mazuli-nameri-tawang-bomdila-dirang-tezpur",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "arunachal-pradesh-group-tour-packages-from-guwahati",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "arunachal-pradesh-package-tour-from-delhi-with-tawang-bhalukpong-dirang-bomdila-tezpur-itanagar-pasighat-13n-14d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "arunachal-pradesh-package-tour-from-guwahati",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "arunachal-pradesh-package-tour-from-mumbai-with-dirang-tawang-bomdila-bhalukpong-ziro-daporijo-aalo-pasighat",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "assam-nagaland-manipur-package-tour-from-guwahati-with-kaziranga-kohima-dzukou-valley-imphal-7n-8d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "assam-nagaland-manipur-package-tour-with-kaziranga-kohima-dzukou-valley-imphal-8n-9d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "bali-package-tour",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "belun-eco-village-package-tour",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "bhutan-tour-package-from-bangalore",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "untouched-bhutan-8n9d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "bhutan-package-tour-with-hotel-six-senses-como-uma",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kaziranga-tour-package-wildlife-3nights-4days",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "arunachal-pradesh-package-tour-with-bhalukpong-bomdila-dirang-tawang-ziro-daporijo-aalo-mechuka-pasighat-16n-17d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "darjeeling-tinchuley-mangwa-tour-package-offbeat-destinations-in-north-bengal",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "garpanchkot-package-tour-from-kolkata",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "hotel-sonar-bangla-sundarban-package-tour-booking-from-kolkata",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "jammu-kashmir-family-tour-packages",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kailash-mansarovar-yatra-package-tour-by-helicopter",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kailash-mansarovar-yatra-package-tour-by-road",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-offbeat-package-tour-with-sinthan-top-aru-valley-betab-valley-chandanbari-pahalgam-sonmarg",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-package-tour-from-ahmedabad",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-package-tour-from-bangalore",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-package-tour-from-chennai",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-package-tour-from-mumbai",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-package-tour-from-pune",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-package-tour-from-surat",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-offbeat-package-tour-with-baisaran-valley-doodhpathri-yusmarg",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-offbeat-package-tour-with-gurez-valley",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-package-tour-with-ladakh",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-package-tour-with-vaishno-devi-katra-pahalgam-gulmarg-srinagar",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-tulip-garden-festival-package-tour",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kashmir-package-tour-with-amritsar-katra-vaishno-devi-pahalgam-gulmarg-srinagar-sonmarg",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kathmandu-pokhara-jomsom-muktinath-package-tour",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kaziranga-elephant-jeep-safari",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kaziranga-majuli-guwahati-package-tour-5n-6d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kaziranga-manas-majuli-pobitora-package-tour-7n-8d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "assam-kaziranga-pobitora-manas-package-tour-from-guwahati-6d-5n",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kaziranga-shillong-cherrapunjee-group-tour-packages-from-guwahati",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kaziranga-shillong-cherrapunji-shnongpdeng-package-tour-from-guwahati-9n-10d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "nagaland-manipur-package-tour-with-kohima-imphal-mokokchung-mon-6n-7d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kohima-imphal-mokokchung-tour-package-8d-7n",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "kolakham-tinchuley-tour-package-offbeat-destination-in-north-bengal",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "ladakh-package-tour-from-delhi",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "ladakh-package-tour-from-manali-by-car-via-rohtang-pass-keylong-jispa-sarchu-upshi",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "leh-ladakh-packages-tour",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "ladakh-package-tour-from-kolkata",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "leh-ladakh-bike-tour-packages-from-manali",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "leh-ladakh-offbeat-tour-packages-with-tso-moriri",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "leh-ladakh-group-tour-packages",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "ladakh-package-tour-from-pune",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "leh-ladakh-package-tour-with-siachen-glacier-base-camp-turtuke28093hundere28093thang-sumuru-panamik",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "leh-ladakh-tour-package-with-turtuk-and-siachen-glacier-base-camp",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "ladakh-package-tour-from-mumbai",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "leh-to-leh-bike-tour-packages",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "lumbini-pokhara-jomsom-muktinath-kathmandu-package-tour-from-gorakhpur",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "maldives-honeymoon-package-tour",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "maldives-package-tour-from-india",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "meghalaya-shillong-cherrapunji-package-tour-from-guwahati-with-garo-hills-tura-wari-chora",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "meghalaya-package-tour-with-wari-chora-tura-south-garo-hills-mawsynram-jowai-mawlynnong-dawki",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "nagaland-manipur-package-tour-with-kohima-dzukou-valley-imphal",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "neoravalley-safari",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "nepal-package-tour-with-muktinath-from-bangalore",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "nepal-package-tour-with-muktinath-from-chennai",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "nepal-package-tour-from-mumbai",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "nepal-package-tour-from-pune",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "nepal-package-tour-with-kathmandu-pokhara-chitwan-janakpur",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "nepal-package-tour-with-kathmandu-pokhara-chitwan-nagarkot",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "nepal-package-tour-with-kathmandu-pokhara-nagarkot-from-bangalore",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "nepal-packages-with-kathmandu-pokhara-nagarkot",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "shillong-cherrapunji-package-tour-with-nohkalikai-seven-sisters-wakaba-mawsawa-dainthlen-krangsuri-waterfalls",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "leh-ladakh-nubravalley-pangong-package-tour-6n-7d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "shillong-cherrapunji-group-tour-package",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "shillong-cherrapunji-kaziranga-tawang-tour-package-11d-10n",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "shillong-cherrapunji-tawang-tour-package-10d-9n",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "sikkimdrjeelingpelling-6n7d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "majestic-sikkim-6n7d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "extended-silk-route-6n7d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "wonderful-silk-route-4n5d",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "tawang-bumla-pass-tour-package-8d-7n",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "tawang-dirang-shergaon-tour-package-8d-7n",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "tawang-sangti-tour-package-8d-7n",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "tawang-zemithang-tour-package-8d-7n",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "tawang-ziro-daporijo-along-pasighat-tengapani-tour-package-18d-17n",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "vietnam-honeymoon-package-tour-from-kolkata",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "vietnam-package-tour-from-kolkata",
+      "reason": "Request failed with status code 429"
+    },
+    {
+      "slug": "bhutan-dmc-b2b-packages-for-bhutan",
+      "reason": "Request failed with status code 429"
+    }
+  ]
+}

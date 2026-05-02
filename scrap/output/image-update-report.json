@@ -1,0 +1,15 @@
+{
+ "generatedAt": "2026-04-23T07:41:04.607Z",
+ "filesUpdated": {
+ "tours": 160,
+ "destinations": 121,
+ "blogs": 153
+ },
+ "unsplash": {
+ "usedApiKey": true,
+ "totalQueries": 232,
+ "apiSuccess": 36,
+ "apiFallback": 196,
+ "uniqueQueryCount": 232
+ }
+}

@@ -5,8 +5,16 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
-export default function DetailSection() {
+const FALLBACK_PRIMARY = '/assets/destination-santorini.jpg';
+const FALLBACK_SECONDARY = '/assets/sea.jpg';
+
+export default function DetailSection({ primaryImage, secondaryImage }) {
   const router = useRouter();
+
+  const primarySrc = primaryImage?.url || FALLBACK_PRIMARY;
+  const primaryAlt = primaryImage?.alt || 'Main travel';
+  const secondarySrc = secondaryImage?.url || FALLBACK_SECONDARY;
+  const secondaryAlt = secondaryImage?.alt || 'Small travel';
 
   return (
     <section className='relative bg-background max-w-[99rem] mx-auto py-16 sm:py-20 px-4 sm:px-8 overflow-hidden'>
@@ -79,8 +87,8 @@ export default function DetailSection() {
           {/* MAIN IMAGE */}
           <div className='relative w-[90%] sm:w-[80%] md:w-[85%] aspect-[5/6] rounded-2xl overflow-hidden shadow-xl'>
             <Image
-              src={'/assets/destination-santorini.jpg'}
-              alt='Main travel'
+              src={primarySrc}
+              alt={primaryAlt}
               fill
               className='object-cover'
               sizes='(max-width: 768px) 90vw, (max-width: 1200px) 80vw, 600px'
@@ -90,8 +98,8 @@ export default function DetailSection() {
           {/* SMALL OVERLAY IMAGE */}
           <div className='absolute hidden sm:block top-1/2 -left-10 md:-left-14 transform -translate-y-1/2 w-[35%] aspect-square rounded-xl overflow-hidden shadow-lg border-4 border-white'>
             <Image
-              src={'/assets/sea.jpg'}
-              alt='Small travel'
+              src={secondarySrc}
+              alt={secondaryAlt}
               fill
               className='object-cover'
               sizes='200px'
@@ -101,8 +109,8 @@ export default function DetailSection() {
           {/* MOBILE SMALL IMAGE (STACKED) */}
           <div className='sm:hidden mt-6 w-[60%] aspect-square rounded-xl overflow-hidden shadow-lg border-4 border-white'>
             <Image
-              src={'/assets/destination-santorini.jpg'}
-              alt='Small travel mobile'
+              src={secondarySrc}
+              alt={secondaryAlt}
               fill
               className='object-cover'
               sizes='200px'

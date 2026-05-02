@@ -41,6 +41,7 @@ const Navbar = () => {
 
   const router = useRouter();
   const pathname = usePathname();
+  const useColoredDesktopLogo = isScrolled || pathname === '/';
 
   const isActive = (href = '') => {
     if (href === '/') return pathname === '/';
@@ -58,7 +59,7 @@ const Navbar = () => {
         <div className='flex items-center justify-between lg:h-20 h-16'>
           {/* Logo */}
           <Link href='/' className='hidden lg:flex items-center px-4 gap-2'>
-            {!isScrolled ? (
+            {!useColoredDesktopLogo ? (
               <Image
                 src='/assets/white-logo.png'
                 alt='Logo'

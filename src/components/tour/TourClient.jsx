@@ -16,6 +16,11 @@ import { getSearchTours } from '@/lib/tours';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { AiLoader } from '../ui/ai-loader';
+import {
+  formatTourPlaceShort,
+  formatTourTitle,
+  normalizeTourKey,
+} from '@/lib/tourText';
 
 // Debounce
 function useDebounce(value, delay = 400) {
@@ -27,15 +32,35 @@ function useDebounce(value, delay = 400) {
   return debounced;
 }
 
+const PRICE_MAX = 1000000;
+
+function uniqueTours(list = []) {
+  const seenSlugs = new Set();
+  const seenKeys = new Set();
+
+  return (list || []).filter((tour) => {
+    const slug = String(tour?.slug || '').trim().toLowerCase();
+    const title = formatTourTitle(tour?.title);
+    const place = formatTourPlaceShort(tour?.place, title);
+    const key = `${normalizeTourKey(title)}|${normalizeTourKey(place)}`;
+
+    if (slug && seenSlugs.has(slug)) return false;
+    if (seenKeys.has(key)) return false;
+
+    if (slug) seenSlugs.add(slug);
+    seenKeys.add(key);
+    return true;
+  });
+}
+
 export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
-  const [items, setItems] = useState(initialPage?.items || []);
+  const [items, setItems] = useState(uniqueTours(initialPage?.items || []));
   const [total, setTotal] = useState(initialPage?.total || 0);
   const [loading, setLoading] = useState(false);
-
-  const [limit, setLimit] = useState(initialPage?.limit || initialLimit);
+  const [page, setPage] = useState(1);
 
   // Filters
-  const [priceRange, setPriceRange] = useState([0, 500000]);
+  const [priceRange, setPriceRange] = useState([0, PRICE_MAX]);
   const [durations, setDurations] = useState([]);
   const [ratings, setRatings] = useState([]);
   const [tourTypes, setTourTypes] = useState([]);
@@ -46,6 +71,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
 
   const [hydrated, setHydrated] = useState(false);
   const observerRef = useRef(null);
+  const loadingRef = useRef(false);
 
   const tourTypeOptions = ['fixed_date', 'selectable_date', 'both'];
   const tourTypeLabels = {
@@ -55,122 +81,90 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
   };
   const durationOptions = ['1', '3', '5', '7', '14', '30'];
   const ratingOptions = [1, 2, 3, 4, 5];
-  const initialFetchSkipped = useRef(false);
 
   // -----------------------------
   // HYDRATE FROM URL QUERY PARAMS
   // -----------------------------
   useEffect(() => {
-    let active = true;
-    const hydrate = async () => {
-      const q = searchParams.get('search') || searchParams.get('q') || '';
-      const urlTypes = searchParams.getAll('tourType');
-      const cat = searchParams.get('category');
-      const urlDur = searchParams.getAll('duration');
-      const urlRatings = searchParams.getAll('minRating');
-      const min = searchParams.get('min');
-      const max = searchParams.get('max');
+    const q = searchParams.get('search') || searchParams.get('q') || '';
+    const urlTypes = searchParams.getAll('tourType');
+    const cat = searchParams.get('category');
+    const urlDur = searchParams.getAll('duration');
+    const urlRatings = searchParams.getAll('minRating');
+    const min = searchParams.get('min');
+    const max = searchParams.get('max');
 
-      if (!active) return;
-      setSearch(q);
-      setTourTypes(urlTypes.length ? urlTypes : cat ? [cat] : []);
-      setDurations(urlDur.length ? urlDur : []);
-      setRatings(urlRatings.length ? urlRatings.map(Number) : []);
-      setPriceRange([min ? Number(min) : 0, max ? Number(max) : 1000000]);
-      setHydrated(true);
-    };
-    hydrate();
-    return () => {
-      active = false;
-    };
+    setSearch(q);
+    setTourTypes(urlTypes.length ? urlTypes : cat ? [cat] : []);
+    setDurations(urlDur.length ? urlDur : []);
+    setRatings(urlRatings.length ? urlRatings.map(Number) : []);
+    setPriceRange([min ? Number(min) : 0, max ? Number(max) : PRICE_MAX]);
+    setHydrated(true);
   }, [searchParams]);
 
-  // ---------------------------
-  // FETCH TOURS (API)
-  // ---------------------------
-  const fetchTours = useCallback(
-    async (fetchLimit) => {
-      if (!hydrated) return;
+  // ------------------------------------------------------------------
+  // FETCH ON FILTER CHANGE — reset to page 1, REPLACE items
+  // Note: no useCallback here to avoid circular dependency double-fetch
+  // ------------------------------------------------------------------
+  useEffect(() => {
+    if (!hydrated) return;
+    let cancelled = false;
 
+    const doFetch = async () => {
       setLoading(true);
+      loadingRef.current = true;
+      setPage(1);
 
-      const params = {
+      const data = await getSearchTours({
         page: 1,
-        limit: fetchLimit,
+        limit: initialLimit,
         q: debouncedSearch,
-
         minPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
-        maxPrice: priceRange[1] < 1000000 ? priceRange[1] : undefined,
-
-        // multi-select arrays
+        maxPrice: priceRange[1] < PRICE_MAX ? priceRange[1] : undefined,
         duration: durations,
         minRating: ratings,
         tourType: tourTypes,
-      };
+      });
 
-      const data = await getSearchTours(params);
-      setItems(data.items || []);
-      setTotal(data.total || 0);
-
+      if (cancelled) return;
+      setItems(uniqueTours(data?.items || []));
+      setTotal(data?.total || 0);
       setLoading(false);
-    },
-    [hydrated, debouncedSearch, priceRange, durations, ratings, tourTypes],
-  );
+      loadingRef.current = false;
+    };
 
-  // -----------------------------------------
-  // FETCH WHEN FILTERS CHANGE (AFTER HYDRATE)
-  // -----------------------------------------
-  useEffect(() => {
-    if (!hydrated) return;
-    let active = true;
-    const run = async () => {
-      if (
-        !initialFetchSkipped.current &&
-        initialPage?.items?.length &&
-        !search &&
-        !tourTypes.length &&
-        !durations.length &&
-        !ratings.length &&
-        priceRange[0] === 0 &&
-        priceRange[1] === 500000
-      ) {
-        initialFetchSkipped.current = true;
-        return;
-      }
-      if (!active) return;
-      setLimit(6);
-      await fetchTours(6);
-    };
-    run();
-    return () => {
-      active = false;
-    };
-  }, [
-    hydrated,
-    priceRange,
-    durations,
-    ratings,
-    tourTypes,
-    debouncedSearch,
-    fetchTours,
-  ]);
+    doFetch();
+    return () => { cancelled = true; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated, debouncedSearch, priceRange, durations, ratings, tourTypes]);
 
   // ---------------------------
-  // LOAD MORE
+  // LOAD MORE (APPEND next page)
   // ---------------------------
-  useEffect(() => {
-    if (!hydrated) return;
-    if (limit === 6) return;
-    let active = true;
-    const run = async () => {
-      if (!active) return;
-      await fetchTours(limit);
-    };
-    run();
-    return () => {
-      active = false;
-    };
-  }, [limit, hydrated, fetchTours]);
+  const loadMore = useCallback(async () => {
+    if (loadingRef.current || items.length >= total) return;
+    const nextPage = page + 1;
+
+    loadingRef.current = true;
+    setLoading(true);
+
+    const data = await getSearchTours({
+      page: nextPage,
+      limit: initialLimit,
+      q: debouncedSearch,
+      minPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
+      maxPrice: priceRange[1] < PRICE_MAX ? priceRange[1] : undefined,
+      duration: durations,
+      minRating: ratings,
+      tourType: tourTypes,
+    });
+
+    setItems((prev) => uniqueTours([...(prev || []), ...((data?.items || []))]));
+    setTotal(data?.total || 0);
+    setPage(nextPage);
+    setLoading(false);
+    loadingRef.current = false;
+  }, [page, items.length, total, initialLimit, debouncedSearch, priceRange, durations, ratings, tourTypes]);
 
   // ---------------------------
   // INFINITE SCROLL WATCHER
@@ -180,22 +174,22 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && items.length < total) {
-          setLimit((prev) => prev + 6);
+        if (entries[0].isIntersecting && items.length < total && !loadingRef.current) {
+          loadMore();
         }
       },
-      { threshold: 0.2 },
+      { threshold: 0.1, rootMargin: '200px' },
     );
 
     if (observerRef.current) observer.observe(observerRef.current);
     return () => observer.disconnect();
-  }, [hydrated, items, total]);
+  }, [hydrated, items.length, total, loadMore]);
 
   // ---------------------------
   // RESET FILTERS
   // ---------------------------
   const resetFilters = () => {
-    setPriceRange([0, 500000]);
+    setPriceRange([0, PRICE_MAX]);
     setDurations([]);
     setRatings([]);
     setTourTypes([]);
@@ -207,13 +201,6 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
   // ---------------------------
   const renderFilters = () => (
     <div className='space-y-6'>
-      <div className='flex justify-between items-center'>
-        <h3 className='font-semibold'>Filter By</h3>
-        <Button variant='ghost' size='sm' onClick={resetFilters}>
-          Reset
-        </Button>
-      </div>
-
       {/* PRICE */}
       <div>
         <h4 className='text-sm font-medium mb-2'>Price Range (₹)</h4>
@@ -222,7 +209,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
           <Input
             type='number'
             min={0}
-            max={500000}
+            max={PRICE_MAX}
             value={priceRange[0]}
             onChange={(e) =>
               setPriceRange([Number(e.target.value), priceRange[1]])
@@ -235,7 +222,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
           <Input
             type='number'
             min={0}
-            max={500000}
+            max={PRICE_MAX}
             value={priceRange[1]}
             onChange={(e) =>
               setPriceRange([priceRange[0], Number(e.target.value)])
@@ -335,9 +322,21 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
         <section className='py-12'>
           <div className='container mx-auto px-4 flex flex-col lg:flex-row gap-8'>
             {/* SIDEBAR */}
-            <aside className='w-full lg:w-80 shrink-0 hidden lg:block'>
-              <div className='sticky top-4 bg-card border rounded-lg p-6 space-y-6'>
-                {renderFilters()}
+            <aside className='w-full lg:w-72 shrink-0 hidden lg:block'>
+              <div className='sticky top-4 bg-card border rounded-xl shadow-sm overflow-hidden flex flex-col' style={{ maxHeight: 'calc(100vh - 2rem)' }}>
+                {/* Header */}
+                <div className='flex justify-between items-center px-5 py-4 border-b bg-muted/40 shrink-0'>
+                  <h3 className='font-semibold text-base'>Filter Tours</h3>
+                  <button
+                    onClick={resetFilters}
+                    className='text-xs text-primary hover:underline font-medium'>
+                    Reset all
+                  </button>
+                </div>
+                {/* Scrollable body */}
+                <div className='overflow-y-auto flex-1 px-5 py-5 space-y-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'>
+                  {renderFilters()}
+                </div>
               </div>
             </aside>
 
@@ -361,8 +360,16 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
                     </PopoverTrigger>
                     <PopoverContent
                       align='end'
-                      className='w-60 max-h-[50vh] overflow-y-auto p-4'>
-                      {renderFilters()}
+                      className='w-72 max-h-[70vh] overflow-y-auto p-0'>
+                      <div className='flex justify-between items-center px-4 py-3 border-b bg-muted/40 sticky top-0'>
+                        <h3 className='font-semibold text-sm'>Filter Tours</h3>
+                        <button onClick={resetFilters} className='text-xs text-primary hover:underline font-medium'>
+                          Reset all
+                        </button>
+                      </div>
+                      <div className='p-4'>
+                        {renderFilters()}
+                      </div>
                     </PopoverContent>
                   </Popover>
                 </div>

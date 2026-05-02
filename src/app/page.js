@@ -71,18 +71,22 @@ export async function generateMetadata() {
 
 export default async function HomePage() {
   const { data, reviews } = await getSiteData();
+  const hasHero = Array.isArray(data?.hero) && data.hero.length > 0;
 
   return (
     <div className="p-0 m-0">
-      {data?.hero?.length > 0 && <Hero slides={data.hero} />}
-      <SearchBar />
+      {hasHero && <Hero slides={data.hero} />}
+      <SearchBar hasHero={hasHero} />
 
       <div className="mx-auto min-[1550px]:px-16">
         {data?.destinations?.length > 0 && (
           <PopularDestinations destinations={data.destinations} />
         )}
 
-        <DetailSection />
+        <DetailSection
+          primaryImage={data?.primaryImage}
+          secondaryImage={data?.secondaryImage}
+        />
 
         {data?.tours?.length > 0 && <FeaturedTours tours={data.tours} />}
 

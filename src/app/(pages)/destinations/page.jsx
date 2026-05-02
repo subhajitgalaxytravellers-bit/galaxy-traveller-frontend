@@ -42,8 +42,13 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const data = await getAllDestinations();
-  const continents = data?.data?.group || [];
+  let continents = [];
+  try {
+    const data = await getAllDestinations();
+    continents = data?.data?.group || [];
+  } catch {
+    // API unavailable — render empty state gracefully
+  }
 
   return <DestinationsClient continents={continents} />;
 }

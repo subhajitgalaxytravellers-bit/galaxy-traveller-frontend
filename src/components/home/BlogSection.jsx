@@ -74,11 +74,11 @@ const BlogSection = ({ blogPosts = blogPost }) => {
             return (
               <div
                 key={index}
-                className='opacity-0 animate-fade-in-up'
+                className='opacity-0 animate-fade-in-up h-full'
                 style={{ animationDelay: `${index * 0.1}s` }}>
-                <a href={`/blog/${post.slug}`}>
-                  <Card className='group p-0 overflow-hidden border-0 card-shadow hover:hover-shadow transition-all duration-300 cursor-pointer relative'>
-                    <CardContent className='p-0'>
+                <a href={`/blog/${post.slug}`} className='block h-full'>
+                  <Card className='group p-0 overflow-hidden border-0 card-shadow hover:hover-shadow transition-all duration-300 cursor-pointer relative h-full flex flex-col'>
+                    <CardContent className='p-0 h-full flex flex-col'>
                       {/* Image */}
                       <div className='relative overflow-hidden aspect-[16/10]'>
                         <Image
@@ -96,7 +96,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
                       </div>
 
                       {/* Content */}
-                      <div className='p-6'>
+                      <div className='p-6 flex flex-col flex-1'>
                         {/* Meta */}
                         <div className='flex items-center gap-4 text-sm text-muted-foreground mb-3'>
                           <div className='flex items-center gap-1'>
@@ -124,7 +124,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
                         </p>
 
                         {/* Footer */}
-                        <div className='flex items-center justify-between pt-4 border-t border-border'>
+                        <div className='flex items-center justify-between pt-4 border-t border-border mt-auto'>
                           <div className='flex items-center gap-2'>
                             <User className='w-4 h-4 text-primary' />
                             <span className='text-sm font-medium'>

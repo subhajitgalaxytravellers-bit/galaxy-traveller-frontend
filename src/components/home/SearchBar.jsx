@@ -21,7 +21,7 @@ const typeLabels = {
   both: 'Fixed + Flexible',
 };
 
-const SearchBar = () => {
+const SearchBar = ({ hasHero = false }) => {
   const router = useRouter();
 
   const [place, setPlace] = useState('');
@@ -41,7 +41,10 @@ const SearchBar = () => {
   };
 
   return (
-    <section className='relative -mt-24 z-20'>
+    <section
+      className={`relative z-20 ${
+        hasHero ? '-mt-24' : 'mt-16 lg:mt-20'
+      }`}>
       <div className='container mx-auto px-4'>
         <div className='bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-6xl mx-auto'>
           <div className='grid grid-cols-1 md:grid-cols-5 gap-4'>
