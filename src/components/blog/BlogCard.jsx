@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { formatDate } from '@/lib/date';
 import Link from 'next/link';
-import Image from 'next/image';
+import SafeImage from '@/components/common/SafeImage';
 
 export const BlogCard = ({
   id,
@@ -20,8 +20,9 @@ export const BlogCard = ({
     <Card className='overflow-hidden p-0 border-0 shadow-md group h-full flex flex-col transform-gpu will-change-transform hover:-translate-y-1 transition-transform duration-300'>
       <Link href={`/blog/${id}`} className='flex flex-col h-full'>
         <div className='relative h-56 overflow-hidden flex-shrink-0'>
-          <Image
+          <SafeImage
             src={image}
+            seed={id || title}
             alt={title}
             fill
             className='object-cover transition-transform duration-500 ease-out group-hover:scale-105 transform-gpu will-change-transform'

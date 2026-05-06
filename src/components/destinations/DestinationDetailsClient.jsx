@@ -8,13 +8,11 @@ import {
   MapPin,
   Star,
   Calendar,
-  Users,
   ChevronLeft,
   IndianRupee,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { sanitizeGCSUrl } from "@/lib/sanitizeUrl";
 import {
   Carousel,
   CarouselContent,
@@ -24,7 +22,8 @@ import {
 } from "@/components/ui/carousel";
 import { TourCard } from "@/components/tour/TourCard";
 import { BlogCard } from "@/components/blog/BlogCard";
-import Image from "next/image";
+import SafeImage from "@/components/common/SafeImage";
+import { sanitizeGCSUrl } from "@/lib/sanitizeUrl";
 
 export default function DestinationDetailsClient({ destination }) {
   const router = useRouter();
@@ -34,14 +33,19 @@ export default function DestinationDetailsClient({ destination }) {
   const relatedBlogs = Array.isArray(destination?.blogs)
     ? destination.blogs
     : [];
+  const longDescriptionParagraphs = String(destination?.about || "")
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
 
   return (
     <div className="min-h-screen">
       {/* HERO SECTION */}
       <section className="relative h-screen">
         <div className="absolute inset-0">
-          <Image
-            src={sanitizeGCSUrl(destination.heroImg)}
+          <SafeImage
+            src={destination.heroImg}
+            seed={destination.slug || destination.title}
             alt={destination.title}
             fill
             className="object-cover"
@@ -188,14 +192,39 @@ export default function DestinationDetailsClient({ destination }) {
               transition={{ duration: 0.6 }}
               className="mb-16"
             >
-              <Image
-                src={sanitizeGCSUrl(destination.highlight?.img)}
-                alt={`${destination.title} highlight`}
-                width={1200}
-                height={500}
-                className="w-full h-[500px] object-cover rounded-2xl shadow-2xl"
-              />
+              <div className="relative h-[320px] overflow-hidden rounded-2xl shadow-2xl sm:h-[420px] lg:h-[500px]">
+                <SafeImage
+                  src={destination.highlight?.img}
+                  seed={`${destination.slug || destination.title}-highlight`}
+                  alt={`${destination.title} highlight`}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
+                  className="object-cover"
+                />
+              </div>
             </motion.div>
+
+            {longDescriptionParagraphs.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="mb-16"
+              >
+                <h3 className="text-3xl font-bold mb-8">About {destination.title}</h3>
+                <div className="space-y-6">
+                  {longDescriptionParagraphs.map((paragraph, index) => (
+                    <p
+                      key={`${destination.slug || destination.title}-long-${index}`}
+                      className="text-lg text-muted-foreground leading-relaxed"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </motion.div>
+            )}
           </div>
         </div>
       </section>
@@ -273,23 +302,6 @@ export default function DestinationDetailsClient({ destination }) {
         </section>
       )}
 
-      {/* CTA */}
-      <section className="py-20 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-4 text-center">
-          <Users className="w-16 h-16 mx-auto mb-6" />
-          <h2 className="text-4xl font-bold mb-4">
-            Ready to Explore? Let&apos;s Plan Your Trip!
-          </h2>
-          <Button
-            size="lg"
-            onClick={() => router.push("/contact")}
-            variant="outline"
-            className="text-lg text-primary hover:bg-gray-300 hover:text-primary px-8 py-6"
-          >
-            Get a Quote
-          </Button>
-        </div>
-      </section>
     </div>
   );
 }

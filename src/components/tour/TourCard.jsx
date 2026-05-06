@@ -1,7 +1,7 @@
 import { MapPin, Clock, Star } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { formatTourPlaceShort, formatTourTitle } from '@/lib/tourText';
+import SafeImage from '@/components/common/SafeImage';
 
 export const TourCard = ({ tour }) => {
   const priceValue = Number(tour?.details?.pricePerPerson);
@@ -13,8 +13,9 @@ export const TourCard = ({ tour }) => {
     <Link href={`/tour/${tour.slug}`} className='group block'>
       <div className='relative h-[400px] rounded-2xl overflow-hidden border border-border/50 bg-card/70 backdrop-blur-sm transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl'>
         {/* Background Image */}
-        <Image
+        <SafeImage
           src={tour.heroImg}
+          seed={tour.slug || tour.title}
           alt={displayTitle}
           fill
           className='object-cover transition-transform duration-700 group-hover:scale-105'

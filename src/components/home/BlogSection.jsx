@@ -6,6 +6,7 @@ import { Calendar, Clock, ArrowRight, User } from 'lucide-react';
 import Image from 'next/image';
 import { formatDate } from '@/lib/date';
 import { useRouter } from 'next/navigation';
+import { sanitizeGCSUrl } from '@/lib/sanitizeUrl';
 
 const blogPost = [
   {
@@ -82,7 +83,10 @@ const BlogSection = ({ blogPosts = blogPost }) => {
                       {/* Image */}
                       <div className='relative overflow-hidden aspect-[16/10]'>
                         <Image
-                          src={post.displayImg || post.image}
+                          src={sanitizeGCSUrl(
+                            post.displayImg || post.image,
+                            post.slug || post.title,
+                          )}
                           alt={post.title}
                           fill
                           className='object-cover group-hover:scale-110 transition-transform duration-500'

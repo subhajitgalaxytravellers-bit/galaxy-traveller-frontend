@@ -65,7 +65,7 @@ const Navbar = () => {
                 alt='Logo'
                 width={120}
                 height={48}
-                className='h-8 lg:h-14'
+                className='h-8 w-auto lg:h-14'
               />
             ) : (
               <Image
@@ -73,7 +73,7 @@ const Navbar = () => {
                 alt='Logo'
                 width={120}
                 height={48}
-                className='h-8 lg:h-14'
+                className='h-8 w-auto lg:h-14'
               />
             )}
           </Link>
@@ -85,7 +85,7 @@ const Navbar = () => {
               alt='Logo'
               width={80}
               height={50}
-              className='h-8 lg:h-14'
+              className='h-8 w-auto lg:h-14'
             />
           </Link>
 

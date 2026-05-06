@@ -75,7 +75,7 @@ const Footer = ({ footer = {}, global = {} }) => {
               alt='Logo'
               width={150}
               height={60}
-              className='drop-shadow-sm'
+              className='h-auto drop-shadow-sm'
             />
             <p className='text-white/80 leading-relaxed'>
               {footer?.brief ||

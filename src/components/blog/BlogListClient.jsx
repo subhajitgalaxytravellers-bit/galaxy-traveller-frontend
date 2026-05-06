@@ -150,8 +150,6 @@ export default function BlogListClient({ initialPage, limit = 9 }) {
                 'Loading more...'
               ) : hasNextPage ? (
                 <div ref={sentinelRef} className='h-full w-full' />
-              ) : blogs.length > 0 ? (
-                'No more articles.'
               ) : null}
             </div>
           </div>

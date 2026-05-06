@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Travel placeholder</title>
+  <desc id="desc">Abstract landscape placeholder for travel images.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f4c5c" />
+      <stop offset="55%" stop-color="#2c7da0" />
+      <stop offset="100%" stop-color="#f4d35e" />
+    </linearGradient>
+    <linearGradient id="ground" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#264653" />
+      <stop offset="100%" stop-color="#386641" />
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)" />
+  <circle cx="1260" cy="190" r="96" fill="#ffe8a3" opacity="0.95" />
+  <path d="M0 640 L260 470 L470 615 L690 390 L880 560 L1110 350 L1360 575 L1600 430 L1600 900 L0 900 Z" fill="#173f5f" opacity="0.9" />
+  <path d="M0 710 L230 580 L430 680 L700 520 L910 680 L1180 520 L1400 660 L1600 560 L1600 900 L0 900 Z" fill="#206a5d" opacity="0.92" />
+  <path d="M0 780 L220 700 L430 760 L680 640 L930 770 L1180 650 L1410 760 L1600 700 L1600 900 L0 900 Z" fill="url(#ground)" />
+  <text x="110" y="790" fill="#ffffff" font-family="Arial, sans-serif" font-size="62" font-weight="700" letter-spacing="6">GALAXY TRAVELLERS</text>
+  <text x="110" y="850" fill="#f1faee" font-family="Arial, sans-serif" font-size="28" letter-spacing="3">Image unavailable - showing travel placeholder</text>
+</svg>

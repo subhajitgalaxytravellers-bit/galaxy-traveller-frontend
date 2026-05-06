@@ -43,6 +43,7 @@ export const AiLoader = () => {
               alt='Loading'
               fill
               className='object-contain drop-shadow-sm'
+              sizes='65px'
               priority
             />
           </div>

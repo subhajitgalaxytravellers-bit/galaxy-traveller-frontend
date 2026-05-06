@@ -78,7 +78,7 @@ export default async function RootLayout({ children }) {
   const extraScripts = String(tracking?.extraScripts || '').trim();
   const siteGlobal = globals?.data || {};
   return (
-    <html lang='en'>
+    <html lang='en' data-scroll-behavior='smooth'>
       <head>
         {gtmId && (
           // eslint-disable-next-line @next/next/next-script-for-ga

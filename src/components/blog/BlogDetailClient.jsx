@@ -27,7 +27,6 @@ import { TourCard } from "../tour/TourCard";
 import { DestinationCard } from "../destinations/DestinationCard";
 
 export default function BlogDetailClient({ post }) {
-  console.log(post);
   const formattedDate = formatDate(post.createdAt);
   const seoMetaTitle = typeof post?.seo?.metaTitle === "string" ? post.seo.metaTitle.trim() : "";
   const rawTitle = typeof post?.title === "string" ? post.title.trim() : "";
@@ -35,14 +34,24 @@ export default function BlogDetailClient({ post }) {
   const cleanSeoTitle = seoMetaTitle
     ? seoMetaTitle.replace(/\s*\|\s*Galaxy Travellers\s*$/i, "").trim()
     : "";
-  const heroTitle = rawSlug || rawTitle || cleanSeoTitle || "Blog";
-  const displayTitle = rawTitle || cleanSeoTitle || rawSlug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()) || "Blog";
+  const slugAsTitle = rawSlug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  const displayTitle = rawTitle || cleanSeoTitle || slugAsTitle || "Blog";
+
+  // Hero section — use dedicated hero fields, fallback to existing values
+  const heroImage =
+    post?.hero?.heroImg || post?.displayImg || post?.seo?.shareImage || "/assets/default.jpg";
+  const heroTitle =
+    post?.hero?.heroTitle?.trim() || rawTitle || cleanSeoTitle || slugAsTitle || "Blog";
+  const heroDescription =
+    post?.hero?.heroDescription?.trim() ||
+    (typeof post?.bodyAlt === "string" ? post.bodyAlt.trim().slice(0, 220) : "");
+
+  // Article summary (under the h1)
   const displaySummary =
     typeof post?.bodyAlt === "string" && post.bodyAlt.trim()
       ? post.bodyAlt.trim().slice(0, 220)
       : "";
-  const heroImage =
-    post?.displayImg || post?.seo?.shareImage || "/assets/default.jpg";
+
   const social = Array.isArray(post?.createdBy?.social)
     ? post.createdBy.social
     : [];
@@ -54,7 +63,15 @@ export default function BlogDetailClient({ post }) {
     typeof post?.body === "string" && post.body.trim()
       ? post.body
       : post?.bodyAlt || "";
-  const paragraphs = bodyText ? bodyText.split("\n\n") : [];
+  const paragraphs = bodyText
+    ? bodyText
+        // Ensure every heading (##, ###, #, or !) always starts a fresh paragraph block
+        .replace(/\n(#{1,3} )/g, "\n\n$1")
+        .replace(/\n(!\[)/g, "\n\n$1")
+        .split("\n\n")
+        .map((p) => p.trim())
+        .filter(Boolean)
+    : [];
   const categories = Array.isArray(post?.categories) ? post.categories : [];
 
   const relatedPosts = Array.isArray(post?.blogs)
@@ -65,30 +82,28 @@ export default function BlogDetailClient({ post }) {
     ? post.destinations
     : [];
 
-  console.log(post?.blogs);
-
   return (
     <div className="min-h-screen bg-background">
       {/* HERO */}
-      <section className="relative h-[50vh] min-h-[360px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 image-overlay">
+      <section className="relative h-[60vh] min-h-[400px] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0">
           <Image
             src={heroImage}
-            alt={displayTitle}
+            alt={heroTitle}
             fill
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-black/35 z-10"></div>
-          <div className="absolute inset-0 hero-bottom-fade z-20"></div>
+          {/* gradient overlay — dark at bottom for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 z-10" />
         </div>
-        <div className="relative z-30 container mx-auto px-4 text-center text-white">
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4 break-words [text-wrap:balance] drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
+        <div className="relative z-20 container mx-auto px-4 text-center text-white max-w-4xl">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-3 break-words [text-wrap:balance] drop-shadow-[0_2px_16px_rgba(0,0,0,0.8)]">
             {heroTitle}
           </h2>
-          {displaySummary && (
-            <p className="text-base md:text-lg text-white/90 max-w-3xl mx-auto drop-shadow-[0_1px_8px_rgba(0,0,0,0.65)]">
-              {displaySummary}
+          {heroDescription && (
+            <p className="text-base md:text-lg text-white/85 max-w-2xl mx-auto leading-relaxed drop-shadow-[0_1px_8px_rgba(0,0,0,0.7)]">
+              {heroDescription}
             </p>
           )}
         </div>
@@ -182,23 +197,32 @@ export default function BlogDetailClient({ post }) {
             {/* Article Body */}
             <div className="prose prose-xl max-w-none prose-headings:font-heading prose-a:text-primary hover:prose-a:text-primary/80 prose-img:rounded-2xl">
               {paragraphs.map((paragraph, index) => {
-                if (paragraph.startsWith("##")) {
-                  return (
-                    <h2
-                      key={index}
-                      className="font-heading text-3xl md:text-4xl font-extrabold mt-14 mb-8 text-foreground tracking-tight"
-                    >
-                      {paragraph.replace("## ", "")}
-                    </h2>
-                  );
-                } else if (paragraph.startsWith("###")) {
+                if (paragraph.startsWith("### ")) {
                   return (
                     <h3
                       key={index}
                       className="font-heading text-2xl md:text-3xl font-bold mt-12 mb-6 text-foreground tracking-tight"
                     >
-                      {paragraph.replace("### ", "")}
+                      {paragraph.replace(/^###\s+/, "")}
                     </h3>
+                  );
+                } else if (paragraph.startsWith("## ")) {
+                  return (
+                    <h2
+                      key={index}
+                      className="font-heading text-2xl md:text-3xl font-bold mt-14 mb-5 text-foreground tracking-tight"
+                    >
+                      {paragraph.replace(/^##\s+/, "")}
+                    </h2>
+                  );
+                } else if (paragraph.startsWith("# ")) {
+                  return (
+                    <h1
+                      key={index}
+                      className="font-heading text-3xl md:text-4xl font-extrabold mt-16 mb-6 text-foreground tracking-tight"
+                    >
+                      {paragraph.replace(/^#\s+/, "")}
+                    </h1>
                   );
                 } else if (paragraph.startsWith("- ")) {
                   const items = paragraph
@@ -212,7 +236,7 @@ export default function BlogDetailClient({ post }) {
                           className="flex items-start gap-4 text-foreground/80 leading-relaxed text-lg"
                         >
                           <span className="text-primary mt-2 flex-shrink-0 bg-primary/10 rounded-full h-2 w-2" />
-                          <span className="flex-1">{item.replace("- ", "")}</span>
+                          <span className="flex-1">{item.replace(/^-\s+/, "")}</span>
                         </li>
                       ))}
                     </ul>
@@ -241,11 +265,6 @@ export default function BlogDetailClient({ post }) {
                           fill
                           className="object-cover transition-transform duration-700 group-hover:scale-105"
                         />
-                        {/* {match[1] && (
-                            <figcaption className="text-sm text-muted-foreground text-center mt-3">
-                              {match[1]}
-                            </figcaption>
-                          )} */}
                       </figure>
                     );
                   }

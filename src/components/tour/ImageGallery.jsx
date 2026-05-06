@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { ChevronLeft, ChevronRight, X, Expand } from "lucide-react";
-import Image from "next/image";
+import SafeImage from "@/components/common/SafeImage";
 
 const FALLBACK =
   "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop";
@@ -57,8 +57,9 @@ export default function ImageGallery({ images = [] }) {
             onClick={() => openModal(0)}
             data-testid="image-main"
           >
-            <Image
+            <SafeImage
               src={mainImage}
+              seed={`gallery-main-${mainImage}`}
               alt="Main tour image"
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -82,8 +83,9 @@ export default function ImageGallery({ images = [] }) {
                   onClick={() => openModal(index + 1)}
                   data-testid={`image-thumbnail-${index + 1}`}
                 >
-                  <Image
+                  <SafeImage
                     src={img}
+                    seed={`gallery-mobile-${index}-${img}`}
                     alt={`Tour image ${index + 2}`}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -111,8 +113,9 @@ export default function ImageGallery({ images = [] }) {
             onClick={() => openModal(0)}
             data-testid="image-main"
           >
-            <Image
+            <SafeImage
               src={mainImage}
+              seed={`gallery-desktop-main-${mainImage}`}
               alt="Main tour image"
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -145,8 +148,9 @@ export default function ImageGallery({ images = [] }) {
                 onClick={() => openModal(index + 1)}
                 data-testid={`image-thumbnail-${index + 1}`}
               >
-                <Image
+                <SafeImage
                   src={img}
+                  seed={`gallery-desktop-${index}-${img}`}
                   alt={`Tour image ${index + 2}`}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -235,8 +239,9 @@ export default function ImageGallery({ images = [] }) {
             )}
 
             {isOpen && (
-              <Image
+              <SafeImage
                 src={safeImages[currentIndex]}
+                seed={`gallery-modal-${currentIndex}-${safeImages[currentIndex]}`}
                 alt={`Tour image ${currentIndex + 1}`}
                 width={1200}
                 height={800}

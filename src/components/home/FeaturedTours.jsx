@@ -5,8 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Clock3, Users, Star, MapPin, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import SafeImage from '@/components/common/SafeImage';
 
 const TOUR_TYPE_LABELS = {
   fixed_date: 'Fixed Dates',
@@ -81,10 +81,12 @@ export default function FeaturedTours({ tours }) {
               <Card className='group h-full p-0 overflow-hidden rounded-3xl border border-border/60 bg-card shadow-sm hover:-translate-y-1.5 hover:shadow-2xl transition-all duration-300'>
                 <CardContent className='p-0'>
                   <div className='relative overflow-hidden aspect-[4/3]'>
-                    <Image
+                    <SafeImage
                       src={tour.heroImg || '/assets/default-tour.jpg'}
+                      seed={tour.slug || tour.title}
                       alt={tour.title}
                       fill
+                      sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
                       className='object-cover transition-transform duration-700 group-hover:scale-110'
                     />
                     <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent' />

@@ -3,9 +3,9 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { IndianRupeeIcon, MapPin } from 'lucide-react';
 import { motion, useMotionValue } from 'framer-motion';
-import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import SafeImage from '@/components/common/SafeImage';
 
 const containerVariants = {
   hidden: {},
@@ -101,12 +101,13 @@ export default function PopularDestinations({ destinations }) {
                 <Card className='group overflow-hidden p-0 border-0 card-shadow hover:hover-shadow transition-all duration-300 cursor-pointer'>
                   <CardContent className='p-0'>
                     <div className='relative overflow-hidden aspect-3/4'>
-                      <Image
+                      <SafeImage
                         src={
                           destination.image ||
                           destination.heroImg ||
                           '/assets/default.jpg'
                         }
+                        seed={destination.slug || destination.title}
                         alt={destination.title}
                         fill
                         className='object-cover group-hover:scale-110 transition-transform duration-500'

@@ -1,5 +1,6 @@
 // lib/mapTourModel.js
 import { formatTourPlaceShort, formatTourTitle } from "@/lib/tourText";
+import { sanitizeGCSUrl } from "@/lib/sanitizeUrl";
 
 const FALLBACK_IMG =
   "https://images.musement.com/cover/0003/14/koh-samui-xxl-jpg_header-213595.jpeg";
@@ -39,7 +40,10 @@ export default function toTourModel(api) {
   // IMAGES
   // ------------------------------
   const gallery = Array.isArray(api?.galleryImgs) ? api.galleryImgs : [];
-  const heroImage = api?.heroImg || gallery[0] || FALLBACK_IMG;
+  const heroImage = sanitizeGCSUrl(
+    api?.heroImg || gallery[0] || FALLBACK_IMG,
+    api?.slug || api?.title,
+  );
 
   // ------------------------------
   // TESTIMONIALS → RATING
@@ -262,7 +266,10 @@ function simplifyBlog(b) {
     slug: b?.slug,
     title: b?.title,
     description: b?.description,
-    image: b?.displayImg || b?.coverImage || b?.image || FALLBACK_IMG,
+    image: sanitizeGCSUrl(
+      b?.displayImg || b?.coverImage || b?.image || FALLBACK_IMG,
+      b?.slug || b?.title,
+    ),
   };
 }
 
@@ -272,12 +279,14 @@ function simplifyDestination(d) {
     slug: d?.slug,
     title: d?.title,
     description: d?.description,
-    image:
+    image: sanitizeGCSUrl(
       d?.displayImg ||
-      d?.heroImg ||
-      d?.highlight?.img ||
-      d?.image ||
-      FALLBACK_IMG,
+        d?.heroImg ||
+        d?.highlight?.img ||
+        d?.image ||
+        FALLBACK_IMG,
+      d?.slug || d?.title,
+    ),
   };
 }
 
@@ -286,7 +295,10 @@ function simplifyExperience(x) {
     id: x?._id || x?.id,
     slug: x?.slug,
     title: x?.title,
-    image: x?.heroImg || x?.displayImg || x?.image || FALLBACK_IMG,
+    image: sanitizeGCSUrl(
+      x?.heroImg || x?.displayImg || x?.image || FALLBACK_IMG,
+      x?.slug || x?.title,
+    ),
     highlight: x?.highlight || null,
     status: x?.status,
   };
@@ -297,7 +309,10 @@ function simplifySpotlight(s) {
     id: s?._id || s?.id,
     title: s?.title,
     description: s?.description,
-    image: s?.displayImg || s?.image || FALLBACK_IMG,
+    image: sanitizeGCSUrl(
+      s?.displayImg || s?.image || FALLBACK_IMG,
+      s?.slug || s?.title,
+    ),
     tour: s?.tour || null,
   };
 }
@@ -308,7 +323,10 @@ function simplifyTour(t) {
     slug: t?.slug,
     title: t?.title,
     place: t?.place,
-    image: t?.heroImg || t?.image || FALLBACK_IMG,
+    image: sanitizeGCSUrl(
+      t?.heroImg || t?.image || FALLBACK_IMG,
+      t?.slug || t?.title,
+    ),
     status: t?.status,
   };
 }

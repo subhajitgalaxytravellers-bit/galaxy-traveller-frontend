@@ -30,9 +30,12 @@ const remotePatterns = [
   { protocol: "https", hostname: "developers.google.com",   pathname: "/**" },
   { protocol: "https", hostname: "lh3.googleusercontent.com", pathname: "/**" },
 
+  // ── External CMS / supplier images ────────────────────────────────────
+  { protocol: "http", hostname: "img.b2bpic.net", pathname: "/**" },
+  { protocol: "https", hostname: "img.b2bpic.net", pathname: "/**" },
+
   // ── Unsplash (placeholder / seeded images) ────────────────────────────
   { protocol: "https", hostname: "images.unsplash.com",  pathname: "/**" },
-  { protocol: "https", hostname: "source.unsplash.com",  pathname: "/**" },
   { protocol: "https", hostname: "plus.unsplash.com",    pathname: "/**" },
 ];
 
