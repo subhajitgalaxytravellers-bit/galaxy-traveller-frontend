@@ -49,7 +49,7 @@ export default function TourItinerary({ itinerary }) {
 
   return (
     <div className="space-y-6 mb-6">
-      <h2 className="text-lg lg:text-xl font-semibold text-slate-800 mb-6">Detailed Itinerary</h2>
+      <h2 className="font-heading text-xl lg:text-2xl font-extrabold text-slate-800 mb-6 tracking-tight">Detailed Itinerary</h2>
 
       <div className="space-y-4">
         {normalizedItinerary.map((day, idx) => {
@@ -72,7 +72,7 @@ export default function TourItinerary({ itinerary }) {
                   {day.day}
                 </div>
                 <div>
-                  <h3 className="text-base lg:text-lg font-medium text-slate-800 tracking-tight">
+                  <h3 className="font-heading text-lg lg:text-xl font-semibold text-slate-800 tracking-tight">
                     Day {idx + 1}
                   </h3>
                   <p className="text-[13px] lg:text-[13px] text-slate-500 mt-0.5 font-medium select-none">

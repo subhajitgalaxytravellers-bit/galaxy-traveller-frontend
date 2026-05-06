@@ -42,7 +42,7 @@ export default function TourHighlights({ highlights }) {
 
   return (
     <div className="space-y-6 mb-6">
-      <h2 className="text-2xl font-bold mb-6">Tour Highlights</h2>
+      <h2 className="font-heading text-2xl font-bold mb-6 tracking-tight">Tour Highlights</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {displayHighlights.map((highlight, index) => (
@@ -65,7 +65,7 @@ export default function TourHighlights({ highlights }) {
                 )}
                 <div className="flex-1">
                   <h3
-                    className="text-lg font-medium mb-2"
+                    className="font-heading text-lg font-semibold mb-2 tracking-tight"
                     data-testid={`highlight-title-${index}`}
                   >
                     {highlight.title}

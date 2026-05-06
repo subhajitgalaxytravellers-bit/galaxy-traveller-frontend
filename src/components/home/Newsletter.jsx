@@ -9,7 +9,7 @@ const Newsletter = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
           <Mail className="w-16 h-16 mx-auto mb-6 opacity-90" />
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="font-heading text-4xl md:text-5xl font-bold mb-4 italic tracking-wide">
             Get Travel Inspiration
           </h2>
           <p className="text-lg mb-8 opacity-90">

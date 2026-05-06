@@ -31,6 +31,7 @@ const Navbar = () => {
   }, []);
 
   const links = [
+    { label: 'Home', href: '/' },
     { label: 'Blog', href: '/blogs' },
     { label: 'Destinations', href: '/destinations' },
     { label: 'Tours', href: '/tours' },
@@ -58,7 +59,7 @@ const Navbar = () => {
       <div className='container mx-auto relative'>
         <div className='flex items-center justify-between lg:h-20 h-16'>
           {/* Logo */}
-          <Link href='/' className='hidden lg:flex items-center px-4 gap-2'>
+          <Link href='/' className='hidden lg:flex items-center px-9 gap-2'>
             {!useColoredDesktopLogo ? (
               <Image
                 src='/assets/white-logo.png'
@@ -97,13 +98,13 @@ const Navbar = () => {
                 <a
                   key={item.label}
                   href={item.href}
-                  className={`relative text-sm font-medium transition-all duration-300 group ${
+                  className={`relative font-heading text-sm font-medium tracking-wide transition-all duration-300 group ${
                     isScrolled
                       ? active
                         ? 'text-primary'
                         : 'text-foreground hover:text-primary'
                       : 'text-white hover:text-white'
-                  } ${active ? 'tracking-wide' : ''}`}>
+                  } ${active ? 'tracking-widest' : ''}`}>
                   {item.label}
 
                   {/* Underline */}
@@ -172,9 +173,9 @@ const Navbar = () => {
                   <a
                     key={item.label}
                     href={item.href}
-                    className={`relative text-sm font-medium transition-all duration-300 group ${
+                    className={`relative font-heading text-sm font-medium tracking-wide transition-all duration-300 group ${
                       active
-                        ? 'text-primary tracking-wide'
+                        ? 'text-primary tracking-widest'
                         : 'text-foreground hover:text-primary'
                     }`}>
                     {item.label}

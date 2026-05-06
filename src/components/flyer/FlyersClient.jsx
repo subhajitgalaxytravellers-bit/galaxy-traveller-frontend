@@ -68,7 +68,7 @@ export default function FlyersClient({ initialData, limit }) {
           priority
         />
         <div className='relative z-20 text-center px-4 text-white'>
-          <h1 className='text-3xl md:text-5xl font-bold mb-4'>
+          <h1 className='font-heading text-3xl md:text-5xl font-bold mb-4 italic tracking-wide drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)]'>
             Promotional Flyers
           </h1>
           <p className='text-base md:text-lg text-gray-300 max-w-2xl mx-auto'>

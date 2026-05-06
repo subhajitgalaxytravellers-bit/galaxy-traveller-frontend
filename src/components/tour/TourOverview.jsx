@@ -61,7 +61,7 @@ function TourOverview({
 
       {/* Clean overview section */}
       <div>
-        <h2 className="text-2xl font-bold mb-4">Tour Overview</h2>
+        <h2 className="font-heading text-2xl font-bold mb-4 tracking-tight">Tour Overview</h2>
         <p
           className="text-base text-muted-foreground leading-relaxed"
           data-testid="text-description"

@@ -58,7 +58,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
           <p className='text-primary font-semibold mb-2 uppercase tracking-wider'>
             Travel Insights
           </p>
-          <h2 className='text-4xl md:text-5xl font-bold mb-4'>
+          <h2 className='font-heading text-4xl md:text-5xl font-bold mb-4 italic tracking-wide'>
             Latest from Our Blog
           </h2>
           <p className='text-muted-foreground text-lg max-w-2xl mx-auto'>
@@ -118,7 +118,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
                         </div>
 
                         {/* Title */}
-                        <h3 className='text-xl font-bold mb-3 group-hover:text-primary transition-colors line-clamp-2'>
+                        <h3 className='font-heading text-xl font-bold mb-3 group-hover:text-primary transition-colors line-clamp-2 tracking-tight'>
                           {post.title}
                         </h3>
 

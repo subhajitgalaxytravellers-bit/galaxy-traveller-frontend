@@ -5,7 +5,7 @@ import { Card, CardContent } from "../ui/card";
 export default function TourMoments({ moments }) {
   return (
     <div className="space-y-6 mb-6">
-      <h2 className="text-2xl font-bold mb-6">Memorable Moments</h2>
+      <h2 className="font-heading text-2xl font-bold mb-6 tracking-tight">Memorable Moments</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {moments.map((moment, index) => (

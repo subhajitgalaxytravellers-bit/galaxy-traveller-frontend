@@ -51,7 +51,7 @@ const Footer = ({ footer = {}, global = {} }) => {
               <p className='text-xs uppercase tracking-[0.18em] text-white/75'>
                 Your journey, curated
               </p>
-              <h3 className='text-xl md:text-2xl font-semibold leading-snug'>
+              <h3 className='font-heading text-xl md:text-2xl font-semibold leading-snug tracking-tight'>
                 {footer?.heading || 'Travel stories start here.'}
               </h3>
               <p className='text-sm text-white/80 mt-2 max-w-2xl'>
@@ -98,7 +98,7 @@ const Footer = ({ footer = {}, global = {} }) => {
           </div>
 
           <div className='lg:ml-20'>
-            <h4 className='text-lg font-semibold mb-4'>Explore</h4>
+            <h4 className='font-heading text-lg font-semibold mb-4 tracking-tight'>Explore</h4>
             <div className='grid gap-3 text-white/80'>
               {quickLinks.map((item, idx) => (
                 <Link
@@ -113,7 +113,7 @@ const Footer = ({ footer = {}, global = {} }) => {
           </div>
 
           <div className='lg:ml-20'>
-            <h4 className='text-lg font-semibold mb-4'>Support</h4>
+            <h4 className='font-heading text-lg font-semibold mb-4 tracking-tight'>Support</h4>
             <div className='grid gap-3 text-white/80'>
               {supportLinks.map((item, idx) => (
                 <Link
@@ -128,7 +128,7 @@ const Footer = ({ footer = {}, global = {} }) => {
           </div>
 
           <div className='space-y-3 lg:ml-20'>
-            <h4 className='text-lg font-semibold'>Contact</h4>
+            <h4 className='font-heading text-lg font-semibold tracking-tight'>Contact</h4>
             <div className='space-y-3 text-white/80'>
               <div>
                 <p className='text-xs uppercase tracking-[0.15em] text-white/70 mb-1'>

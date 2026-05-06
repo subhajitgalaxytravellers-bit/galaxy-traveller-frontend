@@ -21,7 +21,7 @@ export default function TourFAQ({ faqs }) {
 
   return (
     <div className="space-y-6 mb-6">
-      <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+      <h2 className="font-heading text-2xl font-bold mb-6 tracking-tight">Frequently Asked Questions</h2>
 
       <div className="space-y-4 flex flex-col gap-4">
         {faqs.map((faq, index) => (

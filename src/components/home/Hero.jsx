@@ -70,7 +70,7 @@ const Hero = ({ slides = [] }) => {
                       Get unforgettable pleasure with us
                     </p>
 
-                    <h1 className='text-4xl md:text-6xl lg:text-7xl font-bold mb-5 leading-tight'>
+                    <h1 className='font-heading text-4xl md:text-6xl lg:text-7xl font-bold mb-5 leading-tight italic tracking-wide drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)]'>
                       {slide.title}
                       <br />
                       <span className='text-secondary'>{slide.subtitle}</span>

@@ -35,7 +35,7 @@ export default function TeamSection() {
         <section className="py-20 md:py-32 bg-muted/30">
             <div className="container mx-auto px-4">
                 <div className='text-center mb-16'>
-                    <h2 className='text-4xl font-bold mb-4'>Meet Our Team</h2>
+                    <h2 className='font-heading text-4xl font-bold mb-4 italic tracking-wide'>Meet Our Team</h2>
                     <p className='text-muted-foreground text-lg max-w-2xl mx-auto'>
                         The passionate individuals behind your extraordinary travel
                         experiences
@@ -56,7 +56,7 @@ export default function TeamSection() {
                             </div>
                             <div className="p-6">
                                 <div className="flex justify-between items-baseline mb-2">
-                                    <h3 className="text-xl font-bold transition-all duration-500 group-hover:text-primary">{member.name}</h3>
+                                    <h3 className="font-heading text-xl font-bold tracking-tight transition-all duration-500 group-hover:text-primary">{member.name}</h3>
                                   
                                 </div>
                                 <div className="flex items-center justify-between">

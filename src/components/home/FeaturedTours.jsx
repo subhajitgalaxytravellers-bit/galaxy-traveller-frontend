@@ -56,7 +56,7 @@ export default function FeaturedTours({ tours }) {
           <p className='text-primary font-semibold mb-2 uppercase tracking-wider'>
             Featured Tours
           </p>
-          <h2 className='text-4xl md:text-5xl font-bold mb-4'>
+          <h2 className='font-heading text-4xl md:text-5xl font-bold mb-4 italic tracking-wide'>
             Popular Tour Packages
           </h2>
           <p className='text-muted-foreground text-lg max-w-2xl mx-auto'>
@@ -109,7 +109,7 @@ export default function FeaturedTours({ tours }) {
                       <span className='truncate'>{tour.location || tour.place || 'Destination'}</span>
                     </div>
 
-                    <h3 className='mb-4 line-clamp-2 text-xl font-bold leading-tight transition-colors group-hover:text-primary'>
+                    <h3 className='font-heading mb-4 line-clamp-2 text-xl font-bold leading-tight tracking-tight transition-colors group-hover:text-primary'>
                       {tour.title}
                     </h3>
 

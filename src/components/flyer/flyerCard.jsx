@@ -35,7 +35,7 @@ export const FlyerCard = ({ flyer }) => {
         <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent' />
 
         <div className='absolute bottom-0 left-0 right-0 p-4 text-white'>
-          <h3 className='text-lg font-semibold mb-1'>{flyer?.title}</h3>
+          <h3 className='font-heading text-lg font-semibold mb-1 tracking-tight'>{flyer?.title}</h3>
 
           <p className='text-sm opacity-90 whitespace-normal break-words'>
             {flyer?.description}

@@ -28,7 +28,7 @@ export default function DetailSection({ primaryImage, secondaryImage }) {
           <p className='text-primary font-semibold uppercase tracking-wide mb-2'>
             Dream Your Next Trip
           </p>
-          <h2 className='text-3xl sm:text-4xl font-bold text-foreground mb-8 leading-tight'>
+          <h2 className='font-heading text-3xl sm:text-4xl font-bold text-foreground mb-8 leading-tight tracking-tight'>
             Discover When Even <br /> You Want To Go
           </h2>
           <p className='text-muted-foreground mb-8 max-w-xl'>
@@ -44,7 +44,7 @@ export default function DetailSection({ primaryImage, secondaryImage }) {
                 <PlaneTakeoff className='w-6 h-6' />
               </div>
               <div>
-                <h4 className='font-semibold text-lg'>Best Travel Agency</h4>
+                <h4 className='font-heading font-semibold text-lg tracking-tight'>Best Travel Agency</h4>
                 <p className='text-muted-foreground text-sm'>
                   Plan your dream destination easily and confidently with our
                   expert team.
@@ -57,7 +57,7 @@ export default function DetailSection({ primaryImage, secondaryImage }) {
                 <ShieldCheck className='w-6 h-6' />
               </div>
               <div>
-                <h4 className='font-semibold text-lg'>
+                <h4 className='font-heading font-semibold text-lg tracking-tight'>
                   Secure Journey With Us
                 </h4>
                 <p className='text-muted-foreground text-sm'>

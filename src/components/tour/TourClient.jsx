@@ -332,7 +332,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
           <div className='absolute inset-0 hero-bottom-fade'></div>
 
           <div className='relative z-10 container mx-auto px-4 h-full flex flex-col justify-center text-center text-white'>
-            <h1 className='text-4xl md:text-5xl font-bold'>
+            <h1 className='font-heading text-4xl md:text-5xl font-bold italic tracking-wide drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)]'>
               Discover Your Next Adventure
             </h1>
             <p className='text-base md:text-lg mt-4'>
@@ -350,7 +350,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
               <div className='sticky top-4 bg-card border rounded-xl shadow-sm overflow-hidden flex flex-col' style={{ maxHeight: 'calc(100vh - 2rem)' }}>
                 {/* Header */}
                 <div className='flex justify-between items-center px-5 py-4 border-b bg-muted/40 shrink-0'>
-                  <h3 className='font-semibold text-base'>Filter Tours</h3>
+                  <h3 className='font-heading font-semibold text-base tracking-tight'>Filter Tours</h3>
                   <button
                     onClick={resetFilters}
                     className='text-xs text-primary hover:underline font-medium'>
@@ -386,7 +386,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
                       align='end'
                       className='w-72 max-h-[70vh] overflow-y-auto p-0'>
                       <div className='flex justify-between items-center px-4 py-3 border-b bg-muted/40 sticky top-0'>
-                        <h3 className='font-semibold text-sm'>Filter Tours</h3>
+                        <h3 className='font-heading font-semibold text-sm tracking-tight'>Filter Tours</h3>
                         <button onClick={resetFilters} className='text-xs text-primary hover:underline font-medium'>
                           Reset all
                         </button>

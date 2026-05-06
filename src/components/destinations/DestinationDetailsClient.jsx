@@ -61,7 +61,7 @@ export default function DestinationDetailsClient({ destination }) {
             transition={{ duration: 0.8 }}
             className="max-w-4xl"
           >
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
+            <h1 className="font-heading text-5xl md:text-7xl font-bold text-white mb-6 italic tracking-wide drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)]">
               {destination.title}
             </h1>
             <p className="text-xl md:text-2xl text-white/90 mb-8">
@@ -103,7 +103,7 @@ export default function DestinationDetailsClient({ destination }) {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-4xl font-bold mb-6">{destination.title}</h2>
+              <h2 className="font-heading text-4xl font-bold mb-6 tracking-tight">{destination.title}</h2>
               <p className="text-lg text-muted-foreground leading-relaxed mb-8">
                 {destination.description}
               </p>
@@ -178,7 +178,7 @@ export default function DestinationDetailsClient({ destination }) {
               transition={{ duration: 0.6 }}
               className="mb-16"
             >
-              <h3 className="text-3xl font-bold mb-8">Experience Highlights</h3>
+              <h3 className="font-heading text-3xl font-bold mb-8 tracking-tight">Experience Highlights</h3>
               <p className="text-lg text-foreground leading-relaxed">
                 {destination.highlight?.brief}
               </p>
@@ -212,7 +212,7 @@ export default function DestinationDetailsClient({ destination }) {
                 transition={{ duration: 0.6 }}
                 className="mb-16"
               >
-                <h3 className="text-3xl font-bold mb-8">About {destination.title}</h3>
+                <h3 className="font-heading text-3xl font-bold mb-8 tracking-tight">About {destination.title}</h3>
                 <div className="space-y-6">
                   {longDescriptionParagraphs.map((paragraph, index) => (
                     <p
@@ -235,7 +235,7 @@ export default function DestinationDetailsClient({ destination }) {
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between mb-10">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold">
+                <h2 className="font-heading text-3xl md:text-4xl font-bold italic tracking-wide">
                   Tours in {destination.title}
                 </h2>
                 <p className="text-muted-foreground mt-2">
@@ -267,7 +267,7 @@ export default function DestinationDetailsClient({ destination }) {
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between mb-10">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold">
+                <h2 className="font-heading text-3xl md:text-4xl font-bold italic tracking-wide">
                   Stories from {destination.title}
                 </h2>
                 <p className="text-muted-foreground mt-2">

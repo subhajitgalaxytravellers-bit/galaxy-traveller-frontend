@@ -32,7 +32,7 @@ export default function PolicyContent({ sections }) {
             transition={{ duration: 0.8 }}
             className="max-w-4xl"
           >
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
+            <h1 className="font-heading text-5xl md:text-7xl font-bold text-white mb-6 italic tracking-wide drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)]">
               Privacy Policy
             </h1>
             <p className="text-xl text-white/90 mb-4">
@@ -74,7 +74,7 @@ export default function PolicyContent({ sections }) {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="mb-10"
               >
-                <h2 className="font-display text-2xl font-bold text-foreground mb-4">
+                <h2 className="font-heading text-2xl font-bold text-foreground mb-4 tracking-tight">
                   {section.title}
                 </h2>
 

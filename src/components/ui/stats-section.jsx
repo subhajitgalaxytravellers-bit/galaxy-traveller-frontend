@@ -29,7 +29,7 @@ export default function StatsSection({ stats }) {
                 <div className="mb-4 p-4 bg-primary/10 rounded-full text-primary group-hover:scale-110 transition-transform duration-300">
                   <Icon className="w-8 h-8" />
                 </div>
-                <h3 className="text-4xl md:text-5xl font-extrabold text-primary mb-2 tracking-tight">
+                <h3 className="font-heading text-4xl md:text-5xl font-extrabold text-primary mb-2 tracking-tight">
                   {item.value}
                 </h3>
                 <p className="text-muted-foreground font-medium text-lg text-center">

@@ -59,7 +59,7 @@ export default function TourHero({
 
           {/* Title */}
           <h1
-            className='font-heading font-bold leading-tight
+            className='font-heading font-bold leading-tight italic tracking-wide
                           text-2xl sm:text-4xl md:text-5xl lg:text-6xl'>
             {title}
           </h1>

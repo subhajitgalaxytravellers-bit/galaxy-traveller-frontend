@@ -32,7 +32,7 @@ export default function TourReviews({ reviews, overallRating, totalReviews }) {
   return (
     <div className="space-y-6 ">
       <div className="flex items-center justify-between  ">
-        <h2 className="text-2xl font-semibold w-full  lg:mt-6">
+        <h2 className="font-heading text-2xl font-semibold w-full lg:mt-6 tracking-tight">
           Customer Reviews
         </h2>
         <div className="flex lg:justify-end items-center max-md:items-end max-md:flex-col max-md:gap-0 gap-2 w-full">
@@ -65,7 +65,7 @@ export default function TourReviews({ reviews, overallRating, totalReviews }) {
                   <div className="flex items-center justify-between">
                     <div>
                       <h4
-                        className="font-semibold"
+                        className="font-heading font-semibold tracking-tight"
                         data-testid={`reviewer-name-${review.id}`}
                       >
                         {review.name}

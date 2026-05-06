@@ -141,7 +141,7 @@ export default function DestinationsClient({ continents }) {
       <section className='relative h-[70vh] min-h-[420px] md:h-[70vh] md:min-h-[420px] flex items-center justify-center overflow-hidden'>
         <div className='absolute inset-0 bg-linear-to-br from-primary/20 via-background to-accent/20' />
         <div className='relative z-20 text-center px-4'>
-          <h1 className='text-3xl md:text-5xl font-bold text-white mb-4'>
+          <h1 className='font-heading text-3xl md:text-5xl font-bold text-white mb-4 italic tracking-wide drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)]'>
             Feel the Adventure of a Lifetime
           </h1>
           <p className='text-base md:text-lg text-gray-300 max-w-2xl mx-auto'>
@@ -304,7 +304,7 @@ export default function DestinationsClient({ continents }) {
                                   </span>
                                 </div>
 
-                                <h3 className='text-2xl font-bold mb-2'>
+                                <h3 className='font-heading text-2xl font-bold mb-2 tracking-tight'>
                                   {destination.title}
                                 </h3>
 
@@ -320,7 +320,7 @@ export default function DestinationsClient({ continents }) {
 
                               {/* Hover Details */}
                               <div className='absolute inset-0 bg-blur backdrop-blur-lg translate-y-full group-hover:translate-y-0 transition-transform duration-300 p-6 flex flex-col justify-center'>
-                                <h3 className='text-2xl font-bold text-white mb-4'>
+                                <h3 className='font-heading text-2xl font-bold text-white mb-4 tracking-tight'>
                                   {destination.title}
                                 </h3>
 

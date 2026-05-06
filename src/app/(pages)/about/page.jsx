@@ -120,7 +120,7 @@ export default async function AboutPage() {
         </div>
 
         <div className='relative z-10 text-center text-white px-4 animate-fade-in'>
-          <h1 className='text-3xl md:text-5xl mt-8 font-bold mb-4 md:mb-6'>
+          <h1 className='font-heading text-3xl md:text-5xl mt-8 font-bold mb-4 md:mb-6 italic tracking-wide drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)]'>
             About GalaxyTravel
           </h1>
           <p className='text-sm sm:text-lg md:text-xl max-w-3xl mx-auto mb-6 md:mb-8 opacity-95 px-2'>
@@ -159,7 +159,7 @@ export default async function AboutPage() {
               <div className='bg-primary/10 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center mb-5 md:mb-6'>
                 <Target className='w-7 h-7 md:w-8 md:h-8 text-primary' />
               </div>
-              <h2 className='text-2xl md:text-3xl font-bold mb-3 md:mb-4'>
+              <h2 className='font-heading text-2xl md:text-3xl font-bold mb-3 md:mb-4 tracking-tight'>
                 Our Mission
               </h2>
               <p className='text-muted-foreground text-base md:text-lg leading-relaxed'>
@@ -173,7 +173,7 @@ export default async function AboutPage() {
               <div className='bg-primary/10 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center mb-5 md:mb-6'>
                 <Eye className='w-7 h-7 md:w-8 md:h-8 text-primary' />
               </div>
-              <h2 className='text-2xl md:text-3xl font-bold mb-3 md:mb-4'>
+              <h2 className='font-heading text-2xl md:text-3xl font-bold mb-3 md:mb-4 tracking-tight'>
                 Our Vision
               </h2>
               <p className='text-muted-foreground text-base md:text-lg leading-relaxed'>
@@ -193,7 +193,7 @@ export default async function AboutPage() {
         <div className='container mx-auto'>
           <div className='grid md:grid-cols-2 gap-10 md:gap-12 items-center'>
             <div className='space-y-6'>
-              <h2 className='text-3xl md:text-4xl font-bold'>Our Story</h2>
+              <h2 className='font-heading text-3xl md:text-4xl font-bold tracking-tight italic'>Our Story</h2>
               <p className='text-muted-foreground text-base md:text-lg leading-relaxed'>
                 GalaxyTravel was born from a simple idea: everyone deserves to
                 experience the wonders of our world. What started as a small
@@ -227,7 +227,7 @@ export default async function AboutPage() {
       <section className='py-20 px-4 bg-muted/30'>
         <div className='container mx-auto'>
           <div className='text-center mb-16'>
-            <h2 className='text-4xl font-bold mb-4'>Our Values</h2>
+            <h2 className='font-heading text-4xl font-bold mb-4 italic tracking-wide'>Our Values</h2>
             <p className='text-muted-foreground text-lg max-w-2xl mx-auto'>
               These principles guide everything we do, from planning your trip
               to supporting local communities
@@ -243,7 +243,7 @@ export default async function AboutPage() {
                   <div className='bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4'>
                     <Icon className='w-8 h-8 text-primary' />
                   </div>
-                  <h3 className='text-xl font-semibold mb-3'>{value.title}</h3>
+                  <h3 className='font-heading text-xl font-semibold mb-3 tracking-tight'>{value.title}</h3>
                   <p className='text-muted-foreground'>{value.description}</p>
                 </Card>
               );

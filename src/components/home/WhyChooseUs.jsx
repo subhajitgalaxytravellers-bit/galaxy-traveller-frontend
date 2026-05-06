@@ -35,7 +35,7 @@ const WhyChooseUs = () => {
           <p className="text-primary font-semibold mb-2 uppercase tracking-wider">
             Why Choose Us
           </p>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="font-heading text-4xl md:text-5xl font-bold mb-4 italic tracking-wide">
             Your Perfect Travel Partner
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -54,7 +54,7 @@ const WhyChooseUs = () => {
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
                   <feature.icon className="w-8 h-8 text-primary group-hover:text-primary-foreground transition-colors" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
+                <h3 className="font-heading text-xl font-bold mb-3 tracking-tight">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
               </CardContent>
             </Card>

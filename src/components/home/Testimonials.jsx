@@ -71,7 +71,7 @@ const Testimonials = ({ reviews }) => {
           <p className='text-primary font-semibold mb-2 uppercase tracking-wider'>
             Testimonials
           </p>
-          <h2 className='text-4xl md:text-5xl font-bold mb-4'>
+          <h2 className='font-heading text-4xl md:text-5xl font-bold mb-4 italic tracking-wide'>
             What Our Travelers Say
           </h2>
           <p className='text-muted-foreground text-lg max-w-2xl mx-auto'>
