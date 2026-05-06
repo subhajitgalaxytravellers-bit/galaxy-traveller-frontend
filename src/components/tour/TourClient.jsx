@@ -56,8 +56,12 @@ function uniqueTours(list = []) {
 export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
   const [items, setItems] = useState(uniqueTours(initialPage?.items || []));
   const [total, setTotal] = useState(initialPage?.total || 0);
+  const [totalPages, setTotalPages] = useState(initialPage?.totalPages || 1);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(initialPage?.page || 1);
+  const [hasMore, setHasMore] = useState(
+    (initialPage?.page || 1) < (initialPage?.totalPages || 1),
+  );
 
   // Filters
   const [priceRange, setPriceRange] = useState([0, PRICE_MAX]);
@@ -115,22 +119,33 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
       loadingRef.current = true;
       setPage(1);
 
-      const data = await getSearchTours({
-        page: 1,
-        limit: initialLimit,
-        q: debouncedSearch,
-        minPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
-        maxPrice: priceRange[1] < PRICE_MAX ? priceRange[1] : undefined,
-        duration: durations,
-        minRating: ratings,
-        tourType: tourTypes,
-      });
+      try {
+        const data = await getSearchTours({
+          page: 1,
+          limit: initialLimit,
+          q: debouncedSearch,
+          minPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
+          maxPrice: priceRange[1] < PRICE_MAX ? priceRange[1] : undefined,
+          duration: durations,
+          minRating: ratings,
+          tourType: tourTypes,
+        });
 
-      if (cancelled) return;
-      setItems(uniqueTours(data?.items || []));
-      setTotal(data?.total || 0);
-      setLoading(false);
-      loadingRef.current = false;
+        if (cancelled) return;
+        const freshItems = uniqueTours(data?.items || []);
+        const nextPage = data?.page || 1;
+        const nextTotalPages = data?.totalPages || 1;
+
+        setItems(freshItems);
+        setTotal(data?.total || 0);
+        setPage(nextPage);
+        setTotalPages(nextTotalPages);
+        setHasMore(nextPage < nextTotalPages && (data?.items || []).length > 0);
+      } finally {
+        if (cancelled) return;
+        setLoading(false);
+        loadingRef.current = false;
+      }
     };
 
     doFetch();
@@ -142,29 +157,38 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
   // LOAD MORE (APPEND next page)
   // ---------------------------
   const loadMore = useCallback(async () => {
-    if (loadingRef.current || items.length >= total) return;
+    if (loadingRef.current || !hasMore) return;
     const nextPage = page + 1;
 
     loadingRef.current = true;
     setLoading(true);
 
-    const data = await getSearchTours({
-      page: nextPage,
-      limit: initialLimit,
-      q: debouncedSearch,
-      minPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
-      maxPrice: priceRange[1] < PRICE_MAX ? priceRange[1] : undefined,
-      duration: durations,
-      minRating: ratings,
-      tourType: tourTypes,
-    });
+    try {
+      const data = await getSearchTours({
+        page: nextPage,
+        limit: initialLimit,
+        q: debouncedSearch,
+        minPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
+        maxPrice: priceRange[1] < PRICE_MAX ? priceRange[1] : undefined,
+        duration: durations,
+        minRating: ratings,
+        tourType: tourTypes,
+      });
 
-    setItems((prev) => uniqueTours([...(prev || []), ...((data?.items || []))]));
-    setTotal(data?.total || 0);
-    setPage(nextPage);
-    setLoading(false);
-    loadingRef.current = false;
-  }, [page, items.length, total, initialLimit, debouncedSearch, priceRange, durations, ratings, tourTypes]);
+      const fetchedPage = data?.page || nextPage;
+      const fetchedTotalPages = data?.totalPages || totalPages;
+      const incoming = data?.items || [];
+
+      setItems((prev) => uniqueTours([...(prev || []), ...incoming]));
+      setTotal(data?.total || 0);
+      setPage(fetchedPage);
+      setTotalPages(fetchedTotalPages);
+      setHasMore(fetchedPage < fetchedTotalPages && incoming.length > 0);
+    } finally {
+      setLoading(false);
+      loadingRef.current = false;
+    }
+  }, [hasMore, page, initialLimit, debouncedSearch, priceRange, durations, ratings, tourTypes, totalPages]);
 
   // ---------------------------
   // INFINITE SCROLL WATCHER
@@ -174,7 +198,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && items.length < total && !loadingRef.current) {
+        if (entries[0].isIntersecting && hasMore && !loadingRef.current) {
           loadMore();
         }
       },
@@ -183,7 +207,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
 
     if (observerRef.current) observer.observe(observerRef.current);
     return () => observer.disconnect();
-  }, [hydrated, items.length, total, loadMore]);
+  }, [hydrated, hasMore, loadMore]);
 
   // ---------------------------
   // RESET FILTERS
@@ -400,7 +424,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
               </div>
 
               {/* Infinite Scroll Trigger */}
-              {items.length < total && (
+              {hasMore && (
                 <div
                   ref={observerRef}
                   className='h-16 flex items-center justify-center text-muted-foreground'>

@@ -10,9 +10,6 @@ export default function OverviewCard({
 }) {
   const numericPrice = Number(price);
   const hasValidPrice = Number.isFinite(numericPrice) && numericPrice > 0;
-  const priceDisplay = hasValidPrice
-    ? `₹${numericPrice.toLocaleString("en-IN")}`
-    : "_";
 
   const overviewItems = [
     {
@@ -20,11 +17,15 @@ export default function OverviewCard({
       label: "Duration",
       value: duration,
     },
-    {
-      icon: IndianRupee,
-      label: "Price per person",
-      value: priceDisplay,
-    },
+    ...(hasValidPrice
+      ? [
+          {
+            icon: IndianRupee,
+            label: "Price per person",
+            value: `Rs. ${numericPrice.toLocaleString("en-IN")}`,
+          },
+        ]
+      : []),
     {
       icon: User,
       label: "Suggested Ages",
@@ -36,6 +37,7 @@ export default function OverviewCard({
       value: maxGroupSize,
     },
   ];
+
   return (
     <Card className="w-full gap-2 p-0 py-4 h-fit mb-4 max-w-4xl border-border shadow-xs bg-card">
       <CardHeader>

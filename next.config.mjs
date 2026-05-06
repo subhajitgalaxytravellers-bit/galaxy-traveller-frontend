@@ -38,6 +38,12 @@ const remotePatterns = [
   { protocol: "https", hostname: "images.unsplash.com",  pathname: "/**" },
   { protocol: "https", hostname: "plus.unsplash.com",    pathname: "/**" },
   { protocol: "https", hostname: "images.pexels.com",    pathname: "/**" },
+  { protocol: "https", hostname: "upload.wikimedia.org", pathname: "/**" },
+  { protocol: "https", hostname: "commons.wikimedia.org", pathname: "/**" },
+  { protocol: "https", hostname: "img.freepik.com",      pathname: "/**" },
+  { protocol: "https", hostname: "b2bpic.net",           pathname: "/**" },
+  { protocol: "https", hostname: "img.b2bpic.net",       pathname: "/**" },
+  { protocol: "https", hostname: "*.b2bpic.net",         pathname: "/**" },
 ];
 
 const nextConfig = {

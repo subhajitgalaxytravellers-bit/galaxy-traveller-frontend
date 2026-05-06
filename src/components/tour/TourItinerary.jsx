@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { ChevronDown, ChevronUp, Clock, Info } from "lucide-react";
@@ -49,7 +49,7 @@ export default function TourItinerary({ itinerary }) {
 
   return (
     <div className="space-y-6 mb-6">
-      <h2 className="text-xl lg:text-2xl font-extrabold text-slate-800 mb-6">Detailed Itinerary</h2>
+      <h2 className="text-lg lg:text-xl font-semibold text-slate-800 mb-6">Detailed Itinerary</h2>
 
       <div className="space-y-4">
         {normalizedItinerary.map((day, idx) => {
@@ -72,7 +72,7 @@ export default function TourItinerary({ itinerary }) {
                   {day.day}
                 </div>
                 <div>
-                  <h3 className="text-lg lg:text-xl font-semibold text-slate-800 tracking-tight">
+                  <h3 className="text-base lg:text-lg font-medium text-slate-800 tracking-tight">
                     Day {idx + 1}
                   </h3>
                   <p className="text-[13px] lg:text-[13px] text-slate-500 mt-0.5 font-medium select-none">
@@ -117,7 +117,7 @@ export default function TourItinerary({ itinerary }) {
                       {/* Content */}
                       <div className="flex-1 mt-0">
                         {cleanTitle && (
-                          <h4 className="text-[16px] lg:text-[17px] font-semibold text-slate-800 mb-1">
+                          <h4 className="text-[15px] lg:text-[16px] font-medium text-slate-800 mb-1">
                             {cleanTitle}
                           </h4>
                         )}
