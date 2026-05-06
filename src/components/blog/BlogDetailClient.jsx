@@ -98,7 +98,7 @@ export default function BlogDetailClient({ post }) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 z-10" />
         </div>
         <div className="relative z-20 container mx-auto px-4 text-center text-white max-w-4xl">
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-3 break-words [text-wrap:balance] drop-shadow-[0_2px_16px_rgba(0,0,0,0.8)]">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-3 break-words [text-wrap:balance] drop-shadow-[0_2px_16px_rgba(0,0,0,0.9)] italic tracking-wide">
             {heroTitle}
           </h2>
           {heroDescription && (
@@ -114,7 +114,7 @@ export default function BlogDetailClient({ post }) {
       <article className="bg-background py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold text-foreground mb-6 leading-tight tracking-tight [text-wrap:balance]">
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold text-foreground mb-6 leading-tight [text-wrap:balance] tracking-tight">
               {displayTitle}
             </h1>
             {displaySummary && (
@@ -201,7 +201,7 @@ export default function BlogDetailClient({ post }) {
                   return (
                     <h3
                       key={index}
-                      className="font-heading text-2xl md:text-3xl font-bold mt-12 mb-6 text-foreground tracking-tight"
+                      className="font-heading text-xl md:text-2xl font-semibold italic mt-10 mb-4 text-foreground/85 tracking-normal border-l-[3px] border-primary/40 pl-4"
                     >
                       {paragraph.replace(/^###\s+/, "")}
                     </h3>
@@ -210,7 +210,7 @@ export default function BlogDetailClient({ post }) {
                   return (
                     <h2
                       key={index}
-                      className="font-heading text-2xl md:text-3xl font-bold mt-14 mb-5 text-foreground tracking-tight"
+                      className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold mt-14 mb-5 text-foreground tracking-tight relative after:absolute after:bottom-0 after:left-0 after:w-12 after:h-[3px] after:bg-primary/60 pb-3"
                     >
                       {paragraph.replace(/^##\s+/, "")}
                     </h2>
@@ -219,7 +219,7 @@ export default function BlogDetailClient({ post }) {
                   return (
                     <h1
                       key={index}
-                      className="font-heading text-3xl md:text-4xl font-extrabold mt-16 mb-6 text-foreground tracking-tight"
+                      className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mt-16 mb-6 text-foreground tracking-tight italic"
                     >
                       {paragraph.replace(/^#\s+/, "")}
                     </h1>
@@ -248,9 +248,9 @@ export default function BlogDetailClient({ post }) {
                   return (
                     <blockquote
                       key={index}
-                      className="relative border-l-4 border-primary pl-8 py-6 my-12 italic text-xl md:text-2xl text-foreground bg-primary/5 rounded-r-2xl font-serif leading-relaxed"
+                      className="relative border-l-4 border-primary pl-8 py-6 my-12 text-xl md:text-2xl text-foreground bg-primary/5 rounded-r-2xl leading-relaxed font-display italic"
                     >
-                      <span className="absolute -top-4 -left-6 text-6xl text-primary/20 font-serif font-black">&quot;</span>
+                      <span className="absolute -top-4 -left-5 text-6xl text-primary/25 font-display font-black leading-none">&ldquo;</span>
                       {paragraph.replace(/^"|"$/g, "")}
                     </blockquote>
                   );
@@ -325,7 +325,7 @@ export default function BlogDetailClient({ post }) {
       {relatedDestinations.length > 0 && (
         <section className="bg-muted/30 py-16">
           <div className="container mx-auto px-4">
-            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-10 text-center">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-10 text-center italic tracking-wide">
               Destinations in this story
             </h2>
 
@@ -350,7 +350,7 @@ export default function BlogDetailClient({ post }) {
       {relatedTours.length > 0 && (
         <section className="bg-background py-16">
           <div className="container mx-auto px-4">
-            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-10 text-center">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-10 text-center italic tracking-wide">
               Tours you might like
             </h2>
 
@@ -375,7 +375,7 @@ export default function BlogDetailClient({ post }) {
       {relatedPosts.length > 0 && (
         <section className="bg-secondary/30 py-16">
           <div className="container mx-auto px-4">
-            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-10 text-center">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-10 text-center italic tracking-wide">
               Related Stories
             </h2>
 

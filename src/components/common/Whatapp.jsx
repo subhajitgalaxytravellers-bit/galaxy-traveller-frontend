@@ -2,6 +2,9 @@
 
 import Image from "next/image";
 
+const buttonClassName =
+  "fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center hover:bg-[#1ebe5d] transition shadow-xl";
+
 export default function WhatsAppButton({ phone }) {
   if (!phone) return null; // no error—just hide CTA
 
@@ -13,14 +16,7 @@ export default function WhatsAppButton({ phone }) {
       href={chatUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="
-        fixed bottom-6 right-6 z-50 
-        w-12 h-12 rounded-full
-        bg-[#25D366]
-        flex items-center justify-center
-        hover:bg-[#1ebe5d] transition
-        shadow-xl
-      "
+      className={buttonClassName}
     >
       <Image
         src="/assets/whatapp.jpg"

@@ -4,7 +4,10 @@ const config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ["Poppins", "sans-serif"],
+        sans:    ["var(--font-sans)", "Poppins", "sans-serif"],
+        heading: ["var(--font-heading)", "Playfair Display", "Georgia", "serif"],
+        display: ["var(--font-display)", "DM Serif Display", "Georgia", "serif"],
+        mono:    ["var(--font-geist-mono)", "monospace"],
       },
     },
   },

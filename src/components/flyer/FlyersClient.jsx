@@ -81,8 +81,7 @@ export default function FlyersClient({ initialData, limit }) {
       <section className='container mx-auto px-4 py-8'>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6'>
           {flyers?.map((flyer, index) => {
-            console.log(flyer);
-            return <FlyerCard key={index} flyer={flyer} />;
+            return <FlyerCard key={flyer?._id || flyer?.slug || index} flyer={flyer} />;
           })}
         </div>
 

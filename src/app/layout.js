@@ -1,4 +1,4 @@
-import { Poppins, Geist_Mono } from 'next/font/google';
+import { Poppins, Geist_Mono, Playfair_Display, DM_Serif_Display } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -33,8 +33,24 @@ export const preferredRegion = ['bom1'];
 const poppins = Poppins({
   subsets: ['latin'],
   display: 'swap',
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-geist-sans', // reuse existing CSS var for sans
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-sans',
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800'],
+  style: ['normal', 'italic'],
+  variable: '--font-heading',
+});
+
+const dmSerif = DM_Serif_Display({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
 });
 
 const geistMono = Geist_Mono({
@@ -117,7 +133,8 @@ export default async function RootLayout({ children }) {
         )}
       </head>
       <body
-        className={`${poppins.className} ${poppins.variable} ${geistMono.variable}`}>
+        suppressHydrationWarning
+        className={`${poppins.className} ${poppins.variable} ${playfair.variable} ${dmSerif.variable} ${geistMono.variable}`}>
         {gtmId && (
           <>
             <noscript>
