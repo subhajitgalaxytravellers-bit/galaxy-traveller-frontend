@@ -1,9 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { TourCard, TourCardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Clock3, Users, Star, MapPin, ArrowUpRight } from 'lucide-react';
+import { Clock3, Users, Star, MapPin, ArrowUpRight, Edit3 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import SafeImage from '@/components/common/SafeImage';
@@ -71,82 +71,74 @@ export default function FeaturedTours({ tours }) {
           initial='hidden'
           whileInView='visible'
           viewport={{ once: true, amount: 0.2 }}
-          className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-          {tours?.map((tour, idx) => (
+          className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
+          {tours?.slice(0, 8).map((tour, idx) => (
             <motion.div key={tour.id || idx} variants={cardVariants}>
               {(() => {
                 const rawPrice = tour.price || tour.details?.pricePerPerson;
                 const priceAvailable = hasPrice(rawPrice);
                 return (
-              <Card className='group h-full p-0 overflow-hidden rounded-3xl border border-border/60 bg-card shadow-sm hover:-translate-y-1.5 hover:shadow-2xl transition-all duration-300'>
-                <CardContent className='p-0'>
-                  <div className='relative overflow-hidden aspect-[4/3]'>
-                    <SafeImage
-                      src={tour.heroImg || '/assets/default-tour.jpg'}
-                      seed={tour.slug || tour.title}
-                      alt={tour.title}
-                      fill
-                      sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                      className='object-cover transition-transform duration-700 group-hover:scale-110'
-                    />
-                    <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent' />
+              <TourCard className='aspect-[3/4] rounded-2xl'>
+                <SafeImage
+                  src={tour.heroImg || '/assets/default-tour.jpg'}
+                  seed={tour.slug || tour.title}
+                  alt={tour.title}
+                  fill
+                  sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                  className='object-cover transition-transform duration-700 group-hover:scale-110 z-0'
+                />
+                
+                <div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10 pointer-events-none' />
 
-                    <Badge className='absolute right-4 top-4 border border-white/20 bg-black/50 text-white backdrop-blur-md'>
-                      {tour.badge || getTypeLabel(tour.tourType)}
-                    </Badge>
+                <div 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push(`/tour/${tour.slug}`);
+                  }}
+                  className='absolute right-4 top-4 z-20 flex items-center justify-between gap-2 rounded-xl bg-black/40 p-2.5 text-white backdrop-blur-md border border-white/10 cursor-pointer hover:bg-black/60 transition-all duration-300 shadow-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0'>
+                  <Edit3 className="mb-1 h-4 w-4" />
+                  <span className='text-[9px] font-semibold uppercase tracking-wider'>Enquire</span>
+                </div>
 
-                    <div className='absolute left-4 bottom-4 flex items-center gap-1 rounded-full border border-white/30 bg-black/50 px-3 py-1 text-white backdrop-blur-md'>
-                      <Star className='h-3.5 w-3.5 fill-yellow-300 text-yellow-300' />
+                <TourCardContent>
+                  <h3 className='font-heading mb-1 line-clamp-2 text-[24px] font-bold leading-tight tracking-tight text-white drop-shadow-sm'>
+                    {tour.title}
+                  </h3>
+
+                  <div className='mb-2.5 flex items-center gap-1.5 text-xs text-white/90 font-medium drop-shadow-sm'>
+                    <MapPin className='h-3.5 w-3.5 shrink-0 text-white/70' />
+                    <span className='truncate'>{tour.location || tour.place || 'Destination'}</span>
+                  </div>
+
+                  <div className='mb-6 flex items-center gap-3 text-xs font-medium text-white/80 drop-shadow-sm'>
+                    <span className='flex items-center gap-1.5'>
+                      <Clock3 className='h-3.5 w-3.5 text-white/60' />
+                      {tour.duration || tour.details?.duration || 'Custom'}
+                    </span>
+                    <span className='text-white/30'>|</span>
+                    <span className='flex items-center gap-1.5'>
+                      <Users className='h-3.5 w-3.5 text-white/60' />
+                      {tour.groupSize || tour.details?.groupSize || 'Any'} Persons
+                    </span>
+                  </div>
+
+                  <div className='flex items-center justify-between mt-auto'>
+                    <div className='flex items-center gap-1.5 rounded-full border border-white/20 bg-black/30 px-3 py-1.5 text-white backdrop-blur-md'>
+                      <Star className='h-3 w-3 fill-yellow-400 text-yellow-400' />
                       <span className='text-xs font-medium'>
-                        {tour.rating || 'New'} {tour.reviews ? `(${tour.reviews})` : ''}
+                        {tour.rating || 'New'}
                       </span>
                     </div>
+
+                    <Button
+                      onClick={() => router.push(`/tour/${tour.slug}`)}
+                      className='rounded-full px-5 h-9 bg-[#3b6f6f] hover:bg-[#2c5252] text-white border-none shadow-md text-xs font-medium tracking-wide transition-colors'>
+                      Explore
+                      <ArrowUpRight className='ml-1.5 h-3.5 w-3.5' />
+                    </Button>
                   </div>
-
-                  <div className='p-6'>
-                    <div className='mb-3 flex items-center gap-2 text-sm text-muted-foreground'>
-                      <MapPin className='h-4 w-4 text-primary' />
-                      <span className='truncate'>{tour.location || tour.place || 'Destination'}</span>
-                    </div>
-
-                    <h3 className='font-heading mb-4 line-clamp-2 text-xl font-bold leading-tight tracking-tight transition-colors group-hover:text-primary'>
-                      {tour.title}
-                    </h3>
-
-                    <div className='mb-6 flex items-center gap-3 text-sm'>
-                      <div className='rounded-full bg-muted px-3 py-1.5 text-muted-foreground inline-flex items-center gap-2'>
-                        <Clock3 className='h-4 w-4 text-primary' />
-                        <span>{tour.duration || tour.details?.duration || 'Custom'}</span>
-                      </div>
-                      <div className='rounded-full bg-muted px-3 py-1.5 text-muted-foreground inline-flex items-center gap-2'>
-                        <Users className='h-4 w-4 text-primary' />
-                        <span>{tour.groupSize || tour.details?.groupSize || 'Any'} People</span>
-                      </div>
-                    </div>
-
-                    <div className='flex items-center justify-between'>
-                      {priceAvailable ? (
-                        <div>
-                          <p className='text-xs uppercase tracking-wide text-muted-foreground'>Starting from</p>
-                          <p className='text-2xl font-bold text-primary'>
-                            {`Rs. ${Number(rawPrice).toLocaleString()}`}
-                          </p>
-                        </div>
-                      ) : (
-                        <div />
-                      )}
-
-                      <Button
-                        onClick={() => router.push(`/tour/${tour.slug}`)}
-                        variant='default'
-                        className='rounded-full px-5'>
-                        Explore
-                        <ArrowUpRight className='ml-2 h-4 w-4' />
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                </TourCardContent>
+              </TourCard>
                 );
               })()}
             </motion.div>

@@ -91,7 +91,7 @@ export default function PopularDestinations({ destinations }) {
           initial='hidden'
           whileInView='visible'
           viewport={{ once: true, amount: 0.2 }}
-          className='grid grid-flow-col auto-cols-[minmax(260px,1fr)] overflow-x-auto gap-6 pb-2 snap-x snap-mandatory'>
+          className='grid grid-flow-col auto-cols-[minmax(260px,1fr)] overflow-x-auto gap-6 pb-2 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'>
           {destinations?.map((destination, idx) => (
             <Link
               href={`/destination/${destination.slug}`}

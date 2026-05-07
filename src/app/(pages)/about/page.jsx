@@ -159,7 +159,7 @@ export default async function AboutPage() {
               <div className='bg-primary/10 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center mb-5 md:mb-6'>
                 <Target className='w-7 h-7 md:w-8 md:h-8 text-primary' />
               </div>
-              <h2 className='font-heading text-2xl md:text-3xl font-bold mb-3 md:mb-4 tracking-tight'>
+              <h2 className='font-heading text-3xl md:text-4xl font-bold tracking-tight italic'>
                 Our Mission
               </h2>
               <p className='text-muted-foreground text-base md:text-lg leading-relaxed'>
@@ -173,7 +173,7 @@ export default async function AboutPage() {
               <div className='bg-primary/10 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center mb-5 md:mb-6'>
                 <Eye className='w-7 h-7 md:w-8 md:h-8 text-primary' />
               </div>
-              <h2 className='font-heading text-2xl md:text-3xl font-bold mb-3 md:mb-4 tracking-tight'>
+              <h2 className='font-heading text-3xl md:text-4xl font-bold tracking-tight italic'>
                 Our Vision
               </h2>
               <p className='text-muted-foreground text-base md:text-lg leading-relaxed'>
@@ -214,9 +214,12 @@ export default async function AboutPage() {
             </div>
             <div className='flex justify-center'>
               <ImageCollage
-                img1='/assets/destination-alps.jpg'
-                img2='/assets/hero-mountains.jpg'
-                img3='/assets/hero-blog.jpg'
+                // img1='/assets/destination-alps.jpg'
+                // img2='/assets/hero-mountains.jpg'
+                // img3='/assets/hero-blog.jpg'
+                img1='/assets/aboutA.jpg'
+                img2='/assets/aboutB.jpg'
+                img3='/assets/aboutC.jpg'
               />
             </div>
           </div>

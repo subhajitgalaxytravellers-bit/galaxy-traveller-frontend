@@ -9,9 +9,10 @@ const ImageCollage = ({ img1, img2, img3 }) => {
         <Image
           src={img1}
           alt="Destination"
-          width={240}
-          height={240}
-          className="h-[15rem]  object-cover aspect-square shadow-lg group-hover:scale-110 transition-transform duration-500"
+          width={600}
+          height={600}
+          quality={90}
+          className="h-[15rem] w-auto object-cover aspect-square shadow-lg group-hover:scale-110 transition-transform duration-500"
         />
       </div>
       <div className="flex flex-col gap-2 ">
@@ -20,8 +21,9 @@ const ImageCollage = ({ img1, img2, img3 }) => {
           <Image
             src={img2}
             alt="Adventure"
-            width={320}
-            height={320}
+            width={800}
+            height={800}
+            quality={90}
             className="h-[20rem] w-[25rem] aspect-square object-cover rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-500"
           />
         </div>
@@ -31,9 +33,10 @@ const ImageCollage = ({ img1, img2, img3 }) => {
           <Image
             src={img3}
             alt="Relaxation"
-            width={160}
-            height={160}
-            className="h-[10rem]  aspect-square object-cover rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-500"
+            width={400}
+            height={400}
+            quality={90}
+            className="h-[10rem] w-[10rem] aspect-square object-cover rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-500"
           />
         </div>
       </div>

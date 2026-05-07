@@ -347,7 +347,7 @@ export default function ToursClient({ initialPage, limit: initialLimit = 6 }) {
           <div className='container mx-auto px-4 flex flex-col lg:flex-row gap-8'>
             {/* SIDEBAR */}
             <aside className='w-full lg:w-72 shrink-0 hidden lg:block'>
-              <div className='sticky top-4 bg-card border rounded-xl shadow-sm overflow-hidden flex flex-col' style={{ maxHeight: 'calc(100vh - 2rem)' }}>
+              <div className='sticky top-24 bg-card border rounded-xl shadow-sm overflow-hidden flex flex-col' style={{ maxHeight: 'calc(100vh - 7rem)' }}>
                 {/* Header */}
                 <div className='flex justify-between items-center px-5 py-4 border-b bg-muted/40 shrink-0'>
                   <h3 className='font-heading font-semibold text-base tracking-tight'>Filter Tours</h3>

@@ -69,7 +69,7 @@ const BlogSection = ({ blogPosts = blogPost }) => {
 
         {/* Blog Grid */}
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-          {blogPosts.map((post, index) => {
+          {blogPosts.slice(0, 6).map((post, index) => {
             console.log(post.createdAt);
             const { day, month, year } = formatDate(post?.createdAt);
             return (
@@ -92,11 +92,11 @@ const BlogSection = ({ blogPosts = blogPost }) => {
                           className='object-cover group-hover:scale-110 transition-transform duration-500'
                           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
                         />
-                        {post.categories?.length > 0 && (
+                        {/* {post.categories?.length > 0 && (
                           <Badge className='absolute top-4 left-4 bg-primary text-primary-foreground'>
                             {post.categories[0].tag}
                           </Badge>
-                        )}
+                        )} */}
                       </div>
 
                       {/* Content */}

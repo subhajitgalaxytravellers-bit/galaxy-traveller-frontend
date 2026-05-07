@@ -90,6 +90,36 @@ function CardFooter({
   );
 }
 
+function TourCard({
+  className,
+  ...props
+}) {
+  return (
+    <div
+      data-slot="tour-card"
+      className={cn(
+        "group relative flex flex-col overflow-hidden rounded-[24px] bg-muted/20 text-card-foreground shadow-md transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl h-full w-full",
+        className
+      )}
+      {...props} />
+  );
+}
+
+function TourCardContent({
+  className,
+  ...props
+}) {
+  return (
+    <div
+      data-slot="tour-card-content"
+      className={cn(
+        "absolute bottom-0 left-0 right-0 z-20 flex flex-col p-6 text-white transition-all duration-300 group-hover:backdrop-blur-md rounded-b-2xl",
+        className
+      )}
+      {...props} />
+  );
+}
+
 export {
   Card,
   CardHeader,
@@ -98,4 +128,6 @@ export {
   CardAction,
   CardDescription,
   CardContent,
+  TourCard,
+  TourCardContent,
 }
