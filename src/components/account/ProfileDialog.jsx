@@ -168,7 +168,7 @@ export default function ProfileDialog({
     return () => {
       active = false;
     };
-  }, [open, user?._id, user?.name, user?.email, user?.bio, user?.location, user?.profileImg, user?.avatar]);
+  }, [open, user?._id, user?.name, user?.email, user?.bio, user?.location, user?.profileImg, user?.avatar, user?.phone]);
 
   const onChange = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -289,10 +289,10 @@ export default function ProfileDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='sm:max-w-xl border-primary/20 bg-background p-0 overflow-hidden'>
-        <div className='h-24 bg-gradient-to-r from-primary/90 via-primary to-primary/80' />
+      <DialogContent className='sm:max-w-xl border-primary/20 bg-background p-0 max-h-[92vh] overflow-hidden flex flex-col'>
+        <div className='h-24 shrink-0 bg-gradient-to-r from-primary/90 via-primary to-primary/80' />
 
-        <div className='px-6 pb-6 -mt-12'>
+        <div className='px-6 pb-6 -mt-12 overflow-y-auto min-h-0 flex-1'>
           <DialogHeader className='text-left'>
             <div className='flex items-end justify-between gap-4'>
               <div className='relative'>
@@ -327,7 +327,9 @@ export default function ProfileDialog({
               </div>
 
               <div className='text-right'>
-                <DialogTitle className='text-xl font-bold'>Your Profile</DialogTitle>
+                <DialogTitle className='font-heading text-xl font-bold tracking-tight'>
+                  Your Profile
+                </DialogTitle>
                 <DialogDescription className='text-sm'>
                   Manage your account details
                 </DialogDescription>

@@ -90,7 +90,7 @@ export default function EnquiryCard({ tourId, creatorId, tourName }) {
 
   if (submitted) {
     return (
-      <Card className='shadow-lg border border-green-200 bg-green-50'>
+      <Card className='shadow-none border-0 bg-green-50'>
         <CardContent className='pt-6 text-center space-y-3'>
           <div className='text-4xl'>✓</div>
           <p className='text-green-700 font-semibold text-lg'>Enquiry Sent!</p>
@@ -114,11 +114,13 @@ export default function EnquiryCard({ tourId, creatorId, tourName }) {
   }
 
   return (
-    <Card className='shadow-lg'>
+    <Card className='shadow-none border-0'>
       <CardHeader className='pb-3'>
         <div className='flex items-center gap-2'>
           <MessageCircle className='h-5 w-5 text-primary' />
-          <CardTitle className='text-lg'>Enquire About This Tour</CardTitle>
+          <CardTitle className='font-heading text-lg font-semibold tracking-tight'>
+            Enquire About This Tour
+          </CardTitle>
         </div>
         <CardDescription className='text-sm'>
           Fill in your details and we&apos;ll get back to you with more information.

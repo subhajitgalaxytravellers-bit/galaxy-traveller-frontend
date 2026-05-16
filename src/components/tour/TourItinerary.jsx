@@ -49,7 +49,7 @@ export default function TourItinerary({ itinerary }) {
 
   return (
     <div className="space-y-6 mb-6">
-      <h2 className="font-heading text-xl lg:text-2xl font-extrabold text-slate-800 mb-6 tracking-tight">Detailed Itinerary</h2>
+      <h2 className="font-heading text-xl lg:text-2xl font-bold text-slate-800 mb-6 tracking-tight">Detailed Itinerary</h2>
 
       <div className="space-y-4">
         {normalizedItinerary.map((day, idx) => {
@@ -58,8 +58,8 @@ export default function TourItinerary({ itinerary }) {
           return (
           <Card
             key={idx}
-            className={`p-0 border shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)] rounded-2xl overflow-hidden transition-all duration-200 ${
-              isExpanded ? "border-slate-300 ring-4 ring-slate-50" : "border-slate-200 hover:border-slate-300"
+            className={`p-0 border-0 shadow-none rounded-2xl overflow-hidden transition-all duration-200 ${
+              isExpanded ? "bg-white" : "bg-white hover:bg-slate-50/40"
             }`}
           >
             <div
@@ -105,7 +105,7 @@ export default function TourItinerary({ itinerary }) {
                     return (
                     <div
                       key={index}
-                      className="flex gap-4 p-4 lg:p-5 bg-slate-50/50 border border-slate-200 rounded-xl"
+                      className="flex gap-4 p-4 lg:p-5 bg-slate-50/50 rounded-xl"
                     >
                       {/* Icon */}
                       <div className="flex-shrink-0">

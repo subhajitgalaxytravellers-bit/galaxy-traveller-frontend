@@ -129,8 +129,8 @@ const Navbar = () => {
               }}
               className={
                 isScrolled
-                  ? 'text-white'
-                  : 'bg-white text-primary hover:bg-white hover:text-primary'
+                  ? 'font-heading tracking-tight text-white'
+                  : 'font-heading tracking-tight bg-white text-primary hover:bg-white hover:text-primary'
               }
               size='lg'>
               {isLoggedIn ? 'Book Now' : 'Login'}
@@ -197,7 +197,7 @@ const Navbar = () => {
                 }}
                 variant='default'
                 size='lg'
-                className='w-full'>
+                className='w-full font-heading tracking-tight'>
                 {isLoggedIn ? 'Book Now' : 'Login'}
               </Button>
             </div>

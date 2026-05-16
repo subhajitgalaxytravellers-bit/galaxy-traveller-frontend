@@ -103,7 +103,7 @@ export default function BookingAvatar({ isScrolled }) {
           {isLoggedIn && user ? (
             <div className='space-y-3'>
               <div>
-                <p className='text-sm font-semibold text-foreground'>
+                <p className='font-heading text-sm font-semibold tracking-tight text-foreground'>
                   {user.name || 'Traveller'}
                 </p>
                 <p className='text-xs text-muted-foreground'>{user.email}</p>
@@ -116,14 +116,14 @@ export default function BookingAvatar({ isScrolled }) {
                   setProfileOpen(true);
                   setOpen(false);
                 }}>
-                Profile
+                <span className='font-heading tracking-tight'>Profile</span>
               </Button>
               <Link
                 href='/bookings'
                 className='block w-full'
                 onClick={() => setOpen(false)}>
                 <Button className='w-full' size='sm'>
-                  My bookings
+                  <span className='font-heading tracking-tight'>My bookings</span>
                 </Button>
               </Link>
               <Button
@@ -131,7 +131,7 @@ export default function BookingAvatar({ isScrolled }) {
                 className='w-full transition-colors hover:brightness-110'
                 size='sm'
                 onClick={handleLogout}>
-                Logout
+                <span className='font-heading tracking-tight'>Logout</span>
               </Button>
             </div>
           ) : (
@@ -143,7 +143,7 @@ export default function BookingAvatar({ isScrolled }) {
                 className='w-full'
                 size='sm'
                 onClick={() => setAuthOpen(true)}>
-                Login
+                <span className='font-heading tracking-tight'>Login</span>
               </Button>
             </div>
           )}

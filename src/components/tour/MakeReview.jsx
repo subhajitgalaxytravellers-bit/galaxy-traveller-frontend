@@ -254,7 +254,9 @@ export default function MakeReview({ tourIdOrSlug }) {
 
       <Card className='p-0 py-6 mt-4 border border-gray-100 mb-8 w-full mx-auto sm:px-4'>
         <CardHeader className='px-4 sm:px-6'>
-          <CardTitle className='text-lg sm:text-xl'>Write a Review</CardTitle>
+          <CardTitle className='font-heading text-lg sm:text-xl font-semibold tracking-tight'>
+            Write a Review
+          </CardTitle>
           <p className='text-sm text-muted-foreground'>
             Share your experience with other travelers
           </p>

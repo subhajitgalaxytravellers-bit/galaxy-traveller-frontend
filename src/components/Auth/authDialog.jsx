@@ -159,7 +159,7 @@ function AuthDialog({ open, onOpenChange, onAuthSuccess }) {
       }}>
       <DialogContent className='sm:max-w-md'>
         <DialogHeader>
-          <DialogTitle className='text-2xl text-center font-semibold'>
+          <DialogTitle className='font-heading text-2xl text-center font-semibold tracking-tight'>
             {selectedTab === 'login' ? 'Welcome Back' : 'Create Your Account'}
           </DialogTitle>
         </DialogHeader>
@@ -186,8 +186,8 @@ function AuthDialog({ open, onOpenChange, onAuthSuccess }) {
           {/* TABS */}
           <Tabs value={selectedTab} onValueChange={handleTabChange}>
             <TabsList className='grid grid-cols-2 w-full'>
-              <TabsTrigger value='login'>Login</TabsTrigger>
-              <TabsTrigger value='signup'>Sign Up</TabsTrigger>
+              <TabsTrigger value='login' className='font-heading tracking-tight'>Login</TabsTrigger>
+              <TabsTrigger value='signup' className='font-heading tracking-tight'>Sign Up</TabsTrigger>
             </TabsList>
 
             {/* LOGIN */}

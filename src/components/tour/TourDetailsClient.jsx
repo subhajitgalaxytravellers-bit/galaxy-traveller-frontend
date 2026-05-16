@@ -253,7 +253,7 @@ export default function TourPageClient({ tour }) {
 
               {tour.images?.gallery?.length > 0 && (
                 <section id='gallery' className='scroll-mt-28'>
-                  <h2 className='text-2xl font-semibold mb-4 mt-6'>
+                  <h2 className='font-heading text-2xl font-bold mb-4 mt-6 tracking-tight'>
                     Photo Gallery
                   </h2>
                   <ImageGallery images={tour.images.gallery} />

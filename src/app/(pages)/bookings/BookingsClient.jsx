@@ -171,7 +171,14 @@ export default function BookingsPage() {
       const res = await fetch(`${API_BASE}/api/booking/${id}/invoice`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!res.ok) throw new Error('Failed to download invoice');
+      if (!res.ok) {
+        let message = 'Failed to download invoice';
+        try {
+          const data = await res.json();
+          message = data?.message || message;
+        } catch {}
+        throw new Error(message);
+      }
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');

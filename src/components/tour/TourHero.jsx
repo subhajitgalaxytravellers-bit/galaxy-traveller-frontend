@@ -39,23 +39,25 @@ export default function TourHero({
 
       <div className='relative z-20 container mx-auto h-full w-full  flex items-center px-4 sm:px-6 lg:px-10'>
         <div className='max-w-xl md:max-w-2xl text-white space-y-4 max-lg:w-full lg:max-w-[50vw] text-wrap wrap-break-word sm:space-y-6'>
-          {/* Back */}
-          <Link
-            href='/tours'
-            className='inline-flex items-center gap-1 sm:gap-2 text-white/80 hover:text-white transition-colors'>
-            <ArrowLeft className='h-4 w-4 sm:h-5 sm:w-5' />
-            <span className='text-sm sm:text-base'>Back to Tours</span>
-          </Link>
+          <div className='flex items-center gap-2 sm:gap-3 flex-nowrap'>
+            {/* Back */}
+            <Link
+              href='/tours'
+              className='inline-flex items-center gap-1 sm:gap-2 text-white/80 hover:text-white transition-colors'>
+              <ArrowLeft className='h-4 w-4 sm:h-5 sm:w-5' />
+              <span className='text-sm sm:text-base'>Back to Tours</span>
+            </Link>
 
-          {/* Location */}
-          {location && (
-            <Badge
-              variant='secondary'
-              className='bg-white/10 ml-3 text-white border-white/20 text-xs sm:text-sm py-1 px-2'>
-              <MapPin className='h-3 w-3 sm:h-4 sm:w-4 mr-1' />
-              {location}
-            </Badge>
-          )}
+            {/* Location */}
+            {location && (
+              <Badge
+                variant='secondary'
+                className='bg-white/10 text-white border-white/20 text-xs sm:text-sm py-1 px-2'>
+                <MapPin className='h-3 w-3 sm:h-4 sm:w-4 mr-1' />
+                {location}
+              </Badge>
+            )}
+          </div>
 
           {/* Title */}
           <h1
