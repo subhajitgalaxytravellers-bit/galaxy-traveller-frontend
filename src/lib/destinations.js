@@ -1,5 +1,24 @@
 import { fetchJSON } from "./api";
 
+/**
+ * Fetch all destination groups from site_destinationsList.
+ * Used by the Navbar destinations dropdown and the /destinations/[list] page.
+ */
+export async function getDestinationGroups({ revalidate = 300 } = {}) {
+  try {
+    const base = (process.env.NEXT_PUBLIC_BASE_API || '').replace(/\/$/, '');
+    const res = await fetch(`${base}/api/site_destinationsList`, {
+      next: { revalidate },
+    });
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json?.data?.group || [];
+  } catch {
+    return [];
+  }
+}
+
+
 export async function getAllDestinations() {
   // Primary: curated grouped list used by /destinations page.
   // Keep exact route casing first; some deployments may enforce case-sensitive routing.

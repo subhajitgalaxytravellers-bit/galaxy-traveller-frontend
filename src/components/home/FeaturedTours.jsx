@@ -31,6 +31,25 @@ const containerVariants = {
   },
 };
 
+import { useState } from 'react';
+
+const normalizeId = (value) => {
+  if (!value) return null;
+  if (typeof value === 'string') return value;
+  if (typeof value === 'object') return value.id || value._id || null;
+  return null;
+};
+
+const getTourCategoryTags = (tour) =>
+  (Array.isArray(tour?.categories) ? tour.categories : [])
+    .map((category) => (typeof category === 'object' ? category?.tag : null))
+    .filter(Boolean);
+
+const getTourCategoryIds = (tour) =>
+  (Array.isArray(tour?.categories) ? tour.categories : [])
+    .map((category) => normalizeId(category))
+    .filter(Boolean);
+
 const cardVariants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
@@ -40,8 +59,35 @@ const cardVariants = {
   },
 };
 
-export default function FeaturedTours({ tours }) {
+export default function FeaturedTours({ tours, groups = [] }) {
   const router = useRouter();
+  const [activeTab, setActiveTab] = useState('all');
+
+  const filteredTours =
+    activeTab === 'all'
+      ? tours
+      : tours?.filter((tour) => {
+          const activeGroup = groups.find((group) => group.tag === activeTab);
+          if (!activeGroup) return false;
+
+          const validCategoryIds = new Set([
+            normalizeId(activeGroup),
+            ...(Array.isArray(activeGroup.regions) ? activeGroup.regions : []).map((region) =>
+              normalizeId(region),
+            ),
+          ]);
+
+          const tagMatch = getTourCategoryTags(tour).some((tag) =>
+            [activeGroup.tag, ...(activeGroup.regions || []).map((region) => region.tag)].includes(tag),
+          );
+
+          if (tagMatch) return true;
+
+          const categoryIds = getTourCategoryIds(tour);
+          return categoryIds.some((id) => validCategoryIds.has(id));
+        });
+
+  const displayTours = filteredTours?.slice(0, 8) || [];
 
   return (
     <section id='tours' className='py-24'>
@@ -65,14 +111,43 @@ export default function FeaturedTours({ tours }) {
           </p>
         </motion.div>
 
+        {/* Category Tabs */}
+        {groups.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-2 mb-10">
+            <button
+              onClick={() => setActiveTab('all')}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                activeTab === 'all'
+                  ? 'bg-primary text-primary-foreground shadow-md'
+                  : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+            >
+              All Tours
+            </button>
+            {groups.map((g) => (
+              <button
+                key={g.tag}
+                onClick={() => setActiveTab(g.tag)}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                  activeTab === g.tag
+                    ? 'bg-primary text-primary-foreground shadow-md'
+                    : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'
+                }`}
+              >
+                {g.name || g.tag}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Tours Grid */}
         <motion.div
+          key={activeTab} // Re-trigger animation on tab change
           variants={containerVariants}
           initial='hidden'
-          whileInView='visible'
-          viewport={{ once: true, amount: 0.2 }}
+          animate='visible'
           className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-          {tours?.slice(0, 8).map((tour, idx) => (
+          {displayTours.length > 0 ? displayTours.map((tour, idx) => (
             <motion.div key={tour.id || idx} variants={cardVariants}>
               {(() => {
                 const rawPrice = tour.price || tour.details?.pricePerPerson;
@@ -142,7 +217,11 @@ export default function FeaturedTours({ tours }) {
                 );
               })()}
             </motion.div>
-          ))}
+          )) : (
+            <div className="col-span-full py-10 text-center text-muted-foreground">
+              No tours currently available in this category.
+            </div>
+          )}
         </motion.div>
 
         {/* CTA */}

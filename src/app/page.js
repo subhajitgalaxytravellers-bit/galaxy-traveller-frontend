@@ -6,7 +6,7 @@ import WhyChooseUs from "@/components/home/WhyChooseUs";
 import Testimonials from "@/components/home/Testimonials";
 import BlogSection from "@/components/home/BlogSection";
 import DetailSection from "@/components/home/DetailSection";
-import CTA from "@/components/common/CTA";
+import { getTourGroups } from "@/lib/categories";
 
 const API_BASE = (
   process.env.NEXT_PUBLIC_BASE_API ||
@@ -70,7 +70,10 @@ export async function generateMetadata() {
 }
 
 export default async function HomePage() {
-  const { data, reviews } = await getSiteData();
+  const [{ data, reviews }, tourGroups] = await Promise.all([
+    getSiteData(),
+    getTourGroups(),
+  ]);
   const hasHero = Array.isArray(data?.hero) && data.hero.length > 0;
 
   return (
@@ -88,7 +91,7 @@ export default async function HomePage() {
           secondaryImage={data?.secondaryImage}
         />
 
-        {data?.tours?.length > 0 && <FeaturedTours tours={data.tours} />}
+        {data?.tours?.length > 0 && <FeaturedTours tours={data.tours} groups={tourGroups} />}
 
         <WhyChooseUs />
 

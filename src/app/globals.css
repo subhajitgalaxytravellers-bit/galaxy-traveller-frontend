@@ -303,3 +303,23 @@
   }
 }
 
+/* ── Mega Menu Dropdown Animation ── */
+@keyframes megaMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mega-menu-animate {
+  animation: megaMenuIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Sub-region pill hover */
+.region-pill {
+  @apply px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium hover:bg-primary hover:text-white transition-all cursor-pointer;
+}

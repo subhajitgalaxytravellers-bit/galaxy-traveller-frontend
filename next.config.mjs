@@ -8,6 +8,8 @@ function getApiHostname() {
     return new URL(raw).hostname;
   } catch {
     return null;
+
+    
   }
 }
 
@@ -41,6 +43,8 @@ const remotePatterns = [
   { protocol: "https", hostname: "upload.wikimedia.org", pathname: "/**" },
   { protocol: "https", hostname: "commons.wikimedia.org", pathname: "/**" },
   { protocol: "https", hostname: "img.freepik.com",      pathname: "/**" },
+  { protocol: "https", hostname: "picsum.photos",        pathname: "/**" },
+  { protocol: "https", hostname: "fastly.picsum.photos", pathname: "/**" },
   { protocol: "https", hostname: "b2bpic.net",           pathname: "/**" },
   { protocol: "https", hostname: "img.b2bpic.net",       pathname: "/**" },
   { protocol: "https", hostname: "*.b2bpic.net",         pathname: "/**" },
