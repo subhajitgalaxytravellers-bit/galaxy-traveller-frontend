@@ -4,7 +4,7 @@ import { getFlyers } from "@/lib/flyers";
 export async function generateMetadata() {
   const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || "").replace(/\/$/, "");
 
-  let title = "Flyers | Galaxy Travelers";
+  let title = "Flyers | Galaxy Travellers";
   let description = "Explore promotional travel flyers";
   let shareImage = "/opengraph-flyers.jpg";
 

@@ -4,7 +4,7 @@ import { getSearchToursPage } from '@/lib/tours';
 export async function generateMetadata() {
   const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || '').replace(/\/$/, '');
 
-  let title = 'Explore Tours | Galaxy Travelers';
+  let title = 'Explore Tours | Galaxy Travellers';
   let description =
     'Discover premium travel tours, curated adventures, and breathtaking experiences across the world.';
   let shareImage = '/opengraph-tours.jpg';

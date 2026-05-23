@@ -6,7 +6,7 @@ import WhyChooseUs from "@/components/home/WhyChooseUs";
 import Testimonials from "@/components/home/Testimonials";
 import BlogSection from "@/components/home/BlogSection";
 import DetailSection from "@/components/home/DetailSection";
-import { getTourGroups } from "@/lib/categories";
+import { getCategoryTours, getTourGroups } from "@/lib/categories";
 
 const API_BASE = (
   process.env.NEXT_PUBLIC_BASE_API ||
@@ -34,7 +34,7 @@ async function getSiteData() {
 }
 
 export async function generateMetadata() {
-  let title = "Galaxy Travel - Explore the World";
+  let title = "Galaxy Travellers - Explore the World";
   let description = "Find curated tours, destinations, and travel experiences.";
   let shareImage = "/opengraph-home.jpg";
 
@@ -74,6 +74,13 @@ export default async function HomePage() {
     getSiteData(),
     getTourGroups(),
   ]);
+  const groupToursEntries = await Promise.all(
+    (tourGroups || []).map(async (group) => {
+      const result = await getCategoryTours(group.tag, { page: 1, limit: 8 });
+      return [group.tag, Array.isArray(result?.items) ? result.items : []];
+    }),
+  );
+  const groupToursByTag = Object.fromEntries(groupToursEntries);
   const hasHero = Array.isArray(data?.hero) && data.hero.length > 0;
 
   return (
@@ -91,7 +98,13 @@ export default async function HomePage() {
           secondaryImage={data?.secondaryImage}
         />
 
-        {data?.tours?.length > 0 && <FeaturedTours tours={data.tours} groups={tourGroups} />}
+        {data?.tours?.length > 0 && (
+          <FeaturedTours
+            tours={data.tours}
+            groups={tourGroups}
+            groupToursByTag={groupToursByTag}
+          />
+        )}
 
         <WhyChooseUs />
 

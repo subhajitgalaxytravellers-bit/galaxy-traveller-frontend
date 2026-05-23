@@ -31,24 +31,7 @@ const containerVariants = {
   },
 };
 
-import { useState } from 'react';
-
-const normalizeId = (value) => {
-  if (!value) return null;
-  if (typeof value === 'string') return value;
-  if (typeof value === 'object') return value.id || value._id || null;
-  return null;
-};
-
-const getTourCategoryTags = (tour) =>
-  (Array.isArray(tour?.categories) ? tour.categories : [])
-    .map((category) => (typeof category === 'object' ? category?.tag : null))
-    .filter(Boolean);
-
-const getTourCategoryIds = (tour) =>
-  (Array.isArray(tour?.categories) ? tour.categories : [])
-    .map((category) => normalizeId(category))
-    .filter(Boolean);
+import { useMemo, useState } from 'react';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -59,35 +42,22 @@ const cardVariants = {
   },
 };
 
-export default function FeaturedTours({ tours, groups = [] }) {
+export default function FeaturedTours({ tours, groups = [], groupToursByTag = {} }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('all');
 
-  const filteredTours =
-    activeTab === 'all'
-      ? tours
-      : tours?.filter((tour) => {
-          const activeGroup = groups.find((group) => group.tag === activeTab);
-          if (!activeGroup) return false;
-
-          const validCategoryIds = new Set([
-            normalizeId(activeGroup),
-            ...(Array.isArray(activeGroup.regions) ? activeGroup.regions : []).map((region) =>
-              normalizeId(region),
-            ),
-          ]);
-
-          const tagMatch = getTourCategoryTags(tour).some((tag) =>
-            [activeGroup.tag, ...(activeGroup.regions || []).map((region) => region.tag)].includes(tag),
-          );
-
-          if (tagMatch) return true;
-
-          const categoryIds = getTourCategoryIds(tour);
-          return categoryIds.some((id) => validCategoryIds.has(id));
-        });
-
-  const displayTours = filteredTours?.slice(0, 8) || [];
+  const displayTours = useMemo(
+    () =>
+      (activeTab === 'all'
+        ? Array.isArray(tours)
+          ? tours
+          : []
+        : Array.isArray(groupToursByTag?.[activeTab])
+          ? groupToursByTag[activeTab]
+          : []
+      ).slice(0, 8),
+    [activeTab, groupToursByTag, tours],
+  );
 
   return (
     <section id='tours' className='py-24'>

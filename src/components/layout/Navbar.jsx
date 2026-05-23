@@ -266,16 +266,19 @@ function MobileTourMenu({ groups, onClose }) {
 
   return (
     <div className='overflow-hidden rounded-2xl border border-border bg-muted/20'>
-      <button
-        className='flex w-full items-center justify-between px-4 py-3 font-heading text-sm font-semibold text-foreground'
-        onClick={() => setOpen(open === 'root' ? null : 'root')}
-      >
-        <span className='flex items-center gap-2'>
+      <div className='flex items-center justify-between px-4 py-3'>
+        <span className='flex min-w-0 flex-1 items-center gap-2 font-heading text-sm font-semibold text-foreground'>
           <Compass className='w-4 h-4 text-primary' />
           Tours
         </span>
-        <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${open === 'root' ? 'rotate-180' : ''}`} />
-      </button>
+        <button
+          type='button'
+          className='ml-3 flex-shrink-0'
+          onClick={() => setOpen(open === 'root' ? null : 'root')}
+        >
+          <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${open === 'root' ? 'rotate-180' : ''}`} />
+        </button>
+      </div>
 
       {open === 'root' && (
         <div className='border-t border-border/50 bg-background/60 px-3 pb-3 pt-2 space-y-1'>
@@ -324,16 +327,19 @@ function MobileDestinationMenu({ groups, onClose }) {
 
   return (
     <div className='overflow-hidden rounded-2xl border border-border bg-muted/20'>
-      <button
-        className='flex w-full items-center justify-between px-4 py-3 font-heading text-sm font-semibold text-foreground'
-        onClick={() => setOpen(!open)}
-      >
-        <span className='flex items-center gap-2'>
+      <div className='flex items-center justify-between px-4 py-3'>
+        <span className='flex min-w-0 flex-1 items-center gap-2 font-heading text-sm font-semibold text-foreground cursor-pointer' onClick={onClose}>
           <MapPin className='w-4 h-4 text-primary' />
           Destinations
         </span>
-        <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
-      </button>
+        <button
+          type='button'
+          className='ml-3 flex-shrink-0'
+          onClick={() => setOpen(!open)}
+        >
+          <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+        </button>
+      </div>
 
       {open && (
         <div className='border-t border-border/50 bg-background/60 px-3 pb-3 pt-2 space-y-1'>
@@ -487,8 +493,8 @@ const Navbar = () => {
               onMouseLeave={() => setDestMegaOpen(false)}
             >
               <button
-                onClick={() => setDestMegaOpen((v) => !v)}
-                className={`relative group flex items-center gap-1 font-heading text-sm font-medium tracking-wide transition-all duration-300 ${isScrolled
+                onClick={() => router.push('/destinations')}
+                className={`cursor-pointer relative group flex items-center gap-1 font-heading text-sm font-medium tracking-wide transition-all duration-300 ${isScrolled
                   ? isDestActive ? 'text-primary' : 'text-foreground hover:text-primary'
                   : 'text-white hover:text-white/80'
                   } ${isDestActive ? 'tracking-widest' : ''}`}
@@ -510,8 +516,8 @@ const Navbar = () => {
               onMouseLeave={() => setMegaOpen(false)}
             >
               <button
-                onClick={() => setMegaOpen((v) => !v)}
-                className={`relative group flex items-center gap-1 font-heading text-sm font-medium tracking-wide transition-all duration-300 ${isScrolled
+                onClick={() => router.push('/tours')}
+                className={`cursor-pointer relative group flex items-center gap-1 font-heading text-sm font-medium tracking-wide transition-all duration-300 ${isScrolled
                   ? isTourActive ? 'text-primary' : 'text-foreground hover:text-primary'
                   : 'text-white hover:text-white/80'
                   } ${isTourActive ? 'tracking-widest' : ''}`}

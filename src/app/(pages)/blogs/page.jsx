@@ -4,7 +4,7 @@ import { getBlogsPage } from '@/lib/blogs';
 const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || '').replace(/\/$/, '');
 
 export async function generateMetadata() {
-  let title = 'Galaxy Travelers Blog | Wanderlust - Stories & Guides';
+  let title = 'Galaxy Travellers Blog | Wanderlust - Stories & Guides';
   let description =
     'Explore inspiring travel stories, cultural insights, and destination guides.';
   let shareImage = '/opengraph-blogs.jpg';

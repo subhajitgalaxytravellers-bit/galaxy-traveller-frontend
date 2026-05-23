@@ -19,9 +19,9 @@ import StatsSection from '@/components/ui/stats-section';
 const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || '').replace(/\/$/, '');
 
 export async function generateMetadata() {
-  let title = 'About Us | Galaxy Travelers';
+  let title = 'About Us | Galaxy Travellers';
   let description =
-    'Learn about Galaxy Travelers - our mission, vision, values, journey, and the passionate team behind unforgettable travel experiences.';
+    'Learn about Galaxy Travellers - our mission, vision, values, journey, and the passionate team behind unforgettable travel experiences.';
   let shareImage = '/assets/hero-mountains.jpg';
 
   try {

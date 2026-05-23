@@ -3,7 +3,7 @@ import BookingsClient from './BookingsClient';
 const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || '').replace(/\/$/, '');
 
 export async function generateMetadata() {
-  let title = 'My Bookings | Galaxy Travelers';
+  let title = 'My Bookings | Galaxy Travellers';
   let description = 'Review and manage your tour bookings, payments, and invoices.';
   let shareImage = '/opengraph-bookings.jpg';
 

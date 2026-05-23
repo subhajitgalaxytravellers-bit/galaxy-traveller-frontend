@@ -3,7 +3,7 @@ import ContactClient from "./ContactClient";
 const API_BASE = (process.env.NEXT_PUBLIC_BASE_API || "").replace(/\/$/, "");
 
 export async function generateMetadata() {
-  let title = "Contact Us | Galaxy Travelers";
+  let title = "Contact Us | Galaxy Travellers";
   let description =
     "Get in touch to plan your next adventure. Our team will help tailor your perfect journey.";
   let shareImage = "/opengraph-contact.jpg";

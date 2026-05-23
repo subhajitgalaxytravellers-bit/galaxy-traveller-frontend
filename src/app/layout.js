@@ -19,8 +19,8 @@ export const metadata = {
     process.env.NEXT_PUBLIC_URL || 'https://galaxytravellers.com'
   ),
   title: {
-    default: 'Galaxy Travelers',
-    template: '%s | Galaxy Travelers',
+    default: 'Galaxy Travellers',
+    template: '%s | Galaxy Travellers',
   },
   icons: {
     icon: '/assets/flaticon.ico',
@@ -172,7 +172,7 @@ export default async function RootLayout({ children }) {
 
             {/* GLOBAL WHATSAPP BUTTON */}
             {whatsappNumber && <WhatsAppButton phone={whatsappNumber} />}
-            
+
             {/* GLOBAL SCROLL TO TOP */}
             <ScrollToTop />
 
