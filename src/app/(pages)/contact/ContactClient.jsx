@@ -114,7 +114,7 @@ export default function ContactClient() {
     try {
       const payload = {
         ...data,
-        contact: `${data.countryCode}${data.contact.trim()}`, // Merge code + number
+        contact: `${data.countryCode}${data.contact.trim()}`,
         countryCode: data.countryCode,
         people: Number(data.people),
         budget: Number(data.budget),
@@ -149,6 +149,12 @@ export default function ContactClient() {
   const [otpVerified, setOtpVerified] = useState(false);
   const [otp, setOtp] = useState('');
   const [otpLoading, setOtpLoading] = useState(false);
+  const emails = [contact?.email1 || contact?.email, contact?.email2].filter(Boolean);
+  const locations = [
+    contact?.location1 || contact?.location,
+    contact?.location2,
+    contact?.location3,
+  ].filter(Boolean);
 
   const sendOtp = async () => {
     const phoneNum = form.getValues('contact');
@@ -195,7 +201,6 @@ export default function ContactClient() {
     }
   };
 
-  console.log('Contact info:', contact);
   return (
     <div className='min-h-screen'>
       {/* HERO */}
@@ -235,15 +240,15 @@ export default function ContactClient() {
       {/* FORM + INFO */}
       <div className='pt-16 pb-20 px-6 lg:px-32'>
         <div className='container mx-auto grid lg:grid-cols-3 gap-12'>
-          {/* INFO */}
+          {/* INFO COLUMN */}
           <div className='space-y-8'>
             <div>
               <h2 className='font-heading text-2xl font-bold mb-6 tracking-tight'>Contact Information</h2>
 
               <div className='space-y-6'>
                 {/* PHONE */}
-                <div className='flex gap-4'>
-                  <div className='bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center'>
+                <div className='flex gap-4 items-start'>
+                  <div className='bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center shrink-0'>
                     <Phone className='w-5 h-5 text-primary' />
                   </div>
                   <div>
@@ -254,34 +259,50 @@ export default function ContactClient() {
                 </div>
 
                 {/* EMAIL */}
-                <div className='flex gap-4'>
-                  <div className='bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center'>
+                <div className='flex gap-4 items-start'>
+                  <div className='bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center shrink-0'>
                     <Mail className='w-5 h-5 text-primary' />
                   </div>
                   <div>
                     <h3 className='font-heading font-semibold mb-1 tracking-tight'>Email</h3>
-                    <p className='text-muted-foreground'>{contact?.email}</p>
+                    {emails.map((email) => (
+                      <p key={email} className='text-muted-foreground'>
+                        {email}
+                      </p>
+                    ))}
                   </div>
                 </div>
 
-                {/* ADDRESS */}
-                <div className='flex gap-4'>
-                  <div className='bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center'>
+                {/* ADDRESS — icon top-aligned, each address spaced with left border */}
+                <div className='flex gap-4 items-start'>
+                  <div className='bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center shrink-0 mt-0.5'>
                     <MapPin className='w-5 h-5 text-primary' />
                   </div>
-                  <div>
-                    <h3 className='font-heading font-semibold mb-1 tracking-tight'>Address</h3>
-                    <p className='text-muted-foreground'>
-                      {contact?.location ||
-                        'Our global offices are here to help'}
-                    </p>
+                  <div className='flex-1'>
+                    <h3 className='font-heading font-semibold mb-3 tracking-tight'>Address</h3>
+                    {locations.length ? (
+                      <div className='flex flex-col gap-3'>
+                        {locations.map((location, i) => (
+                          <p
+                            key={i}
+                            className='text-muted-foreground text-sm leading-relaxed border-l-2 border-primary/30 pl-3'
+                          >
+                            {location}
+                          </p>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className='text-muted-foreground text-sm'>
+                        Our global offices are here to help
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* FORM */}
+          {/* FORM COLUMN */}
           <div className='lg:col-span-2'>
             <div className='bg-card border rounded-2xl shadow-sm p-6 sm:p-8'>
               <div className='flex items-center justify-between mb-6'>

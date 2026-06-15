@@ -15,6 +15,13 @@ import Link from 'next/link';
 
 // Primary-toned, glassy footer
 const Footer = ({ footer = {}, global = {} }) => {
+  const emails = [footer?.email1 || footer?.email, footer?.email2].filter(Boolean);
+  const locations = [
+    footer?.location1 || footer?.location,
+    // footer?.location2,
+    // footer?.location3,
+  ].filter(Boolean);
+
   const quickLinks = [
     { id: 'q1', label: 'About', href: '/about' },
     { id: 'q2', label: 'Destinations', href: '/destinations' },
@@ -130,12 +137,22 @@ const Footer = ({ footer = {}, global = {} }) => {
           <div className='flex flex-col items-start'>
             <h4 className='font-heading text-base font-semibold mb-6 tracking-wider text-white/90 uppercase'>Contact</h4>
             <div className='flex flex-col gap-4 text-sm text-white/70'>
-              <div>
-                <a
-                  href={footer?.email ? `mailto:${footer.email}` : '#'}
-                  className='hover:text-white transition-colors'>
-                  {footer?.email || 'hello@galaxytravel.com'}
-                </a>
+              <div className='flex flex-col gap-1'>
+                {emails.length > 0 ? (
+                  emails.map((email) => (
+                    <a
+                      key={email}
+                      href={`mailto:${email}`}
+                      className='hover:text-white transition-colors'
+                    >
+                      {email}
+                    </a>
+                  ))
+                ) : (
+                  <a href='mailto:hello@galaxytravel.com' className='hover:text-white transition-colors'>
+                    hello@galaxytravel.com
+                  </a>
+                )}
               </div>
               <div className='flex flex-col gap-1'>
                 {footer?.contact1 && (
@@ -156,10 +173,16 @@ const Footer = ({ footer = {}, global = {} }) => {
                   <p>+91 98765 43210</p>
                 )}
               </div>
-              <div>
-                <p className='leading-relaxed'>
-                  {footer?.location || 'HQ: Mumbai, India'}
-                </p>
+              <div className='flex flex-col gap-1'>
+                {locations.length > 0 ? (
+                  locations.map((location) => (
+                    <p key={location} className='leading-relaxed'>
+                      {location}
+                    </p>
+                  ))
+                ) : (
+                  <p className='leading-relaxed'>HQ: Mumbai, India</p>
+                )}
               </div>
             </div>
           </div>
