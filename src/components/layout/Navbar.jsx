@@ -67,7 +67,7 @@ function ToursMegaMenu({ groups }) {
 
           {/* ── BALANCED DIRECTORY GRID ── */}
           <div className='p-7 sm:p-8 bg-white'>
-            <div className={`grid ${gridColsClass} gap-x-8 gap-y-7 max-h-[460px] overflow-y-auto pr-1`}>
+            <div className={`grid ${gridColsClass} gap-x-8 gap-y-7 max-h-[490px] overflow-y-auto pr-1 no-scrollbar`}>
               {groups.map((group) => {
                 const regions = Array.isArray(group.regions) ? group.regions : [];
                 return (
@@ -161,8 +161,30 @@ function DestinationsMegaMenu({ groups }) {
     return groupCount > bestCount ? group : best;
   }, null);
 
+  // Dynamically calculate required columns based on actual vertical packing
+  const weights = displayGroups.map(
+    (g) => (Array.isArray(g.destinations) ? Math.max(g.destinations.length, 1) : 1) + 2.5
+  );
+  const maxSingle = Math.max(...weights, 1);
+  const colCapacity = Math.max(maxSingle, 18);
+
+  let calculatedCols = 1;
+  let currentHeight = 0;
+  for (const w of weights) {
+    if (currentHeight + w > colCapacity && currentHeight > 0) {
+      calculatedCols++;
+      currentHeight = w;
+    } else {
+      currentHeight += w;
+    }
+  }
+  const optimalCols = Math.min(6, Math.max(1, calculatedCols));
+
+  const calculatedWidth = optimalCols * 225 + (optimalCols - 1) * 28 + 64;
+  const containerWidth = `min(${calculatedWidth}px, 96vw)`;
+
   return (
-    <div className='absolute top-full left-1/2 -translate-x-1/2 pt-4 z-50' style={{ width: 'min(1080px, 96vw)' }}>
+    <div className='absolute top-full left-1/2 -translate-x-1/2 pt-4 z-50' style={{ width: containerWidth }}>
       <div className='mega-menu-animate relative'>
         {/* Arrow pointer */}
         <div className='absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-slate-200 shadow-xs z-10' />
@@ -171,9 +193,12 @@ function DestinationsMegaMenu({ groups }) {
           {/* Top accent bar */}
           <div className='h-1 w-full bg-gradient-to-r from-emerald-500 via-primary to-primary/40' />
 
-          {/* ── FULL WIDTH MASONRY DIRECTORY (Balanced 4-5 Columns) ── */}
+          {/* ── FULL WIDTH MASONRY DIRECTORY (Dynamic Columns) ── */}
           <div className='p-7 sm:p-8 bg-white'>
-            <div className='columns-2 sm:columns-3 md:columns-4 lg:columns-4 xl:columns-5 gap-x-8 max-h-[460px] overflow-y-auto pr-1'>
+            <div
+              className='gap-x-7 max-h-[490px] overflow-y-auto pr-1 no-scrollbar'
+              style={{ columnCount: optimalCols }}
+            >
               {displayGroups.map((group) => {
                 const destinations = Array.isArray(group.destinations) ? group.destinations : [];
                 return (
@@ -258,60 +283,85 @@ function DestinationsMegaMenu({ groups }) {
    MOBILE MENUS
 ═══════════════════════════════════════════════════════ */
 function MobileTourMenu({ groups, onClose }) {
-  const [open, setOpen] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [openGroup, setOpenGroup] = useState(null);
 
   return (
     <div className='overflow-hidden rounded-2xl border border-border bg-muted/20'>
-      <div className='flex items-center justify-between px-4 py-3'>
+      <button
+        type='button'
+        className='flex w-full items-center justify-between px-4 py-3 text-left'
+        onClick={() => setIsOpen(!isOpen)}
+      >
         <span className='flex min-w-0 flex-1 items-center gap-2 font-heading text-sm font-semibold text-foreground'>
           <Compass className='w-4 h-4 text-primary' />
           Tours
         </span>
-        <button
-          type='button'
-          className='ml-3 flex-shrink-0'
-          onClick={() => setOpen(open === 'root' ? null : 'root')}
-        >
-          <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${open === 'root' ? 'rotate-180' : ''}`} />
-        </button>
-      </div>
+        <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
 
-      {open === 'root' && (
-        <div className='border-t border-border/50 bg-background/60 px-3 pb-3 pt-2 space-y-1'>
-          <Link href='/tours' onClick={onClose} className='flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors'>
+      {isOpen && (
+        <div className='border-t border-border/50 bg-background/60 px-3 pb-3 pt-2 space-y-1.5'>
+          <Link
+            href='/tours'
+            onClick={onClose}
+            className='flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-primary hover:bg-primary/10 transition-colors'
+          >
             <ArrowRight className='w-3.5 h-3.5' />
             All Tours
           </Link>
-          {(groups || []).map((group) => (
-            <div key={group.tag} className='rounded-xl overflow-hidden'>
-              <button
-                className='flex w-full items-center justify-between px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted/70 transition-colors rounded-xl'
-                onClick={() => setOpen(open === group.tag ? 'root' : group.tag)}
-              >
-                <span className='truncate'>{group.name || group.tag}</span>
-                {(group.regions || []).length > 0 && (
-                  <div className='flex items-center gap-1 ml-2 flex-shrink-0'>
-                    <span className='text-[10px] text-muted-foreground'>{group.regions.length}</span>
-                    <ChevronDown className={`h-3 w-3 text-muted-foreground transition-transform ${open === group.tag ? 'rotate-180' : ''}`} />
+
+          {(groups || []).map((group) => {
+            const regions = Array.isArray(group.regions) ? group.regions : [];
+            const isGroupOpen = openGroup === group.tag;
+            return (
+              <div key={group.tag} className='rounded-xl border border-border/40 bg-card/60 overflow-hidden'>
+                <button
+                  type='button'
+                  className='flex w-full items-center justify-between px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted/70 transition-colors rounded-xl text-left'
+                  onClick={() => setOpenGroup(isGroupOpen ? null : group.tag)}
+                >
+                  <span className='flex items-center gap-2 truncate'>
+                    <span className='w-1.5 h-1.5 rounded-[2px] bg-[#65a30d] shrink-0' />
+                    <span className='truncate'>{group.name || group.tag}</span>
+                  </span>
+                  {regions.length > 0 && (
+                    <div className='flex items-center gap-1 ml-2 flex-shrink-0'>
+                      <span className='text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded-full'>{regions.length}</span>
+                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform duration-200 ${isGroupOpen ? 'rotate-180' : ''}`} />
+                    </div>
+                  )}
+                </button>
+
+                {isGroupOpen && (
+                  <div className='px-3 pb-3 pt-1 border-t border-border/40 bg-muted/20 flex flex-wrap gap-1.5'>
+                    <Link
+                      href={`/tours/${group.tag}`}
+                      onClick={onClose}
+                      className='px-2.5 py-1 rounded-full bg-primary/10 text-xs font-semibold text-primary hover:bg-primary hover:text-white transition-all'
+                    >
+                      All in {group.name || group.tag}
+                    </Link>
+                    {regions.map((region) => (
+                      <Link
+                        key={region.tag}
+                        href={`/tours/${group.tag}/${region.tag}`}
+                        onClick={onClose}
+                        className='px-2.5 py-1 rounded-full bg-background border border-border/60 text-xs font-medium text-foreground hover:bg-primary hover:text-white hover:border-primary transition-all'
+                      >
+                        {region.name || region.tag}
+                      </Link>
+                    ))}
+                    {regions.length === 0 && (
+                      <span className='text-xs text-muted-foreground italic px-1 py-0.5'>
+                        No specific sub-regions
+                      </span>
+                    )}
                   </div>
                 )}
-              </button>
-              {open === group.tag && (group.regions || []).length > 0 && (
-                <div className='mx-3 mb-2 flex flex-wrap gap-1.5'>
-                  {group.regions.map((region) => (
-                    <Link
-                      key={region.tag}
-                      href={`/tours/${group.tag}/${region.tag}`}
-                      onClick={onClose}
-                      className='px-2.5 py-1 rounded-full bg-muted text-xs font-medium text-foreground hover:bg-primary hover:text-white transition-all'
-                    >
-                      {region.name || region.tag}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
@@ -319,52 +369,58 @@ function MobileTourMenu({ groups, onClose }) {
 }
 
 function MobileDestinationMenu({ groups, onClose }) {
-  const [open, setOpen] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [openGroup, setOpenGroup] = useState(null);
 
   return (
     <div className='overflow-hidden rounded-2xl border border-border bg-muted/20'>
-      <div className='flex items-center justify-between px-4 py-3'>
+      <button
+        type='button'
+        className='flex w-full items-center justify-between px-4 py-3 text-left'
+        onClick={() => setIsOpen(!isOpen)}
+      >
         <span className='flex min-w-0 flex-1 items-center gap-2 font-heading text-sm font-semibold text-foreground'>
           <MapPin className='w-4 h-4 text-primary' />
           Destinations
         </span>
-        <button
-          type='button'
-          className='ml-3 flex-shrink-0'
-          onClick={() => setOpen(open === 'root' ? null : 'root')}
-        >
-          <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${open === 'root' ? 'rotate-180' : ''}`} />
-        </button>
-      </div>
+        <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
 
-      {open === 'root' && (
-        <div className='border-t border-border/50 bg-background/60 px-3 pb-3 pt-2 space-y-1'>
-          <Link href='/destinations' onClick={onClose} className='flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors'>
+      {isOpen && (
+        <div className='border-t border-border/50 bg-background/60 px-3 pb-3 pt-2 space-y-1.5'>
+          <Link
+            href='/destinations'
+            onClick={onClose}
+            className='flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-primary hover:bg-primary/10 transition-colors'
+          >
             <ArrowRight className='w-3.5 h-3.5' />
             All Destinations
           </Link>
+
           {(groups || []).map((group) => {
             const destinations = Array.isArray(group.destinations) ? group.destinations : [];
-            const isOpen = open === group.title;
+            const isGroupOpen = openGroup === group.title;
             return (
-              <div key={group.title} className='rounded-xl overflow-hidden'>
+              <div key={group.title} className='rounded-xl border border-border/40 bg-card/60 overflow-hidden'>
                 <button
-                  className='flex w-full items-center justify-between px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted/70 transition-colors rounded-xl'
-                  onClick={() => setOpen(isOpen ? 'root' : group.title)}
+                  type='button'
+                  className='flex w-full items-center justify-between px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted/70 transition-colors rounded-xl text-left'
+                  onClick={() => setOpenGroup(isGroupOpen ? null : group.title)}
                 >
                   <span className='flex items-center gap-2 truncate'>
-                    <span className='w-1.5 h-1.5 rounded-[2px] bg-emerald-600 shrink-0' />
-                    {group.title}
+                    <span className='w-1.5 h-1.5 rounded-[2px] bg-[#65a30d] shrink-0' />
+                    <span className='truncate'>{group.title}</span>
                   </span>
                   {destinations.length > 0 && (
                     <div className='flex items-center gap-1 ml-2 flex-shrink-0'>
-                      <span className='text-[10px] text-muted-foreground'>{destinations.length}</span>
-                      <ChevronDown className={`h-3 w-3 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                      <span className='text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded-full'>{destinations.length}</span>
+                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform duration-200 ${isGroupOpen ? 'rotate-180' : ''}`} />
                     </div>
                   )}
                 </button>
-                {isOpen && destinations.length > 0 && (
-                  <div className='mx-3 mb-2 flex flex-wrap gap-1.5'>
+
+                {isGroupOpen && (
+                  <div className='px-3 pb-3 pt-1 border-t border-border/40 bg-muted/20 flex flex-wrap gap-1.5'>
                     <Link
                       href={`/destinations/${slugify(group.title)}`}
                       onClick={onClose}
@@ -377,7 +433,7 @@ function MobileDestinationMenu({ groups, onClose }) {
                         key={dest._id || dest.slug || dest.title}
                         href={`/destination/${dest.slug || slugify(dest.title)}`}
                         onClick={onClose}
-                        className='px-2.5 py-1 rounded-full bg-muted text-xs font-medium text-foreground hover:bg-primary hover:text-white transition-all'
+                        className='px-2.5 py-1 rounded-full bg-background border border-border/60 text-xs font-medium text-foreground hover:bg-primary hover:text-white hover:border-primary transition-all'
                       >
                         {dest.title}
                       </Link>

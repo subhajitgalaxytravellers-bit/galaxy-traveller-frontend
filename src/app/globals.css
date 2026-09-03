@@ -323,3 +323,12 @@
 .region-pill {
   @apply px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium hover:bg-primary hover:text-white transition-all cursor-pointer;
 }
+
+/* Hide scrollbar across all browsers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
