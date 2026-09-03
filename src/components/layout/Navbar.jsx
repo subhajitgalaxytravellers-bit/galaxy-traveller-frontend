@@ -34,116 +34,113 @@ async function fetchDestinationGroups() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   TOURS MEGA MENU — Premium
+   TOURS MEGA MENU — Professional Clean Layout
 ═══════════════════════════════════════════════════════ */
 function ToursMegaMenu({ groups }) {
   if (!groups || groups.length === 0) return null;
 
   const featured = groups[0];
-  const rest = groups.slice(0, 6);
+  const groupCount = groups.length;
+
+  // Dynamically balance grid columns based on number of tour groups
+  const gridColsClass =
+    groupCount <= 2
+      ? 'grid-cols-1 sm:grid-cols-2 max-w-xl mx-auto'
+      : groupCount === 3
+      ? 'grid-cols-1 sm:grid-cols-3'
+      : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
+
+  const containerWidth =
+    groupCount <= 3
+      ? 'min(820px, 96vw)'
+      : 'min(1040px, 96vw)';
 
   return (
-    <div className='absolute top-full left-1/2 -translate-x-1/2 pt-4 z-50' style={{ width: 'min(960px, 96vw)' }}>
+    <div className='absolute top-full left-1/2 -translate-x-1/2 pt-4 z-50' style={{ width: containerWidth }}>
       <div className='mega-menu-animate relative'>
         {/* Arrow pointer */}
-        <div className='absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-border/60 shadow-sm z-10' />
+        <div className='absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-slate-200 shadow-xs z-10' />
 
-        <div className='relative overflow-hidden rounded-2xl bg-white border border-border/60 shadow-[0_20px_60px_-10px_rgba(0,0,0,0.18)]'>
+        <div className='relative overflow-hidden rounded-2xl bg-white border border-slate-200/80 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.16)]'>
           {/* Top accent bar */}
-          <div className='h-1 w-full bg-gradient-to-r from-primary via-primary/70 to-primary/30' />
+          <div className='h-1 w-full bg-gradient-to-r from-primary via-primary/70 to-emerald-500' />
 
-          <div className='flex'>
-            {/* ── LEFT SPOTLIGHT ── */}
-            <div className='w-[270px] flex-shrink-0 bg-gradient-to-br from-primary/5 via-primary/3 to-transparent border-r border-border/50 p-6 flex flex-col justify-between'>
-              <div>
-                <div className='flex items-center gap-2 mb-1'>
-                  <div className='w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center'>
-                    <Compass className='w-3.5 h-3.5 text-primary' />
+          {/* ── BALANCED DIRECTORY GRID ── */}
+          <div className='p-7 sm:p-8 bg-white'>
+            <div className={`grid ${gridColsClass} gap-x-8 gap-y-7 max-h-[460px] overflow-y-auto pr-1`}>
+              {groups.map((group) => {
+                const regions = Array.isArray(group.regions) ? group.regions : [];
+                return (
+                  <div key={group.tag} className='min-w-0 flex flex-col'>
+                    {/* Category Header */}
+                    <Link
+                      href={`/tours/${group.tag}`}
+                      className='group/head flex items-center gap-2 mb-3 hover:opacity-85 transition-opacity'
+                    >
+                      <span className='w-2 h-2 rounded-[2px] bg-[#65a30d] shrink-0 group-hover/head:scale-125 transition-transform' />
+                      <h4 className='font-heading text-xs font-bold uppercase tracking-wider text-[#0f2d4a] group-hover/head:text-primary transition-colors leading-tight'>
+                        {group.name || group.tag}
+                      </h4>
+                    </Link>
+
+                    {/* Listings under category */}
+                    <ul className='space-y-1.5 pl-3.5 border-l border-slate-100'>
+                      {regions.map((region) => (
+                        <li key={region.tag}>
+                          <Link
+                            href={`/tours/${group.tag}/${region.tag}`}
+                            className='block text-[13px] text-slate-600 hover:text-primary hover:translate-x-0.5 transition-all py-0.5 leading-snug'
+                          >
+                            {region.name || region.tag}
+                          </Link>
+                        </li>
+                      ))}
+                      {regions.length === 0 && (
+                        <li>
+                          <Link
+                            href={`/tours/${group.tag}`}
+                            className='block text-xs text-slate-400 hover:text-primary transition-colors italic py-0.5'
+                          >
+                            View packages
+                          </Link>
+                        </li>
+                      )}
+                    </ul>
                   </div>
-                  <span className='text-[10px] font-bold uppercase tracking-[0.2em] text-primary'>Tour Packages</span>
-                </div>
-                <h3 className='font-heading text-xl font-bold text-foreground mt-4 leading-snug'>
-                  Find Your Perfect<br />Adventure
-                </h3>
-                <p className='text-xs text-muted-foreground mt-2 leading-relaxed'>
-                  Curated itineraries across the world's most iconic destinations.
-                </p>
-              </div>
-
-              {featured && (
-                <Link
-                  href={`/tours/${featured.tag}`}
-                  className='group mt-6 flex items-center justify-between rounded-xl bg-primary px-4 py-3 text-white transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5'
-                >
-                  <div>
-                    <p className='text-[10px] font-semibold uppercase tracking-widest opacity-75'>Featured</p>
-                    <p className='font-heading text-sm font-bold mt-0.5'>{featured.name || featured.tag}</p>
-                  </div>
-                  <ArrowRight className='w-4 h-4 opacity-75 group-hover:translate-x-1 transition-transform' />
-                </Link>
-              )}
-
-              <Link href='/tours' className='mt-4 flex items-center gap-1.5 text-xs font-semibold text-primary hover:gap-3 transition-all'>
-                <span>Browse all tours</span>
-                <ArrowRight className='w-3.5 h-3.5' />
-              </Link>
-            </div>
-
-            {/* ── RIGHT GRID ── */}
-            <div className='flex-1 p-6'>
-              <p className='text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4'>
-                Explore by Category
-              </p>
-              <div className='grid grid-cols-3 gap-6'>
-                {rest.map((group) => {
-                  const regionCount = (group.regions || []).length;
-                  return (
-                    <div key={group.tag} className='min-w-0'>
-                      <Link href={`/tours/${group.tag}`} className='group/link flex items-center gap-2 mb-3'>
-                        <div className='w-7 h-7 rounded-lg bg-muted group-hover/link:bg-primary/10 flex items-center justify-center flex-shrink-0 transition-colors'>
-                          <Globe2 className='w-3.5 h-3.5 text-muted-foreground group-hover/link:text-primary transition-colors' />
-                        </div>
-                        <p className='font-heading text-sm font-semibold text-foreground group-hover/link:text-primary transition-colors truncate'>
-                          {group.name || group.tag}
-                        </p>
-                      </Link>
-
-                      <ul className='space-y-2 pl-9'>
-                        {(group.regions || []).map((region) => (
-                          <li key={region.tag}>
-                            <Link
-                              href={`/tours/${group.tag}/${region.tag}`}
-                              className='block text-xs text-muted-foreground hover:text-primary transition-colors truncate'
-                            >
-                              {region.name || region.tag}
-                            </Link>
-                          </li>
-                        ))}
-                        {regionCount === 0 && (
-                          <li>
-                            <Link
-                              href={`/tours/${group.tag}`}
-                              className='block text-xs text-muted-foreground hover:text-primary transition-colors truncate'
-                            >
-                              View packages
-                            </Link>
-                          </li>
-                        )}
-                      </ul>
-                    </div>
-                  );
-                })}
-              </div>
+                );
+              })}
             </div>
           </div>
 
-          {/* ── BOTTOM BAR ── */}
-          <div className='flex items-center justify-between border-t border-border/50 bg-muted/20 px-6 py-3'>
-            <p className='text-[11px] text-muted-foreground'>✦ New tours added every season</p>
-            <Link href='/tours' className='inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-full transition-all'>
-              <span>All Tour Packages</span>
-              <ArrowRight className='w-3 h-3' />
-            </Link>
+          {/* ── BOTTOM ACCENT BAR ── */}
+          <div className='flex flex-wrap items-center justify-between border-t border-slate-100 bg-slate-50/90 px-7 sm:px-8 py-3.5 gap-4'>
+            <div className='flex items-center gap-3'>
+              <div className='w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0'>
+                <Compass className='w-3.5 h-3.5' />
+              </div>
+              <p className='text-xs text-slate-600 font-medium'>
+                <span className='font-semibold text-slate-900'>Curated Adventures:</span> Handpicked tour packages across the world&apos;s most iconic destinations.
+              </p>
+            </div>
+
+            <div className='flex items-center gap-3 ml-auto'>
+              {featured && (
+                <Link
+                  href={`/tours/${featured.tag}`}
+                  className='hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-primary bg-white border border-slate-200 hover:border-primary/40 px-3 py-1.5 rounded-full transition-all shadow-2xs'
+                >
+                  <span className='w-1.5 h-1.5 rounded-full bg-emerald-500' />
+                  <span>Featured: <strong className='text-slate-900 font-bold'>{featured.name || featured.tag}</strong></span>
+                </Link>
+              )}
+              <Link
+                href='/tours'
+                className='inline-flex items-center gap-1.5 text-xs font-bold text-white bg-primary hover:bg-primary/90 px-4 py-1.5 rounded-full transition-all shadow-sm'
+              >
+                <span>All Tour Packages</span>
+                <ArrowRight className='w-3 h-3' />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -152,105 +149,104 @@ function ToursMegaMenu({ groups }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   DESTINATIONS MEGA MENU — Premium
+   DESTINATIONS MEGA MENU — Professional Clean Layout
 ═══════════════════════════════════════════════════════ */
 function DestinationsMegaMenu({ groups }) {
   if (!groups || groups.length === 0) return null;
 
-  const featured = groups[0];
-  const displayGroups = groups.slice(0, 9);
+  const displayGroups = groups;
+  const featured = displayGroups.reduce((best, group) => {
+    const bestCount = Array.isArray(best?.destinations) ? best.destinations.length : -1;
+    const groupCount = Array.isArray(group?.destinations) ? group.destinations.length : 0;
+    return groupCount > bestCount ? group : best;
+  }, null);
 
   return (
-    <div className='absolute top-full left-1/2 -translate-x-1/2 pt-4 z-50' style={{ width: 'min(880px, 96vw)' }}>
+    <div className='absolute top-full left-1/2 -translate-x-1/2 pt-4 z-50' style={{ width: 'min(1080px, 96vw)' }}>
       <div className='mega-menu-animate relative'>
         {/* Arrow pointer */}
-        <div className='absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-border/60 shadow-sm z-10' />
+        <div className='absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-slate-200 shadow-xs z-10' />
 
-        <div className='relative overflow-hidden rounded-2xl bg-white border border-border/60 shadow-[0_20px_60px_-10px_rgba(0,0,0,0.18)]'>
+        <div className='relative overflow-hidden rounded-2xl bg-white border border-slate-200/80 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.16)]'>
           {/* Top accent bar */}
           <div className='h-1 w-full bg-gradient-to-r from-emerald-500 via-primary to-primary/40' />
 
-          <div className='flex'>
-            {/* ── LEFT SPOTLIGHT ── */}
-            <div className='w-[260px] flex-shrink-0 bg-gradient-to-br from-primary/5 via-primary/3 to-transparent border-r border-border/50 p-6 flex flex-col justify-between'>
-              <div>
-                <div className='flex items-center gap-2 mb-1'>
-                  <div className='w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center'>
-                    <MapPin className='w-3.5 h-3.5 text-primary' />
-                  </div>
-                  <span className='text-[10px] font-bold uppercase tracking-[0.2em] text-primary'>Destinations</span>
-                </div>
-                <h3 className='font-heading text-xl font-bold text-foreground mt-4 leading-snug'>
-                  Explore the<br />World with Us
-                </h3>
-                <p className='text-xs text-muted-foreground mt-2 leading-relaxed'>
-                  Handpicked collections spanning every continent and corner of the globe.
-                </p>
-              </div>
-
-              {featured && (
-                <Link
-                  href={`/destinations/${slugify(featured.title)}`}
-                  className='group mt-6 flex items-center justify-between rounded-xl bg-primary px-4 py-3 text-white transition-all hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5'
-                >
-                  <div>
-                    <p className='text-[10px] font-semibold uppercase tracking-widest opacity-75'>Popular</p>
-                    <p className='font-heading text-sm font-bold mt-0.5'>{featured.title}</p>
-                  </div>
-                  <ArrowRight className='w-4 h-4 opacity-75 group-hover:translate-x-1 transition-transform' />
-                </Link>
-              )}
-
-              <Link href='/destinations' className='mt-4 flex items-center gap-1.5 text-xs font-semibold text-primary hover:gap-3 transition-all'>
-                <span>All destinations</span>
-                <ArrowRight className='w-3.5 h-3.5' />
-              </Link>
-            </div>
-
-            {/* ── RIGHT GRID ── */}
-            <div className='flex-1 p-6'>
-              <p className='text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4'>
-                Explore by Region
-              </p>
-              <div className='grid grid-cols-3 gap-1.5'>
-                {displayGroups.map((group, i) => {
-                  const count = Array.isArray(group.destinations) ? group.destinations.length : 0;
-                  return (
+          {/* ── FULL WIDTH MASONRY DIRECTORY (Balanced 4-5 Columns) ── */}
+          <div className='p-7 sm:p-8 bg-white'>
+            <div className='columns-2 sm:columns-3 md:columns-4 lg:columns-4 xl:columns-5 gap-x-8 max-h-[460px] overflow-y-auto pr-1'>
+              {displayGroups.map((group) => {
+                const destinations = Array.isArray(group.destinations) ? group.destinations : [];
+                return (
+                  <div key={group.title} className='break-inside-avoid mb-6 inline-block w-full min-w-0'>
+                    {/* Category Header with green square marker */}
                     <Link
-                      key={group.title}
                       href={`/destinations/${slugify(group.title)}`}
-                      className='group flex items-center gap-3 rounded-xl border border-transparent hover:border-primary/20 hover:bg-primary/5 p-3 transition-all duration-200'
+                      className='group/head flex items-center gap-2 mb-2.5 hover:opacity-85 transition-opacity'
                     >
-                      <div className='w-7 h-7 rounded-lg bg-muted group-hover:bg-primary/10 flex items-center justify-center flex-shrink-0 transition-colors'>
-                        <span className='text-[10px] font-bold text-muted-foreground group-hover:text-primary transition-colors'>
-                          {String(i + 1).padStart(2, '0')}
-                        </span>
-                      </div>
-                      <div className='min-w-0 flex-1'>
-                        <p className='font-heading text-sm font-semibold text-foreground group-hover:text-primary transition-colors truncate leading-tight'>
-                          {group.title}
-                        </p>
-                        {count > 0 && (
-                          <p className='text-[11px] text-muted-foreground mt-0.5'>
-                            {count} destination{count !== 1 ? 's' : ''}
-                          </p>
-                        )}
-                      </div>
-                      <ChevronRight className='w-3.5 h-3.5 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 group-hover:text-primary -translate-x-1 group-hover:translate-x-0 transition-all flex-shrink-0' />
+                      <span className='w-2 h-2 rounded-[2px] bg-[#65a30d] shrink-0 group-hover/head:scale-125 transition-transform' />
+                      <h4 className='font-heading text-xs font-bold uppercase tracking-wider text-[#0f2d4a] group-hover/head:text-primary transition-colors leading-tight'>
+                        {group.title}
+                      </h4>
                     </Link>
-                  );
-                })}
-              </div>
+
+                    {/* Listings under category */}
+                    <ul className='space-y-1.5 pl-3.5 border-l border-slate-100'>
+                      {destinations.map((dest) => (
+                        <li key={dest._id || dest.slug || dest.title}>
+                          <Link
+                            href={`/destination/${dest.slug || slugify(dest.title)}`}
+                            className='block text-[13px] text-slate-600 hover:text-primary hover:translate-x-0.5 transition-all py-0.5 leading-snug'
+                          >
+                            {dest.title}
+                          </Link>
+                        </li>
+                      ))}
+                      {destinations.length === 0 && (
+                        <li>
+                          <Link
+                            href={`/destinations/${slugify(group.title)}`}
+                            className='block text-xs text-slate-400 hover:text-primary transition-colors italic py-0.5'
+                          >
+                            View all
+                          </Link>
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
-          {/* ── BOTTOM BAR ── */}
-          <div className='flex items-center justify-between border-t border-border/50 bg-muted/20 px-6 py-3'>
-            <p className='text-[11px] text-muted-foreground'>✦ Handpicked destinations across all continents</p>
-            <Link href='/destinations' className='inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-full transition-all'>
-              <span>All Destinations</span>
-              <ArrowRight className='w-3 h-3' />
-            </Link>
+          {/* ── BOTTOM ACCENT BAR ── */}
+          <div className='flex flex-wrap items-center justify-between border-t border-slate-100 bg-slate-50/90 px-7 sm:px-8 py-3.5 gap-4'>
+            <div className='flex items-center gap-3'>
+              <div className='w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 shrink-0'>
+                <MapPin className='w-3.5 h-3.5' />
+              </div>
+              <p className='text-xs text-slate-600 font-medium'>
+                <span className='font-semibold text-slate-900'>Explore the World:</span> Handpicked destinations spanning every continent and corner of the globe.
+              </p>
+            </div>
+
+            <div className='flex items-center gap-3 ml-auto'>
+              {featured && (
+                <Link
+                  href={`/destinations/${slugify(featured.title)}`}
+                  className='hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-primary bg-white border border-slate-200 hover:border-primary/40 px-3 py-1.5 rounded-full transition-all shadow-2xs'
+                >
+                  <span className='w-1.5 h-1.5 rounded-full bg-emerald-500' />
+                  <span>Popular: <strong className='text-slate-900 font-bold'>{featured.title}</strong></span>
+                </Link>
+              )}
+              <Link
+                href='/destinations'
+                className='inline-flex items-center gap-1.5 text-xs font-bold text-white bg-primary hover:bg-primary/90 px-4 py-1.5 rounded-full transition-all shadow-sm'
+              >
+                <span>All Destinations</span>
+                <ArrowRight className='w-3 h-3' />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -323,44 +319,72 @@ function MobileTourMenu({ groups, onClose }) {
 }
 
 function MobileDestinationMenu({ groups, onClose }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(null);
 
   return (
     <div className='overflow-hidden rounded-2xl border border-border bg-muted/20'>
       <div className='flex items-center justify-between px-4 py-3'>
-        <span className='flex min-w-0 flex-1 items-center gap-2 font-heading text-sm font-semibold text-foreground cursor-pointer' onClick={onClose}>
+        <span className='flex min-w-0 flex-1 items-center gap-2 font-heading text-sm font-semibold text-foreground'>
           <MapPin className='w-4 h-4 text-primary' />
           Destinations
         </span>
         <button
           type='button'
           className='ml-3 flex-shrink-0'
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen(open === 'root' ? null : 'root')}
         >
-          <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${open === 'root' ? 'rotate-180' : ''}`} />
         </button>
       </div>
 
-      {open && (
+      {open === 'root' && (
         <div className='border-t border-border/50 bg-background/60 px-3 pb-3 pt-2 space-y-1'>
           <Link href='/destinations' onClick={onClose} className='flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors'>
             <ArrowRight className='w-3.5 h-3.5' />
             All Destinations
           </Link>
           {(groups || []).map((group) => {
-            const count = Array.isArray(group.destinations) ? group.destinations.length : 0;
+            const destinations = Array.isArray(group.destinations) ? group.destinations : [];
+            const isOpen = open === group.title;
             return (
-              <Link
-                key={group.title}
-                href={`/destinations/${slugify(group.title)}`}
-                onClick={onClose}
-                className='flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted/70 hover:text-primary transition-colors'
-              >
-                <span className='truncate'>{group.title}</span>
-                {count > 0 && (
-                  <span className='ml-2 text-[10px] text-muted-foreground flex-shrink-0'>{count}</span>
+              <div key={group.title} className='rounded-xl overflow-hidden'>
+                <button
+                  className='flex w-full items-center justify-between px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted/70 transition-colors rounded-xl'
+                  onClick={() => setOpen(isOpen ? 'root' : group.title)}
+                >
+                  <span className='flex items-center gap-2 truncate'>
+                    <span className='w-1.5 h-1.5 rounded-[2px] bg-emerald-600 shrink-0' />
+                    {group.title}
+                  </span>
+                  {destinations.length > 0 && (
+                    <div className='flex items-center gap-1 ml-2 flex-shrink-0'>
+                      <span className='text-[10px] text-muted-foreground'>{destinations.length}</span>
+                      <ChevronDown className={`h-3 w-3 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                    </div>
+                  )}
+                </button>
+                {isOpen && destinations.length > 0 && (
+                  <div className='mx-3 mb-2 flex flex-wrap gap-1.5'>
+                    <Link
+                      href={`/destinations/${slugify(group.title)}`}
+                      onClick={onClose}
+                      className='px-2.5 py-1 rounded-full bg-primary/10 text-xs font-semibold text-primary hover:bg-primary hover:text-white transition-all'
+                    >
+                      All in {group.title}
+                    </Link>
+                    {destinations.map((dest) => (
+                      <Link
+                        key={dest._id || dest.slug || dest.title}
+                        href={`/destination/${dest.slug || slugify(dest.title)}`}
+                        onClick={onClose}
+                        className='px-2.5 py-1 rounded-full bg-muted text-xs font-medium text-foreground hover:bg-primary hover:text-white transition-all'
+                      >
+                        {dest.title}
+                      </Link>
+                    ))}
+                  </div>
                 )}
-              </Link>
+              </div>
             );
           })}
         </div>
@@ -474,16 +498,16 @@ const Navbar = () => {
           {/* ── DESKTOP NAV ── */}
           <div className='hidden items-center gap-7 lg:flex'>
             {/* Home */}
-            <a href='/' className={desktopLinkClass(isActive('/'))}>
+            <Link href='/' className={desktopLinkClass(isActive('/'))}>
               Home
               <span className={underlineClass(isActive('/'))} />
-            </a>
+            </Link>
 
             {/* Blog */}
-            <a href='/blogs' className={desktopLinkClass(isActive('/blogs'))}>
+            <Link href='/blogs' className={desktopLinkClass(isActive('/blogs'))}>
               Blog
               <span className={underlineClass(isActive('/blogs'))} />
-            </a>
+            </Link>
 
             {/* ── DESTINATIONS DROPDOWN ── */}
             <div
@@ -624,3 +648,7 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+
+
