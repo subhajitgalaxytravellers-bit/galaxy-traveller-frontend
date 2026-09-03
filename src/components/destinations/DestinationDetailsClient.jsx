@@ -39,7 +39,7 @@ export default function DestinationDetailsClient({ destination }) {
     .filter(Boolean);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       {/* HERO SECTION */}
       <section className="relative h-screen">
         <div className="absolute inset-0">
@@ -231,7 +231,7 @@ export default function DestinationDetailsClient({ destination }) {
 
       {/* Related Tours */}
       {relatedTours.length > 0 && (
-        <section className="py-16 bg-muted/30">
+        <section className="py-16 bg-muted/30 overflow-hidden">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between mb-10">
               <div>
@@ -244,7 +244,7 @@ export default function DestinationDetailsClient({ destination }) {
               </div>
             </div>
 
-            <Carousel className="w-full">
+            <Carousel className="w-full relative">
               <CarouselContent>
                 {relatedTours.slice(0, 4).map((tour, idx) => (
                   <CarouselItem
@@ -254,8 +254,12 @@ export default function DestinationDetailsClient({ destination }) {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
+              {relatedTours.length > 1 && (
+                <>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </>
+              )}
             </Carousel>
           </div>
         </section>
@@ -263,7 +267,7 @@ export default function DestinationDetailsClient({ destination }) {
 
       {/* Related Blogs */}
       {relatedBlogs.length > 0 && (
-        <section className="py-16 bg-background">
+        <section className="py-16 bg-background overflow-hidden">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between mb-10">
               <div>
@@ -276,7 +280,7 @@ export default function DestinationDetailsClient({ destination }) {
               </div>
             </div>
 
-            <Carousel className="w-full">
+            <Carousel className="w-full relative">
               <CarouselContent>
                 {relatedBlogs.slice(0, 4).map((blog, idx) => (
                   <CarouselItem
@@ -295,8 +299,12 @@ export default function DestinationDetailsClient({ destination }) {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
+              {relatedBlogs.length > 1 && (
+                <>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </>
+              )}
             </Carousel>
           </div>
         </section>

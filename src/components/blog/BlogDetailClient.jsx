@@ -83,7 +83,7 @@ export default function BlogDetailClient({ post }) {
     : [];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       {/* HERO */}
       <section className="relative h-[60vh] min-h-[400px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
@@ -323,13 +323,13 @@ export default function BlogDetailClient({ post }) {
 
       {/* Related Destinations */}
       {relatedDestinations.length > 0 && (
-        <section className="bg-muted/30 py-16">
+        <section className="bg-muted/30 py-16 overflow-hidden">
           <div className="container mx-auto px-4">
             <h2 className="font-heading text-3xl md:text-4xl font-bold mb-10 text-center italic tracking-wide">
               Destinations in this story
             </h2>
 
-            <Carousel className="w-full">
+            <Carousel className="w-full relative">
               <CarouselContent>
                 {relatedDestinations.slice(0, 4).map((dest, index) => (
                   <CarouselItem
@@ -339,8 +339,12 @@ export default function BlogDetailClient({ post }) {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
+              {relatedDestinations.length > 1 && (
+                <>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </>
+              )}
             </Carousel>
           </div>
         </section>
@@ -348,13 +352,13 @@ export default function BlogDetailClient({ post }) {
 
       {/* Related Tours */}
       {relatedTours.length > 0 && (
-        <section className="bg-background py-16">
+        <section className="bg-background py-16 overflow-hidden">
           <div className="container mx-auto px-4">
             <h2 className="font-heading text-3xl md:text-4xl font-bold mb-10 text-center italic tracking-wide">
               Tours you might like
             </h2>
 
-            <Carousel className="w-full">
+            <Carousel className="w-full relative">
               <CarouselContent>
                 {relatedTours.slice(0, 4).map((tour, index) => (
                   <CarouselItem
@@ -364,8 +368,12 @@ export default function BlogDetailClient({ post }) {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
+              {relatedTours.length > 1 && (
+                <>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </>
+              )}
             </Carousel>
           </div>
         </section>
@@ -373,7 +381,7 @@ export default function BlogDetailClient({ post }) {
 
       {/* Related Posts */}
       {relatedPosts.length > 0 && (
-        <section className="bg-secondary/30 py-16">
+        <section className="bg-secondary/30 py-16 overflow-hidden">
           <div className="container mx-auto px-4">
             <h2 className="font-heading text-3xl md:text-4xl font-bold mb-10 text-center italic tracking-wide">
               Related Stories
